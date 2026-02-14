@@ -1,0 +1,44 @@
+# Build directories
+build/
+dist/
+bin/
+obj/
+out/
+
+# Dependencies
+node_modules/
+vendor/
+.venv/
+venv/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Compiled files
+*.o
+*.so
+*.dll
+*.exe
+*.dylib
+*.class
+*.pyc
+*.pyo
+
+# Logs and databases
+*.log
+*.sqlite
+*.db
+
+# Temporary files
+*.tmp
+.cache/
+tmp/
+
+# OS files
+Thumbs.db
+.DS_Store
