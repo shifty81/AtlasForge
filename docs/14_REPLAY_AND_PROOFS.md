@@ -25,7 +25,7 @@ snapshot and the input vector that produced it.
 
 ```
 ReplayFile (v1)
- ├── Header        — magic, version, tick count, hash algorithm ID
+ ├── Header        — magic, version, tick count, hash algorithm ID (currently fixed to BLAKE3; field exists for forward compatibility)
  ├── TickRecord[]   — one per simulation tick
  │    ├── tick_id        : u64
  │    ├── ecs_snapshot   : CompressedBytes
@@ -150,7 +150,7 @@ simulation pipeline that affects replay equivalence.
   "authority_resolution": "server_authoritative",
   "scheduler_semantics": "fixed_tick_64hz",
   "hash_ladder": {
-    "algorithm": "blake3",
+    "algorithm": "BLAKE3",
     "chain_mode": "append_only"
   }
 }
@@ -193,8 +193,9 @@ intermediate representation.
 - **Validation:** the compiler rejects non-deterministic GPU operations
   (unordered atomics, undefined-order blending) at compile time
 - **Font rasterization:** text rendering uses a deterministic rasterization
-  policy — glyph bitmaps are pre-baked at fixed sizes and included in the
-  replay artifact so that font engine differences do not cause visual divergence
+  policy — glyph bitmaps are pre-baked at fixed sizes and stored in a companion
+  `.atlas_glyphs` archive alongside the replay file so that font engine
+  differences do not cause visual divergence
 
 ## CI Integration
 
