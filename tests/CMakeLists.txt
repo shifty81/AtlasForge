@@ -15,6 +15,7 @@ add_executable(AtlasTests
     test_streaming.cpp
     test_galaxy.cpp
     test_interaction.cpp
+    test_interaction_graph.cpp
     test_diplomacy.cpp
     test_asset_graph.cpp
     test_mod.cpp
@@ -33,6 +34,23 @@ add_executable(AtlasTests
     test_ui_screen.cpp
     test_flow.cpp
     test_story.cpp
+    test_project.cpp
+    test_command.cpp
+    test_worldgraph.cpp
+    test_voice.cpp
+    test_plugin.cpp
+    test_heightfield.cpp
+    test_strategygraph.cpp
+    test_server_rules.cpp
+    test_conversation.cpp
+    test_ai_signals.cpp
+    test_ai_memory.cpp
+    test_relationship.cpp
+    test_behaviorgraph.cpp
+    test_graph_serializer.cpp
+    test_uigraph.cpp
+    test_schema_validator.cpp
+    test_graph_cache.cpp
     ${CMAKE_SOURCE_DIR}/editor/panels/ConsolePanel.cpp
     ${CMAKE_SOURCE_DIR}/editor/panels/InteractionDebugger.cpp
     ${CMAKE_SOURCE_DIR}/editor/assistant/EditorAssistant.cpp

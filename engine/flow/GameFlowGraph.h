@@ -1,53 +1,84 @@
 #pragma once
 #include <cstdint>
-#include <string>
-#include <unordered_map>
 #include <vector>
+#include <string>
+#include <memory>
+#include <unordered_map>
 
 namespace atlas::flow {
 
-enum class FlowNodeType : uint8_t {
-    Boot,
-    Splash,
-    MainMenu,
-    NewGame,
-    CharacterSelect,
-    Loading,
-    Gameplay,
-    Pause,
-    GameOver,
-    Credits
+enum class FlowPinType : uint8_t {
+    Trigger,
+    State,
+    Bool,
+    Float,
+    String
 };
 
-struct FlowNode {
-    uint32_t id = 0;
-    FlowNodeType type = FlowNodeType::Boot;
+struct FlowValue {
+    FlowPinType type;
+    std::vector<float> data;
+    std::string text;
+};
+
+struct FlowPort {
     std::string name;
-    std::vector<uint32_t> nextNodes;
-    std::string screenRef;
+    FlowPinType type;
+};
+
+using FlowNodeID = uint32_t;
+using FlowPortID = uint16_t;
+
+struct FlowEdge {
+    FlowNodeID fromNode;
+    FlowPortID fromPort;
+    FlowNodeID toNode;
+    FlowPortID toPort;
+};
+
+struct FlowContext {
+    float elapsedTime;
+    bool inputReceived;
+    uint32_t tick;
+};
+
+class FlowNode {
+public:
+    virtual ~FlowNode() = default;
+    virtual const char* GetName() const = 0;
+    virtual const char* GetCategory() const = 0;
+    virtual std::vector<FlowPort> Inputs() const = 0;
+    virtual std::vector<FlowPort> Outputs() const = 0;
+    virtual void Evaluate(const FlowContext& ctx,
+                          const std::vector<FlowValue>& inputs,
+                          std::vector<FlowValue>& outputs) const = 0;
 };
 
 class GameFlowGraph {
 public:
-    void Init();
-    uint32_t AddNode(FlowNodeType type, const std::string& name);
-    void RemoveNode(uint32_t id);
-    const FlowNode* GetNode(uint32_t id) const;
+    FlowNodeID AddNode(std::unique_ptr<FlowNode> node);
+    void RemoveNode(FlowNodeID id);
+    void AddEdge(const FlowEdge& edge);
+    void RemoveEdge(const FlowEdge& edge);
+
+    bool Compile();
+    bool Execute(const FlowContext& ctx);
+
+    const FlowValue* GetOutput(FlowNodeID node, FlowPortID port) const;
     size_t NodeCount() const;
-
-    void AddTransition(uint32_t fromId, uint32_t toId);
-    std::vector<uint32_t> GetTransitions(uint32_t fromId) const;
-
-    void SetCurrentNode(uint32_t id);
-    uint32_t GetCurrentNode() const;
-    void Advance();
-
-    void SetScreenRef(uint32_t id, const std::string& screenName);
+    bool IsCompiled() const;
 
 private:
-    std::unordered_map<uint32_t, FlowNode> m_nodes;
-    uint32_t m_currentId = 0;
-    uint32_t m_nextId = 1;
+    FlowNodeID m_nextID = 1;
+    std::unordered_map<FlowNodeID, std::unique_ptr<FlowNode>> m_nodes;
+    std::vector<FlowEdge> m_edges;
+    std::vector<FlowNodeID> m_executionOrder;
+    bool m_compiled = false;
+
+    std::unordered_map<uint64_t, FlowValue> m_outputs;
+
+    bool HasCycle() const;
+    bool ValidateEdgeTypes() const;
 };
 
-} // namespace atlas::flow
+}

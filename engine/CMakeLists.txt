@@ -4,6 +4,7 @@ add_library(AtlasEngine STATIC
     ecs/ECS.cpp
     graphvm/GraphVM.cpp
     graphvm/GraphCompiler.cpp
+    graphvm/GraphSerializer.cpp
     assets/AssetRegistry.cpp
     assets/AssetBinary.cpp
     net/NetContext.cpp
@@ -14,25 +15,51 @@ add_library(AtlasEngine STATIC
     world/NoiseGenerator.cpp
     world/WorldStreamer.cpp
     world/GalaxyGenerator.cpp
-    interaction/InteractionSystem.cpp
-    interaction/RuleIntentResolver.cpp
+    world/WorldGraph.cpp
+    world/WorldNodes.cpp
+    world/HeightfieldMesher.cpp
+    project/ProjectManager.cpp
+    command/CommandHistory.cpp
+    interaction/Interaction.cpp
+    voice/VoiceCommand.cpp
+    plugin/PluginSystem.cpp
+    strategygraph/StrategyGraph.cpp
+    rules/ServerRules.cpp
+    conversation/ConversationGraph.cpp
+    ai/AISignalRegistry.cpp
+    ai/AIMemory.cpp
+    ai/RelationshipModel.cpp
+    tile/TileGraph.cpp
+    tile/TileNodes.cpp
+    sound/SoundGraph.cpp
+    sound/SoundNodes.cpp
+    ai/BehaviorGraph.cpp
+    ai/BehaviorNodes.cpp
+    character/CharacterGraph.cpp
+    character/CharacterNodes.cpp
+    animation/AnimationGraph.cpp
+    animation/AnimationNodes.cpp
+    weapon/WeaponGraph.cpp
+    weapon/WeaponNodes.cpp
+    ui/UIGraph.cpp
+    ui/UINodes.cpp
+    flow/GameFlowGraph.cpp
+    flow/GameFlowNodes.cpp
+    schema/SchemaValidator.cpp
+    graphvm/GraphCache.cpp
     ai/FactionRouter.cpp
     asset_graph/AssetGraphExecutor.cpp
-    mod/ModAssetRegistry.cpp
-    input/InputManager.cpp
-    camera/Camera.cpp
-    physics/PhysicsWorld.cpp
     audio/AudioEngine.cpp
+    camera/Camera.cpp
     gameplay/MechanicAsset.cpp
     gameplay/SkillTree.cpp
-    weapon/WeaponGraph.cpp
-    character/CharacterGraph.cpp
-    animation/AnimationGraph.cpp
-    tile/TileGraph.cpp
-    sound/SoundGraph.cpp
-    ui/UIScreenGraph.cpp
-    flow/GameFlowGraph.cpp
+    input/InputManager.cpp
+    interaction/InteractionSystem.cpp
+    interaction/RuleIntentResolver.cpp
+    mod/ModAssetRegistry.cpp
+    physics/PhysicsWorld.cpp
     story/StoryGraph.cpp
+    ui/UIScreenGraph.cpp
 )
 
 target_include_directories(AtlasEngine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

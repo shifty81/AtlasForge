@@ -45,3 +45,36 @@ Thumbs.db
 # CodeQL artifacts
 _codeql_build_dir/
 _codeql_detected_source_root
+
+# CMake generated files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+compile_commands.json
+*.cmake
+!CMakeLists.txt
+
+# Visual Studio
+.vs/
+build_vs/
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.suo
+*.user
+*.pdb
+*.ilk
+*.idb
+
+# Engine build artifacts
+engine/build/
+editor/build/
+runtime/build/
+
+# Additional C++ build artifacts
+*.a
+*.lib
+*.obj
+!*.obj
+*.out

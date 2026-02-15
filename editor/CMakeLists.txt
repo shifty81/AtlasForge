@@ -5,6 +5,10 @@ add_executable(AtlasEditor
     panels/NetInspectorPanel.cpp
     panels/ConsolePanel.cpp
     panels/InteractionDebugger.cpp
+    panels/ProjectPickerPanel.cpp
+    panels/WorldGraphPanel.cpp
+    panels/VoiceCommandPanel.cpp
+    panels/InteractionDebugPanel.cpp
     tools/GamePackagerPanel.cpp
     assistant/EditorAssistant.cpp
     assistant/AssetGraphAssistant.cpp

@@ -1,55 +1,85 @@
 #pragma once
-
-#include <string>
+#include <cstdint>
 #include <vector>
+#include <string>
+#include <memory>
+#include <unordered_map>
 
 namespace atlas::animation {
 
-enum class AnimState {
-    Idle,
-    Walk,
-    Run,
-    Attack,
-    Hit,
-    Death,
-    Custom
+enum class AnimPinType : uint8_t {
+    Float,       // Scalar (time, weight, blend factor)
+    Pose,        // Skeletal pose data
+    Modifier,    // Animation modifier (limp, recoil, tremor)
+    Trigger,     // State transition trigger
+    Mask         // Bone mask for partial blending
 };
 
-enum class AnimModifierSource {
-    Damage,
-    Skill,
-    Emotion,
-    Environment,
-    Equipment
+struct AnimValue {
+    AnimPinType type;
+    std::vector<float> data;
 };
 
-struct AnimModifier {
-    AnimModifierSource source;
-    std::string boneMask;
-    float weight;
+struct AnimPort {
+    std::string name;
+    AnimPinType type;
 };
 
-struct AnimationState {
-    AnimState state = AnimState::Idle;
-    float blendWeight = 1.0f;
-    float timeScale = 1.0f;
+using AnimNodeID = uint32_t;
+using AnimPortID = uint16_t;
+
+struct AnimEdge {
+    AnimNodeID fromNode;
+    AnimPortID fromPort;
+    AnimNodeID toNode;
+    AnimPortID toPort;
 };
 
-class AnimationController {
+struct AnimContext {
+    float deltaTime;
+    float speed;
+    float fatigue;
+    float damageLevel;
+    uint32_t tick;
+};
+
+class AnimNode {
 public:
-    void Init();
-    void SetState(AnimState state);
-    AnimState GetState() const;
-    float GetBlendWeight() const;
-    void AddModifier(const AnimModifier& modifier);
-    void ClearModifiers();
-    size_t ModifierCount() const;
-    float ComputeEffectiveWeight(AnimModifierSource source) const;
-    void Update(float dt);
+    virtual ~AnimNode() = default;
+    virtual const char* GetName() const = 0;
+    virtual const char* GetCategory() const = 0;
+    virtual std::vector<AnimPort> Inputs() const = 0;
+    virtual std::vector<AnimPort> Outputs() const = 0;
+    virtual void Evaluate(const AnimContext& ctx,
+                          const std::vector<AnimValue>& inputs,
+                          std::vector<AnimValue>& outputs) const = 0;
+};
+
+class AnimationGraph {
+public:
+    AnimNodeID AddNode(std::unique_ptr<AnimNode> node);
+    void RemoveNode(AnimNodeID id);
+    void AddEdge(const AnimEdge& edge);
+    void RemoveEdge(const AnimEdge& edge);
+
+    bool Compile();
+    bool Execute(const AnimContext& ctx);
+
+    const AnimValue* GetOutput(AnimNodeID node, AnimPortID port) const;
+    size_t NodeCount() const;
+    bool IsCompiled() const;
 
 private:
-    AnimationState m_current;
-    std::vector<AnimModifier> m_modifiers;
+    AnimNodeID m_nextID = 1;
+    std::unordered_map<AnimNodeID, std::unique_ptr<AnimNode>> m_nodes;
+    std::vector<AnimEdge> m_edges;
+    std::vector<AnimNodeID> m_executionOrder;
+    bool m_compiled = false;
+
+    std::unordered_map<uint64_t, AnimValue> m_outputs;
+
+    bool HasCycle() const;
+    bool ValidateEdgeTypes() const;
 };
 
-} // namespace atlas::animation
+}
