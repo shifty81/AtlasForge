@@ -74,7 +74,7 @@ void test_streamer_get_loaded_chunks() {
 }
 
 void test_streamer_disk_cache() {
-    std::string cacheDir = "/tmp/atlas_test_cache";
+    std::string cacheDir = std::filesystem::temp_directory_path().string() + "/atlas_test_cache";
     // Clean up any previous test artifacts
     std::filesystem::remove_all(cacheDir);
 

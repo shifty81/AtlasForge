@@ -4,6 +4,9 @@
 
 namespace atlas::world {
 
+static constexpr float kPi = 3.14159265358979323846f;
+static constexpr float kTwoPi = 2.0f * kPi;
+
 uint32_t GalaxyGenerator::HashSeed(uint32_t seed, uint32_t index) {
     uint32_t h = seed ^ (index * 2654435761u);
     h ^= h >> 16;
@@ -30,7 +33,7 @@ std::vector<StarSystem> GalaxyGenerator::Generate(const GalaxyParams& params) {
 
         // Choose arm and compute angle
         int arm = static_cast<int>(h0 % static_cast<uint32_t>(params.armCount));
-        float armAngle = static_cast<float>(arm) / static_cast<float>(params.armCount) * 2.0f * 3.14159265f;
+        float armAngle = static_cast<float>(arm) / static_cast<float>(params.armCount) * kTwoPi;
 
         // Random distance from center (biased toward center)
         float r = RandomFloat(h1);
@@ -46,7 +49,7 @@ std::vector<StarSystem> GalaxyGenerator::Generate(const GalaxyParams& params) {
         // Core density boost: systems near center ignore arm structure
         bool isCore = dist < params.coreRadius * params.galaxyRadius;
         float angle = isCore
-            ? RandomFloat(h3) * 2.0f * 3.14159265f
+            ? RandomFloat(h3) * kTwoPi
             : spiralAngle + spread;
 
         double x = static_cast<double>(dist * std::cos(angle));
