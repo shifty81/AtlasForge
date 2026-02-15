@@ -151,9 +151,9 @@ void test_engine_frame_pacing_prevents_spin() {
     auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count();
 
     // 3 ticks at 30hz = 100ms. Allow some tolerance but should be > 50ms
-    // and under 500ms even on loaded CI systems
+    // and under 300ms even on loaded CI systems
     assert(ms >= 50);
-    assert(ms < 500);
+    assert(ms < 300);
 
     std::cout << "[PASS] test_engine_frame_pacing_prevents_spin" << std::endl;
 }
