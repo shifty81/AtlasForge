@@ -66,13 +66,13 @@ Each mechanic is:
 
 ### Supported Mechanics
 
-- Ship flight
+- Vehicle movement
 - Strategy overview
-- Docking transitions
-- FPS interiors
-- EVA (spacewalk)
-- Station exploration
-- Planetary building
+- State transitions
+- First-person movement
+- Zero-gravity movement
+- Interior exploration
+- Environmental construction
 - Combat systems
 
 ## Network Safety
