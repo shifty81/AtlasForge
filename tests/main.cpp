@@ -171,6 +171,62 @@ void test_mechanic_find_by_name();
 void test_mechanic_params();
 void test_mechanic_get_by_type();
 
+// Skill tree tests
+void test_skill_add_node();
+void test_skill_unlock();
+void test_skill_prerequisites();
+void test_skill_effects();
+void test_skill_tree_chain();
+
+// Weapon tests
+void test_weapon_add_module();
+void test_weapon_compute_stats();
+void test_weapon_wear();
+void test_weapon_remove_module();
+
+// Character tests
+void test_character_body();
+void test_character_traits();
+void test_character_equipment();
+void test_character_faction();
+
+// Animation tests
+void test_anim_default_state();
+void test_anim_set_state();
+void test_anim_modifiers();
+void test_anim_effective_weight();
+
+// Tile tests
+void test_tile_init();
+void test_tile_register();
+void test_tile_set_get();
+void test_tile_damage();
+void test_tile_bounds();
+
+// Sound tests
+void test_sound_add_node();
+void test_sound_set_param();
+void test_sound_bind_action();
+void test_sound_evaluate();
+
+// UI Screen tests
+void test_ui_add_widget();
+void test_ui_visibility();
+void test_ui_parent_child();
+void test_ui_remove_widget();
+
+// Game Flow tests
+void test_flow_add_node();
+void test_flow_transitions();
+void test_flow_advance();
+void test_flow_screen_ref();
+
+// Story tests
+void test_story_add_node();
+void test_story_connections();
+void test_story_tags();
+void test_story_get_by_type();
+
 int main() {
     std::cout << "=== Atlas Engine Tests ===" << std::endl;
 
@@ -368,6 +424,71 @@ int main() {
     test_mechanic_find_by_name();
     test_mechanic_params();
     test_mechanic_get_by_type();
+
+    // Skill Tree
+    std::cout << "\n--- Skill Tree ---" << std::endl;
+    test_skill_add_node();
+    test_skill_unlock();
+    test_skill_prerequisites();
+    test_skill_effects();
+    test_skill_tree_chain();
+
+    // Weapon
+    std::cout << "\n--- Weapon System ---" << std::endl;
+    test_weapon_add_module();
+    test_weapon_compute_stats();
+    test_weapon_wear();
+    test_weapon_remove_module();
+
+    // Character
+    std::cout << "\n--- Character System ---" << std::endl;
+    test_character_body();
+    test_character_traits();
+    test_character_equipment();
+    test_character_faction();
+
+    // Animation
+    std::cout << "\n--- Animation System ---" << std::endl;
+    test_anim_default_state();
+    test_anim_set_state();
+    test_anim_modifiers();
+    test_anim_effective_weight();
+
+    // Tile
+    std::cout << "\n--- Tile System ---" << std::endl;
+    test_tile_init();
+    test_tile_register();
+    test_tile_set_get();
+    test_tile_damage();
+    test_tile_bounds();
+
+    // Sound
+    std::cout << "\n--- Sound System ---" << std::endl;
+    test_sound_add_node();
+    test_sound_set_param();
+    test_sound_bind_action();
+    test_sound_evaluate();
+
+    // UI Screen
+    std::cout << "\n--- UI Screen ---" << std::endl;
+    test_ui_add_widget();
+    test_ui_visibility();
+    test_ui_parent_child();
+    test_ui_remove_widget();
+
+    // Game Flow
+    std::cout << "\n--- Game Flow ---" << std::endl;
+    test_flow_add_node();
+    test_flow_transitions();
+    test_flow_advance();
+    test_flow_screen_ref();
+
+    // Story
+    std::cout << "\n--- Story System ---" << std::endl;
+    test_story_add_node();
+    test_story_connections();
+    test_story_tags();
+    test_story_get_by_type();
 
     std::cout << "\n=== All tests passed! ===" << std::endl;
     return 0;

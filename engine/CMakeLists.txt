@@ -24,6 +24,15 @@ add_library(AtlasEngine STATIC
     physics/PhysicsWorld.cpp
     audio/AudioEngine.cpp
     gameplay/MechanicAsset.cpp
+    gameplay/SkillTree.cpp
+    weapon/WeaponGraph.cpp
+    character/CharacterGraph.cpp
+    animation/AnimationGraph.cpp
+    tile/TileGraph.cpp
+    sound/SoundGraph.cpp
+    ui/UIScreenGraph.cpp
+    flow/GameFlowGraph.cpp
+    story/StoryGraph.cpp
 )
 
 target_include_directories(AtlasEngine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

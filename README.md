@@ -153,11 +153,18 @@ Atlas/
 │   ├── camera/          # Camera system (FreeLook, Strategy, FPS, Orbital)
 │   ├── physics/         # Physics simulation
 │   ├── audio/           # Audio engine
-│   ├── gameplay/        # Mechanic asset system
+│   ├── gameplay/        # Mechanic assets & skill trees
+│   ├── weapon/          # Weapon construction graph
+│   ├── character/       # Character graph (modular characters)
+│   ├── animation/       # Animation graph + modifier system
+│   ├── tile/            # Tile graph (2D tileset generation)
+│   ├── sound/           # Sound graph (procedural audio/synth)
+│   ├── story/           # Story graph (narrative generation)
+│   ├── flow/            # Game flow graph (boot → credits)
 │   └── render/          # Render abstraction
 │
 ├── editor/              # Standalone editor (Dev Client)
-│   ├── ui/              # Docking, layout, panel system
+│   ├── ui/              # Docking, layout, panel system, UI screen graphs
 │   ├── panels/          # ECS Inspector, Net Inspector, Console
 │   ├── tools/           # Game Packager, Asset Cooker
 │   ├── ai/              # AI Aggregator for asset generation
