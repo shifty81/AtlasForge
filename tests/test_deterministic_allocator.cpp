@@ -121,15 +121,3 @@ void test_allocator_deterministic() {
     std::cout << "[PASS] test_allocator_deterministic" << std::endl;
 }
 
-int main() {
-    test_allocator_create();
-    test_allocator_single_alloc();
-    test_allocator_multiple_allocs();
-    test_allocator_dealloc();
-    test_allocator_reuse_space();
-    test_allocator_stable_ids();
-    test_allocator_reset();
-    test_allocator_deterministic();
-    std::cout << "All DeterministicAllocator tests passed." << std::endl;
-    return 0;
-}

@@ -143,15 +143,3 @@ void test_hud_visibility() {
     std::cout << "[PASS] test_hud_visibility" << std::endl;
 }
 
-int main() {
-    test_hud_defaults();
-    test_hud_tick_display();
-    test_hud_warnings();
-    test_hud_critical_warning();
-    test_hud_time_controls();
-    test_hud_step_forward();
-    test_hud_determinism_status();
-    test_hud_visibility();
-    std::cout << "All HUD overlay tests passed!" << std::endl;
-    return 0;
-}

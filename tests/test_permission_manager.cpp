@@ -136,16 +136,3 @@ void test_permission_user_management() {
     std::cout << "[PASS] test_permission_user_management" << std::endl;
 }
 
-int main() {
-    test_permission_defaults();
-    test_permission_register_user();
-    test_permission_tier_viewonly();
-    test_permission_tier_developer();
-    test_permission_tier_admin();
-    test_permission_grant_custom();
-    test_permission_revoke();
-    test_permission_user_management();
-
-    std::cout << "\nAll permission manager tests passed!" << std::endl;
-    return 0;
-}
