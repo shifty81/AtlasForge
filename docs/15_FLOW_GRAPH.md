@@ -25,7 +25,7 @@ and is designed for diffability and long-term stability.
 | Format | JSON-based, one node per line where practical |
 | Diff-friendly | Stable key ordering, no cosmetic churn on re-save |
 | Schema-validated | Every IR file is validated against `schemas/flow_graph.schema.json` before compilation |
-| Versioned | Format version field enables automatic migration between versions |
+| Versioned | `format_version` field enables automatic migration between versions |
 | Deterministic compilation | Identical IR always produces identical bytecode |
 
 ### IR Structure
@@ -53,7 +53,7 @@ FlowGraphIR
 |----------|-------|-------------|
 | Logic | Branch, Loop, Compare, Select | Control flow decisions and iteration |
 | Math | Add, Sub, Mul, Div, Clamp, Lerp | Arithmetic and interpolation |
-| ECS | Query, Mutate, Spawn, Destroy | Entity–component operations |
+| ECS | Query, Mutate, Spawn, Destroy | ECS entity and component operations |
 | UI | ShowPanel, SetText, BindData | Widget manipulation (UI graphs only) |
 | Event | OnTick, OnInput, OnStateChange | Entry points triggered by engine events |
 | Control Flow | Sequence, Parallel, Delay | Execution ordering and tick-based delays |
@@ -99,7 +99,7 @@ compiler checks before emitting bytecode.
 |------------|------------------------|----------------------|
 | Gameplay | All | None (full access) |
 | UI | Logic, Math, UI, Event, Control Flow | ECS mutations (Spawn, Destroy, Mutate) |
-| AI | Logic, Math, ECS (read-only), Event | ECS mutations, UI operations |
+| AI | Logic, Math, ECS (read-only), Event (OnTick, OnStateChange only), Control Flow | ECS mutations, UI operations |
 
 - **Nondeterministic nodes** are flagged at compile time with a warning; they
   must be explicitly allowed per graph via the `config.allow_nondeterministic`
@@ -142,7 +142,7 @@ FlowGraphIR → Codegen Compiler → Generated .cpp/.h → Engine Build
 | Property | Guarantee |
 |----------|-----------|
 | Behavioral equivalence | Generated C++ produces identical outputs to the interpreted graph for all inputs |
-| Determinism preserved | The same determinism classification applies; nondeterministic nodes remain flagged |
+| Determinism preserved | The same determinism classification applies; nondeterministic nodes produce compile-time warnings in codegen and are gated behind `config.allow_nondeterministic` |
 | Debug symbols | Generated code includes source-map comments linking back to node IDs in the IR |
 | Incremental | Only changed graphs are re-generated; unchanged graphs reuse cached output |
 
