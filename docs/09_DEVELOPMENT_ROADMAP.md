@@ -171,7 +171,7 @@ Advanced GUI architecture, editor refinements, and determinism enforcement.
 
 Replay system closure, hash ladder verification, and TLA+ formal proofs.
 
-- [ ] Hash ladder verification (H[n] = Hash(H[n-1] || State[n] || Inputs[n]))
+- [x] Hash ladder verification (H[n] = Hash(H[n-1] || State[n] || Inputs[n]))
 - [ ] Replay Timeline panel (scrub, compare, branch, inject inputs)
 - [ ] Replay divergence inspector (auto-open diff view on hash mismatch)
 - [ ] TLA+ specifications (ecs.tla, replay.tla, layout.tla)
@@ -215,8 +215,8 @@ AI-assisted authoring and unified game UI system.
 
 Production-grade CI, build experience, and template repository support.
 
-- [ ] Determinism CI gate (golden replay comparison, hash validation)
-- [ ] Contract bot (automated PR violation scanning)
+- [x] Determinism CI gate (golden replay comparison, hash validation)
+- [x] Contract bot (automated PR violation scanning)
 - [ ] atlas.build.json schema (artifact definitions, validation requirements)
 - [ ] First-run experience (one-command build, /run shortcuts)
 - [ ] Build manifest (executable hashes, layout hashes, DSL version)
@@ -245,7 +245,7 @@ Production-grade CI, build experience, and template repository support.
 | Polish | ✅ Complete | Undo/redo, visual diff, profiler, replay recorder, crash analysis |
 | Game Module System | ✅ Complete | IGameModule interface, ModuleLoader, AtlasGameplay library, EveOffline (shipped in-repo), SDK export |
 | GUI System & Editor Hardening | 🔧 Planned | Custom GUI DSL, layout solver, editor self-hosting, permissions |
-| Replay & Formal Verification | 🔧 Planned | Hash ladder, TLA+ specs, proof viewer, deterministic allocator |
+| Replay & Formal Verification | 🔧 In Progress | Hash ladder implemented, TLA+ specs and proof viewer pending |
 | Flow Graph & Procedural Content | 🔧 Planned | Flow Graph IR/VM, procedural modeling, animation graphs |
 | AtlasAI & Game GUI Authoring | 🔧 Planned | AI assistant, game UI authoring, widget DSL |
-| CI, Build & Template System | 🔧 Planned | Determinism CI, contract bot, atlas init, template repo |
+| CI, Build & Template System | 🔧 In Progress | Determinism CI gate and contract bot added, remaining items planned |

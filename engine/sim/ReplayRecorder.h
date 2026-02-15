@@ -8,11 +8,12 @@ namespace atlas::sim {
 struct ReplayFrame {
     uint32_t tick = 0;
     std::vector<uint8_t> inputData;
+    uint64_t stateHash = 0;  ///< Hash ladder value at this tick (0 = not recorded)
 };
 
 struct ReplayHeader {
     uint32_t magic = 0x52504C59;  // "RPLY"
-    uint32_t version = 1;
+    uint32_t version = 2;         // v2: added stateHash per frame
     uint32_t tickRate = 30;
     uint32_t frameCount = 0;
     uint32_t seed = 0;
@@ -29,6 +30,7 @@ public:
     // Recording
     void StartRecording(uint32_t tickRate, uint32_t seed = 0);
     void RecordFrame(uint32_t tick, const std::vector<uint8_t>& inputData);
+    void RecordFrame(uint32_t tick, const std::vector<uint8_t>& inputData, uint64_t stateHash);
     void StopRecording();
 
     // Playback

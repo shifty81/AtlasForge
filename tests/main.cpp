@@ -560,6 +560,20 @@ void test_replay_save_and_load();
 void test_replay_load_invalid();
 void test_replay_clear();
 
+// State Hasher tests
+void test_hasher_initial_state();
+void test_hasher_advance_tick();
+void test_hasher_deterministic();
+void test_hasher_chaining();
+void test_hasher_divergence_detection();
+void test_hasher_different_seeds();
+void test_hasher_empty_data();
+void test_hasher_raw_pointer_api();
+void test_replay_record_with_hash();
+void test_replay_save_load_with_hash();
+void test_replay_default_hash_zero();
+void test_hash_combine_deterministic();
+
 // Visual Diff tests
 void test_diff_identical();
 void test_diff_added();
@@ -1254,6 +1268,21 @@ int main() {
     test_replay_save_and_load();
     test_replay_load_invalid();
     test_replay_clear();
+
+    // State Hasher
+    std::cout << "\n--- State Hasher ---" << std::endl;
+    test_hasher_initial_state();
+    test_hasher_advance_tick();
+    test_hasher_deterministic();
+    test_hasher_chaining();
+    test_hasher_divergence_detection();
+    test_hasher_different_seeds();
+    test_hasher_empty_data();
+    test_hasher_raw_pointer_api();
+    test_replay_record_with_hash();
+    test_replay_save_load_with_hash();
+    test_replay_default_hash_zero();
+    test_hash_combine_deterministic();
 
     // Visual Diff
     std::cout << "\n--- Visual Diff ---" << std::endl;
