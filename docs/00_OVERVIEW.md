@@ -15,11 +15,11 @@ Atlas is a modular, data-driven game engine and simulation platform designed to 
 
 Atlas is content-agnostic. All gameplay is implemented as data + graphs, not hardcoded logic. Supported game styles include:
 
-- Space strategy (EVE-style overview)
-- FPS interiors
+- Space strategy (top-down / isometric overview)
+- First-person interiors
 - Planetary exploration
-- Voxel worlds (Minecraft-like)
-- Top-down / Zelda-like cameras
+- Voxel worlds
+- Top-down / adventure-style cameras
 - Side-scrollers
 - Large-scale simulations
 

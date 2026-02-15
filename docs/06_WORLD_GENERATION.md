@@ -16,8 +16,8 @@ Everything goes through the `WorldLayout` interface.
 | Layout             | Description       |
 |--------------------|-------------------|
 | `linear_1d`        | Side scroller     |
-| `grid_2d`          | Zelda / Stardew   |
-| `voxel_3d`         | Minecraft          |
+| `grid_2d`          | Top-down / tile-based |
+| `voxel_3d`         | Voxel-based 3D     |
 | `cube_sphere`      | Planet surfaces    |
 | `orbital_graph`    | Space systems      |
 | `hierarchical_cells` | Strategy maps   |
@@ -45,7 +45,7 @@ struct CubeSphereCoord {
 ## Galaxy Generation
 
 - Spiral galaxy templates
-- Up to 100,000+ solar systems
+- Up to 100,000+ star systems
 - Systems generated on demand (seed + rules)
 - Only seed, rules, and player changes are persisted
 
