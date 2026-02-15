@@ -12,10 +12,15 @@ void ReplayRecorder::StartRecording(uint32_t tickRate, uint32_t seed) {
 }
 
 void ReplayRecorder::RecordFrame(uint32_t tick, const std::vector<uint8_t>& inputData) {
+    RecordFrame(tick, inputData, 0);
+}
+
+void ReplayRecorder::RecordFrame(uint32_t tick, const std::vector<uint8_t>& inputData, uint64_t stateHash) {
     if (m_state != ReplayState::Recording) return;
     ReplayFrame frame;
     frame.tick = tick;
     frame.inputData = inputData;
+    frame.stateHash = stateHash;
     m_frames.push_back(std::move(frame));
     m_header.frameCount = static_cast<uint32_t>(m_frames.size());
 }
@@ -45,6 +50,9 @@ bool ReplayRecorder::LoadReplay(const std::string& path) {
         if (dataSize > 0) {
             file.read(reinterpret_cast<char*>(frame.inputData.data()), dataSize);
         }
+        if (header.version >= 2) {
+            file.read(reinterpret_cast<char*>(&frame.stateHash), sizeof(frame.stateHash));
+        }
         m_frames.push_back(std::move(frame));
     }
 
@@ -65,6 +73,7 @@ bool ReplayRecorder::SaveReplay(const std::string& path) const {
         if (dataSize > 0) {
             file.write(reinterpret_cast<const char*>(frame.inputData.data()), dataSize);
         }
+        file.write(reinterpret_cast<const char*>(&frame.stateHash), sizeof(frame.stateHash));
     }
 
     return true;

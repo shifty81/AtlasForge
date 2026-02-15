@@ -1,0 +1,30 @@
+name: Atlas Determinism Gate
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+jobs:
+  determinism:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Configure (Strict Determinism)
+      run: |
+        cmake -B build \
+          -DCMAKE_CXX_FLAGS="-DATLAS_DETERMINISM_STRICT=1 -DATLAS_SIMULATION_BUILD=1" \
+          -DCMAKE_BUILD_TYPE=Release
+
+    - name: Build
+      run: cmake --build build --parallel
+
+    - name: Run Tests
+      run: |
+        cd build
+        ctest --output-on-failure
+
+    - name: Contract Scanner
+      run: python3 tools/contract_scan.py --path engine
