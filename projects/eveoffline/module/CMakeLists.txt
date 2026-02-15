@@ -1,14 +1,14 @@
 # EveOffline Game Module
 #
-# This CMakeLists.txt demonstrates how an external game builds a module
-# that links against AtlasEngine + AtlasGameplay.
+# Built as a STATIC library here because it lives inside the Atlas tree and
+# is linked directly into the test executable.  In a standalone game repo
+# the target would be SHARED so that the runtime can dlopen/LoadLibrary it:
 #
-# In a standalone game repo, the consumer would instead use:
 #   find_package(AtlasEngine REQUIRED)
 #   find_package(AtlasGameplay REQUIRED)
-# and link via the imported targets.
+#   add_library(EveOfflineModule SHARED EveOfflineModule.cpp)
+#   target_link_libraries(EveOfflineModule PRIVATE Atlas::AtlasEngine Atlas::AtlasGameplay)
 
-# When built as part of the Atlas tree the targets already exist.
 add_library(EveOfflineModule STATIC
     EveOfflineModule.cpp
 )
