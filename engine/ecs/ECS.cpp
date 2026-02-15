@@ -14,6 +14,7 @@ void World::DestroyEntity(EntityID id) {
         std::remove(m_entities.begin(), m_entities.end(), id),
         m_entities.end()
     );
+    m_components.erase(id);
 }
 
 bool World::IsAlive(EntityID id) const {
@@ -36,6 +37,17 @@ void World::Update(float dt) {
 
 void World::SetTickCallback(std::function<void(float)> cb) {
     m_tickCallback = std::move(cb);
+}
+
+std::vector<std::type_index> World::GetComponentTypes(EntityID id) const {
+    std::vector<std::type_index> types;
+    auto it = m_components.find(id);
+    if (it != m_components.end()) {
+        for (const auto& pair : it->second) {
+            types.push_back(pair.first);
+        }
+    }
+    return types;
 }
 
 }

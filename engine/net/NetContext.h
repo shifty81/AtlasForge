@@ -2,6 +2,7 @@
 #include <cstdint>
 #include <vector>
 #include <string>
+#include <queue>
 
 namespace atlas::net {
 
@@ -38,6 +39,11 @@ struct WorldSnapshot {
     std::vector<uint8_t> ecsState;
 };
 
+struct QueuedPacket {
+    uint32_t destPeerID = 0; // 0 = broadcast
+    Packet packet;
+};
+
 class NetContext {
 public:
     void Init(NetMode mode);
@@ -52,6 +58,13 @@ public:
     const std::vector<NetPeer>& Peers() const;
     bool IsAuthority() const;
 
+    // Peer management
+    uint32_t AddPeer();
+    void RemovePeer(uint32_t peerID);
+
+    // Receive incoming packets (from local queue after Poll)
+    bool Receive(Packet& outPkt);
+
     // Lockstep / Rollback
     void SaveSnapshot(uint32_t tick);
     void RollbackTo(uint32_t tick);
@@ -61,6 +74,11 @@ private:
     NetMode m_mode = NetMode::Standalone;
     std::vector<NetPeer> m_peers;
     std::vector<WorldSnapshot> m_snapshots;
+    uint32_t m_nextPeerID = 1;
+
+    // Local packet queues for testability
+    std::queue<QueuedPacket> m_outgoing;
+    std::queue<Packet> m_incoming;
 };
 
 }
