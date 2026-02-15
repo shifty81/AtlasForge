@@ -1,6 +1,7 @@
 add_library(AtlasEngine STATIC
     core/Engine.cpp
     core/Logger.cpp
+    core/CrashHandler.cpp
     ecs/ECS.cpp
     graphvm/GraphVM.cpp
     graphvm/GraphCompiler.cpp
