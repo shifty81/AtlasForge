@@ -197,6 +197,14 @@ Atlas/
 - Configures 5 server rules (mining yield, NPC spawn rate, market updates, pirate aggression, warp speed)
 - Exports `CreateGameModule()` factory for dynamic loading
 
+### Arena2D Module (`projects/arena2d/module/`)
+- Minimal 2D arena reference implementation of `IGameModule`
+- Registers 3 factions (Heroes, Monsters, Neutrals) with hostility/friendly relations
+- Registers 2 economy resources (Gold, XP)
+- Configures 3 replication rules (Position, Health, SpriteInfo)
+- Configures 3 server rules (enemy spawn rate, player damage multiplier, XP multiplier)
+- Exports `CreateArena2DModule()` factory for dynamic loading
+
 ### SDK / CMake Export
 - `AtlasEngine` and `AtlasGameplay` targets export CMake config files via `install(EXPORT ...)`
 - External game modules can use `find_package(AtlasEngine)` and `find_package(AtlasGameplay)` to link against the SDK
