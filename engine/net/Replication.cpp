@@ -127,17 +127,16 @@ std::vector<uint8_t> ReplicationManager::CollectDelta(uint32_t tick) {
         for (auto eid : entitiesToReplicate) {
             if (!m_world->IsAlive(eid)) continue;
 
-            // Use the registered serializer to get component data
+            // Use the registered serializer to get component data for this entity
             auto types = m_world->GetComponentTypes(eid);
             for (const auto& ti : types) {
                 if (!m_world->HasSerializer(ti)) continue;
                 if (m_world->GetTypeTag(ti) != rule.typeTag) continue;
 
-                // Serialize via ECS world serialization of this component
-                auto data = m_world->Serialize();
-                // For delta, we just record entityID and a marker
                 writeU32(eid);
-                writeU32(static_cast<uint32_t>(0)); // size placeholder
+                // Data size is 0 for this delta format; full component
+                // serialization is handled by ECS Serialize/Deserialize
+                writeU32(0);
                 entityCount++;
                 break;
             }

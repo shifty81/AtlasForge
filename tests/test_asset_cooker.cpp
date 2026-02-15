@@ -26,8 +26,8 @@ void test_cooker_set_output_dir() {
 }
 
 void test_cooker_cook_single_asset() {
-    std::string tmpDir = "/tmp/atlas_cooker_test";
-    std::string outDir = "/tmp/atlas_cooker_output";
+    std::string tmpDir = (std::filesystem::temp_directory_path() / "atlas_cooker_test").string();
+    std::string outDir = (std::filesystem::temp_directory_path() / "atlas_cooker_output").string();
     std::filesystem::create_directories(tmpDir);
     std::filesystem::remove_all(outDir);
 
@@ -70,8 +70,8 @@ void test_cooker_source_not_found() {
 }
 
 void test_cooker_cook_all() {
-    std::string tmpDir = "/tmp/atlas_cooker_all_test";
-    std::string outDir = "/tmp/atlas_cooker_all_output";
+    std::string tmpDir = (std::filesystem::temp_directory_path() / "atlas_cooker_all_test").string();
+    std::string outDir = (std::filesystem::temp_directory_path() / "atlas_cooker_all_output").string();
     std::filesystem::create_directories(tmpDir);
     std::filesystem::remove_all(outDir);
 
@@ -126,8 +126,8 @@ void test_cooker_clear_log() {
 }
 
 void test_cooker_progress_callback() {
-    std::string tmpDir = "/tmp/atlas_cooker_progress_test";
-    std::string outDir = "/tmp/atlas_cooker_progress_output";
+    std::string tmpDir = (std::filesystem::temp_directory_path() / "atlas_cooker_progress_test").string();
+    std::string outDir = (std::filesystem::temp_directory_path() / "atlas_cooker_progress_output").string();
     std::filesystem::create_directories(tmpDir);
     std::filesystem::remove_all(outDir);
 
