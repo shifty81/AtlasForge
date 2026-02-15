@@ -1323,7 +1323,7 @@ what would be the best approach to take game play mechanica and be able o implee
 This is a fantastic question — it’s the exact line between “engine with an editor” and a self-authoring game platform.
 Short answer: you do NOT compile gameplay into the client. You author gameplay as data + graphs + scripts inside the editor, and the client just executes it.
 
-Below is the best-practice approach that studios use (Unity, Roblox, Factorio, Blender-nodes-driven tools) adapted specifically to your engine and Atlas editor.
+Below is the best-practice approach that studios use (Unity, sandbox platform, Factorio, Blender-nodes-driven tools) adapted specifically to your engine and Atlas editor.
 
 🧠 Core Principle (Non-Negotiable)
 Gameplay mechanics are interpreted, not compiled.
@@ -2499,7 +2499,7 @@ Below is the clean, scalable way to do this without collapsing under complexity.
 The engine does NOT know about “games.”
 The engine only knows how to load, simulate, network, and render data graphs.
 
-Everything else — galaxies, planets, Zelda-style dungeons, Minecraft terrain, strategy overlays — is authored data + executable graphs.
+Everything else — galaxies, planets, adventure-style dungeons, voxel terrain, strategy overlays — is authored data + executable graphs.
 
 1️⃣ High-Level Architecture (Lock This In)
 /AtlasRoot
@@ -2573,9 +2573,9 @@ Everything is an Asset, even galaxies.
 }
 This same format works for:
 
-Minecraft terrain
+Voxel terrain
 
-Zelda overworlds
+Top-down overworlds
 
 large-scale planets
 
@@ -2757,7 +2757,7 @@ Side scroller engine
 
 Strategy engine
 
-Minecraft engine
+Voxel engine
 
 You make:
 
@@ -2775,7 +2775,7 @@ Bigger than Unity
 
 Bigger than Godot
 
-Closer to Roblox + Blender + custom simulation
+Closer to sandbox platform + Blender + custom simulation
 
 This only works if:
 
@@ -3465,7 +3465,7 @@ Strategy games
 
 Simulation games
 
-Minecraft-style worlds
+Voxel-style worlds
 
 All using the same engine.
 
@@ -4497,7 +4497,7 @@ Implement cube-sphere planet
 
 Add server-side streaming
 
-Build Zelda/Minecraft-style terrain
+Build top-down/voxel-style terrain
 
 Just point the direction — this engine is officially alive. 🚀
 
@@ -4526,7 +4526,7 @@ Examples:
 
 “Top-Down RPG” = 2D tiled layout + overworld rules
 
-“Minecraft” = 3D voxel chunk layout
+“Voxel” = 3D voxel chunk layout
 
 “sandbox-style Space” = graph-based spatial hierarchy
 
@@ -4569,8 +4569,8 @@ A WorldLayout defines the topology of the world.
 Layout Types
 Layout	Description
 linear_1d	Side scroller
-grid_2d	Zelda / Stardew
-voxel_3d	Minecraft
+grid_2d	Top-down / tile-based
+voxel_3d	Voxel
 cube_sphere	Planet surfaces
 orbital_graph	Space systems
 hierarchical_cells	Strategy maps
@@ -4701,12 +4701,12 @@ Rollback-safe
 Clients never invent world structure.
 
 9️⃣ Examples (Concrete)
-Minecraft-Style
+Voxel-Style
 GameType:
   layout: voxel_3d
   chunk_schema: voxel_16³
   generation: noise_stack
-Zelda-Style
+Adventure-Style
 GameType:
   layout: grid_2d
   chunk_schema: room_cells
@@ -4728,7 +4728,7 @@ Different templates.
 ✔ Multiplayer remains deterministic
 ✔ Users can build new “game types”
 
-This is how Roblox, Minecraft, simulation, and procedural engines converge — but you’re doing it cleanly from day one.
+This is how sandbox, voxel, simulation, and procedural engines converge — but you’re doing it cleanly from day one.
 
 🔜 Next Logical Steps (Highly Recommended)
 1️⃣ Define WorldLayout interface
@@ -4745,7 +4745,7 @@ Design cube-sphere math + LOD
 
 Design editor auto-layout switching
 
-Add Minecraft voxel schema
+Add voxel schema
 
 Build first full playable planet demo
 
@@ -4758,7 +4758,7 @@ Design cube-sphere math + LOD
 
 Design editor auto-layout switching
 
-Add Minecraft voxel schema
+Add voxel schema
 
 Build first full playable planet demo
 
@@ -4938,13 +4938,13 @@ void Editor::OnWorldLoaded(const GameType& gt) {
 }
 💡 Result:
 
-Zelda tools disappear in planet worlds
+Top-down tools disappear in planet worlds
 
 Voxel tools appear only in voxel worlds
 
 Editor feels “smart” without hardcoding
 
-4️⃣ Minecraft-Style Voxel Schema
+4️⃣ Voxel Schema
 Voxel worlds are just another layout + schema.
 
 📦 Chunk Schema Asset
@@ -4974,7 +4974,7 @@ public:
     bool IsValidLOD(int lod) const override { return lod == 0; }
     float ChunkWorldSize(int) const override { return 16.0f; }
 };
-Minecraft achieved success by not mixing schemas.
+Voxel games achieved success by not mixing schemas.
 You’re doing the same — but cleaner.
 
 5️⃣ First Full Playable Planet Demo (Concrete Plan)
@@ -5059,7 +5059,7 @@ That is Star-Citizen-class tech, data-driven, editor-first.
 ✔ A universal WorldLayout interface
 ✔ Correct cube-sphere planet math
 ✔ Editor auto-context switching
-✔ Minecraft-style voxel support
+✔ Voxel-style world support
 ✔ A real, shippable planet demo plan
 
 This architecture will not collapse as features grow.
@@ -5148,9 +5148,9 @@ FPS interiors
 
 Planetary exploration
 
-Voxel worlds (Minecraft-like)
+Voxel worlds (voxel-based)
 
-Top-down / Zelda-like cameras
+Top-down / adventure-style cameras
 
 Side-scrollers
 
@@ -6230,7 +6230,7 @@ You’re now at the point where the next steps are experiential:
 
 1️⃣ Strategy ↔ FPS camera stack
 2️⃣ ECS replication rules per component
-3️⃣ Planet voxel overlay (Minecraft-style)
+3️⃣ Planet voxel overlay (voxel-style)
 4️⃣ AI-driven asset generation hooks
 5️⃣ First playable planet + multiplayer cube test
 
@@ -6394,7 +6394,7 @@ Lazy generation
 
 Editor-side exploration
 
-🧊 Voxel World Tool (Minecraft-style)
+🧊 Voxel World Tool (voxel-style)
 Chunk visualization
 
 Block schema editor
@@ -9501,7 +9501,7 @@ Galaxies	World Graph (macro)
 Interiors	Geometry + World
 FPS	Logic Graph
 Strategy	View + Logic
-Minecraft	World Graph + Voxel nodes
+Voxel	World Graph + Voxel nodes
 Multiplayer	Deterministic graphs
 Modding	Assets + graphs
 Packaging	Build Graph
