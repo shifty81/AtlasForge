@@ -54,8 +54,9 @@ uint64_t ProfilerPanel::FrameCount() const {
 
 void ProfilerPanel::SetMaxHistory(size_t maxFrames) {
     m_maxHistory = maxFrames;
-    while (m_history.size() > m_maxHistory) {
-        m_history.erase(m_history.begin());
+    if (m_history.size() > m_maxHistory) {
+        m_history.erase(m_history.begin(),
+                        m_history.begin() + static_cast<std::ptrdiff_t>(m_history.size() - m_maxHistory));
     }
 }
 
