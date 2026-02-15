@@ -41,3 +41,7 @@ tmp/
 # OS files
 Thumbs.db
 .DS_Store
+
+# CodeQL artifacts
+_codeql_build_dir/
+_codeql_detected_source_root
