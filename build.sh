@@ -187,7 +187,15 @@ ok "All targets built successfully"
 if [ "$RUN_TESTS" = true ]; then
     echo ""
     info "Running tests..."
-    "$BUILD_DIR/tests/AtlasTests" 2>&1 | while IFS= read -r line; do echo "  $line"; done
+    set +e
+    test_output=$("$BUILD_DIR/tests/AtlasTests" 2>&1)
+    test_exit=$?
+    set -e
+    echo "$test_output" | while IFS= read -r line; do echo "  $line"; done
+    if [ "$test_exit" -ne 0 ]; then
+        error "Tests failed with exit code $test_exit"
+        exit "$test_exit"
+    fi
     ok "All tests passed"
 fi
 
@@ -226,7 +234,7 @@ echo -e "${GREEN}${BOLD} Build complete!${RESET}"
 echo ""
 if [ "$copied" -gt 0 ]; then
     info "Executables in $OUTPUT_DIR/:"
-    ls -lh "$OUTPUT_DIR"/*.* 2>/dev/null || ls -lh "$OUTPUT_DIR"/ 2>/dev/null | grep -v "^total"
+    ls -lh "$OUTPUT_DIR"/ | grep -v "^total"
 fi
 echo -e "${BOLD}═══════════════════════════════════════${RESET}"
 echo ""
