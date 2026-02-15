@@ -19,6 +19,11 @@ add_library(AtlasEngine STATIC
     ai/FactionRouter.cpp
     asset_graph/AssetGraphExecutor.cpp
     mod/ModAssetRegistry.cpp
+    input/InputManager.cpp
+    camera/Camera.cpp
+    physics/PhysicsWorld.cpp
+    audio/AudioEngine.cpp
+    gameplay/MechanicAsset.cpp
 )
 
 target_include_directories(AtlasEngine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

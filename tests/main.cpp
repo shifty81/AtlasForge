@@ -131,6 +131,46 @@ void test_editor_assistant_unknown();
 void test_interaction_debugger_record();
 void test_interaction_debugger_clear();
 
+// Input tests
+void test_input_bind_action();
+void test_input_unbind_action();
+void test_input_press_release();
+void test_input_axis();
+void test_input_callback();
+void test_input_unbound_action();
+
+// Camera tests
+void test_camera_default_state();
+void test_camera_set_mode();
+void test_camera_position();
+void test_camera_fov_clamp();
+void test_camera_orbit();
+void test_camera_movement();
+void test_camera_pitch_clamp();
+
+// Physics tests
+void test_physics_create_body();
+void test_physics_destroy_body();
+void test_physics_gravity();
+void test_physics_static_body();
+void test_physics_apply_force();
+void test_physics_collision_detection();
+
+// Audio tests
+void test_audio_load_sound();
+void test_audio_unload_sound();
+void test_audio_play_pause_stop();
+void test_audio_volume();
+void test_audio_master_volume();
+void test_audio_looping();
+
+// Gameplay mechanic tests
+void test_mechanic_register();
+void test_mechanic_unregister();
+void test_mechanic_find_by_name();
+void test_mechanic_params();
+void test_mechanic_get_by_type();
+
 int main() {
     std::cout << "=== Atlas Engine Tests ===" << std::endl;
 
@@ -283,6 +323,51 @@ int main() {
     test_editor_assistant_unknown();
     test_interaction_debugger_record();
     test_interaction_debugger_clear();
+
+    // Input
+    std::cout << "\n--- Input System ---" << std::endl;
+    test_input_bind_action();
+    test_input_unbind_action();
+    test_input_press_release();
+    test_input_axis();
+    test_input_callback();
+    test_input_unbound_action();
+
+    // Camera
+    std::cout << "\n--- Camera System ---" << std::endl;
+    test_camera_default_state();
+    test_camera_set_mode();
+    test_camera_position();
+    test_camera_fov_clamp();
+    test_camera_orbit();
+    test_camera_movement();
+    test_camera_pitch_clamp();
+
+    // Physics
+    std::cout << "\n--- Physics ---" << std::endl;
+    test_physics_create_body();
+    test_physics_destroy_body();
+    test_physics_gravity();
+    test_physics_static_body();
+    test_physics_apply_force();
+    test_physics_collision_detection();
+
+    // Audio
+    std::cout << "\n--- Audio System ---" << std::endl;
+    test_audio_load_sound();
+    test_audio_unload_sound();
+    test_audio_play_pause_stop();
+    test_audio_volume();
+    test_audio_master_volume();
+    test_audio_looping();
+
+    // Gameplay Mechanics
+    std::cout << "\n--- Gameplay Mechanics ---" << std::endl;
+    test_mechanic_register();
+    test_mechanic_unregister();
+    test_mechanic_find_by_name();
+    test_mechanic_params();
+    test_mechanic_get_by_type();
 
     std::cout << "\n=== All tests passed! ===" << std::endl;
     return 0;

@@ -19,6 +19,11 @@ add_executable(AtlasTests
     test_asset_graph.cpp
     test_mod.cpp
     test_editor_assistant.cpp
+    test_input.cpp
+    test_camera.cpp
+    test_physics.cpp
+    test_audio.cpp
+    test_gameplay.cpp
     ${CMAKE_SOURCE_DIR}/editor/panels/ConsolePanel.cpp
     ${CMAKE_SOURCE_DIR}/editor/panels/InteractionDebugger.cpp
     ${CMAKE_SOURCE_DIR}/editor/assistant/EditorAssistant.cpp

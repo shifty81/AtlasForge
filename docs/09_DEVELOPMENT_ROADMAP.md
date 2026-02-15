@@ -38,11 +38,11 @@
 
 ## Phase 5 — Gameplay
 
-- [ ] Mechanic asset format
-- [ ] Camera system (strategy, FPS, orbital)
-- [ ] Input mapping system
-- [ ] Physics integration
-- [ ] Audio system
+- [x] Mechanic asset format
+- [x] Camera system (strategy, FPS, orbital)
+- [x] Input mapping system
+- [x] Physics integration
+- [x] Audio system
 
 ## Phase 6 — Production
 
