@@ -94,8 +94,8 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    if (moduleLoader.IsLoaded()) {
-        atlas::module::GameModuleContext ctx{
+    auto makeModuleContext = [&]() -> atlas::module::GameModuleContext {
+        return {
             engine.GetWorld(),
             engine.GetNet(),
             replication,
@@ -103,7 +103,10 @@ int main(int argc, char* argv[]) {
             assetRegistry,
             atlas::project::ProjectManager::Get().Descriptor()
         };
+    };
 
+    if (moduleLoader.IsLoaded()) {
+        auto ctx = makeModuleContext();
         auto* mod = moduleLoader.GetModule();
         mod->RegisterTypes(ctx);
         mod->ConfigureReplication(ctx);
@@ -118,14 +121,7 @@ int main(int argc, char* argv[]) {
     engine.Run();
 
     if (moduleLoader.IsLoaded()) {
-        atlas::module::GameModuleContext ctx{
-            engine.GetWorld(),
-            engine.GetNet(),
-            replication,
-            atlas::rules::ServerRules::Get(),
-            assetRegistry,
-            atlas::project::ProjectManager::Get().Descriptor()
-        };
+        auto ctx = makeModuleContext();
         moduleLoader.GetModule()->OnShutdown(ctx);
     }
 
