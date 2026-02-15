@@ -129,6 +129,7 @@ Multi-project architecture with schema validation and plugin support.
 - [x] Game module interface (IGameModule, GameModuleContext, dynamic/static loading)
 - [x] AtlasGameplay library (FactionSystem, CombatFramework, EconomySystem)
 - [x] EveOffline game module (reference IGameModule implementation with factions, economy, replication, server rules)
+- [x] Arena2D game module (minimal 2D arena IGameModule implementation with factions, economy, replication, server rules)
 - [x] CMake SDK export (install/export rules for find_package(AtlasEngine) and find_package(AtlasGameplay))
 
 ## Phase 6 — Production ✅

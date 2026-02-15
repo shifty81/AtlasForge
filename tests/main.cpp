@@ -577,6 +577,14 @@ void test_eveoffline_server_rules();
 void test_eveoffline_lifecycle();
 void test_eveoffline_factory();
 
+// Arena2D Module tests
+void test_arena2d_describe();
+void test_arena2d_register_types();
+void test_arena2d_replication_rules();
+void test_arena2d_server_rules();
+void test_arena2d_lifecycle();
+void test_arena2d_factory();
+
 int main() {
     std::cout << "=== Atlas Engine Tests ===" << std::endl;
 
@@ -1228,6 +1236,15 @@ int main() {
     test_eveoffline_server_rules();
     test_eveoffline_lifecycle();
     test_eveoffline_factory();
+
+    // Arena2D Module
+    std::cout << "\n--- Arena2D Module ---" << std::endl;
+    test_arena2d_describe();
+    test_arena2d_register_types();
+    test_arena2d_replication_rules();
+    test_arena2d_server_rules();
+    test_arena2d_lifecycle();
+    test_arena2d_factory();
 
     std::cout << "\n=== All tests passed! ===" << std::endl;
     return 0;

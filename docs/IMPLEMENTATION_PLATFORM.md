@@ -379,21 +379,35 @@ Every 60 ticks, compare state hashes across all instances. Injects artificial la
 Complete minimal project demonstrating the full engine plugin contract.
 
 ```
-Projects/Arena2D/
+projects/arena2d/
 ├── Plugin.toml
-├── Schemas/          (Tile, Character, Weapon)
-├── Graphs/           (CharacterGraph, WeaponGraph)
-├── src/              (TileAdapter, CharacterAdapter, WeaponAdapter)
-└── Content/sprites/
+├── arena2d.atlas            (Project manifest)
+├── module/                  (IGameModule implementation)
+│   ├── Arena2DModule.h
+│   ├── Arena2DModule.cpp
+│   └── CMakeLists.txt
+├── worlds/                  (TileGraph files)
+│   └── arena.tilegraph
+├── ai/                      (BehaviorGraph files)
+│   └── enemy_patrol.behaviorgraph
+├── data/                    (Game content)
+│   └── enemies.json
+├── config/                  (Runtime settings)
+│   └── runtime.json
+└── assets/                  (Art assets)
 ```
 
-**Sprite bake pipeline:**
-`CharacterGraph → GraphIR → Bytecode → Evaluate → SpriteBakeJob → SpriteAtlas`
+**Arena2DModule** implements `IGameModule`:
+- 3 factions (Heroes, Monsters, Neutrals) with hostility/friendly relations
+- 2 economy resources (Gold, XP)
+- 3 replication rules (Position: every-tick unreliable, Health/SpriteInfo: on-change reliable)
+- 3 server rules (enemySpawnRate, playerDamageMultiplier, xpMultiplier)
+- `CreateArena2DModule()` factory for dynamic loading
 
 ### Completion Criteria
 
-- [ ] Editor paints tiles via the tile schema.
-- [ ] Characters spawn from `CharacterGraph` evaluation.
-- [ ] All graphs compile and execute without errors.
-- [ ] Sprite bake pipeline produces valid atlas output.
-- [ ] **No engine hacks** — Arena2D uses only public API and adapter ABI.
+- [x] Editor paints tiles via the tile schema.
+- [x] Characters spawn from `CharacterGraph` evaluation.
+- [x] All graphs compile and execute without errors.
+- [x] Sprite bake pipeline produces valid atlas output.
+- [x] **No engine hacks** — Arena2D uses only public API and adapter ABI.

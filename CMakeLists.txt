@@ -11,8 +11,9 @@ add_subdirectory(runtime)
 add_subdirectory(client)
 add_subdirectory(server)
 
-# Example game module (EveOffline)
+# Example game modules
 add_subdirectory(projects/eveoffline/module)
+add_subdirectory(projects/arena2d/module)
 
 enable_testing()
 add_subdirectory(tests)
