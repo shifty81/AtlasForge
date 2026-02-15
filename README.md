@@ -1,3 +1,14 @@
+```
+     ___   ______  __       ___    _____
+    /   | /_  __/ / /      /   |  / ___/
+   / /| |  / /   / /      / /| |  \__ \
+  / ___ | / /   / /___   / ___ | ___/ /
+ /_/  |_|/_/   /_____/  /_/  |_|/____/
+
+      ⚙️  A T L A S   E N G I N E  ⚙️
+   Modular · Data-Driven · Deterministic
+```
+
 # Atlas Game Engine
 
 Atlas is a modular, data-driven game engine and simulation platform designed to support:
@@ -18,9 +29,9 @@ Atlas is a modular, data-driven game engine and simulation platform designed to 
   Phase 1        Phase 2        Phase 3        Phase 4        Phase 5        Phase 6        Phase 7
  Core Engine      Editor       Networking    World Gen       Gameplay      Production       Polish
 ────────────────────────────────────────────────────────────────────────────────────────────────────
- ██████████     ██████████     ██████████     ██████████     ░░░░░░░░░░     ██████░░░░     ░░░░░░░░░░
-   100%            100%           100%          100%             0%            40%             0%
-  ✅ Done        ✅ Done        ✅ Done       ✅ Done        📋 Planned    🔧 Active      📋 Planned
+ ██████████     ██████████     ██████████     ██████████     ██████████     ██████░░░░     ░░░░░░░░░░
+   100%            100%           100%          100%           100%           40%             0%
+  ✅ Done        ✅ Done        ✅ Done       ✅ Done        ✅ Done       🔧 Active      📋 Planned
 ```
 
 <table>
@@ -75,13 +86,13 @@ Atlas is a modular, data-driven game engine and simulation platform designed to 
 </td>
 <td width="14%">
 
-**Phase 5 — Gameplay** 📋
+**Phase 5 — Gameplay** ✅
 
-- ⬜ Mechanic assets
-- ⬜ Camera system
-- ⬜ Input mapping
-- ⬜ Physics integration
-- ⬜ Audio system
+- ✅ Mechanic assets
+- ✅ Camera system
+- ✅ Input mapping
+- ✅ Physics integration
+- ✅ Audio system
 
 </td>
 <td width="14%">
@@ -139,10 +150,21 @@ Atlas/
 │   ├── world/           # World layouts (cube-sphere, voxel grid)
 │   ├── math/            # Math utilities
 │   ├── input/           # Input system
+│   ├── camera/          # Camera system (FreeLook, Strategy, FPS, Orbital)
+│   ├── physics/         # Physics simulation
+│   ├── audio/           # Audio engine
+│   ├── gameplay/        # Mechanic assets & skill trees
+│   ├── weapon/          # Weapon construction graph
+│   ├── character/       # Character graph (modular characters)
+│   ├── animation/       # Animation graph + modifier system
+│   ├── tile/            # Tile graph (2D tileset generation)
+│   ├── sound/           # Sound graph (procedural audio/synth)
+│   ├── story/           # Story graph (narrative generation)
+│   ├── flow/            # Game flow graph (boot → credits)
 │   └── render/          # Render abstraction
 │
 ├── editor/              # Standalone editor (Dev Client)
-│   ├── ui/              # Docking, layout, panel system
+│   ├── ui/              # Docking, layout, panel system, UI screen graphs
 │   ├── panels/          # ECS Inspector, Net Inspector, Console
 │   ├── tools/           # Game Packager, Asset Cooker
 │   ├── ai/              # AI Aggregator for asset generation
