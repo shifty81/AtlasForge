@@ -1,59 +1,84 @@
 #pragma once
-
 #include <cstdint>
-#include <map>
-#include <string>
 #include <vector>
+#include <string>
+#include <memory>
+#include <unordered_map>
 
 namespace atlas::tile {
 
-enum class TileType {
-    Empty,
-    Ground,
-    Wall,
-    Water,
-    Lava,
-    Custom
+enum class TilePinType : uint8_t {
+    TileID,
+    TileMap,
+    Float,
+    Mask,
+    Seed,
+    Metadata
 };
 
-struct TileFlags {
-    bool walkable = false;
-    bool transparent = false;
-    bool destructible = false;
+struct TileValue {
+    TilePinType type;
+    std::vector<float> data;
 };
 
-struct TileDefinition {
-    uint32_t id;
+struct TilePort {
     std::string name;
-    TileType type;
-    TileFlags flags;
+    TilePinType type;
 };
 
-struct TileInstance {
-    uint32_t defId = 0;
-    float damage = 0.0f;
-    uint8_t variant = 0;
+using TileNodeID = uint32_t;
+using TilePortID = uint16_t;
+
+struct TileEdge {
+    TileNodeID fromNode;
+    TilePortID fromPort;
+    TileNodeID toNode;
+    TilePortID toPort;
 };
 
-class TileMap {
+struct TileGenContext {
+    uint32_t seed;
+    int32_t mapWidth;
+    int32_t mapHeight;
+};
+
+class TileNode {
 public:
-    void Init(uint32_t width, uint32_t height);
-    uint32_t RegisterTile(const std::string& name, TileType type, TileFlags flags);
-    void SetTile(uint32_t x, uint32_t y, uint32_t defId);
-    const TileInstance* GetTile(uint32_t x, uint32_t y) const;
-    const TileDefinition* GetDefinition(uint32_t defId) const;
-    size_t DefinitionCount() const;
-    uint32_t Width() const;
-    uint32_t Height() const;
-    bool IsValid(uint32_t x, uint32_t y) const;
-    void DamageTile(uint32_t x, uint32_t y, float amount);
+    virtual ~TileNode() = default;
+    virtual const char* GetName() const = 0;
+    virtual const char* GetCategory() const = 0;
+    virtual std::vector<TilePort> Inputs() const = 0;
+    virtual std::vector<TilePort> Outputs() const = 0;
+    virtual void Evaluate(const TileGenContext& ctx,
+                          const std::vector<TileValue>& inputs,
+                          std::vector<TileValue>& outputs) const = 0;
+};
+
+class TileGraph {
+public:
+    TileNodeID AddNode(std::unique_ptr<TileNode> node);
+    void RemoveNode(TileNodeID id);
+    void AddEdge(const TileEdge& edge);
+    void RemoveEdge(const TileEdge& edge);
+
+    bool Compile();
+    bool Execute(const TileGenContext& ctx);
+
+    const TileValue* GetOutput(TileNodeID node, TilePortID port) const;
+    size_t NodeCount() const;
+    bool IsCompiled() const;
 
 private:
-    std::map<uint32_t, TileDefinition> m_defs;
-    std::vector<std::vector<TileInstance>> m_grid;
-    uint32_t m_width = 0;
-    uint32_t m_height = 0;
-    uint32_t m_nextDefId = 1;
+    TileNodeID m_nextID = 1;
+    std::unordered_map<TileNodeID, std::unique_ptr<TileNode>> m_nodes;
+    std::vector<TileEdge> m_edges;
+    std::vector<TileNodeID> m_executionOrder;
+    bool m_compiled = false;
+
+    std::unordered_map<uint64_t, TileValue> m_outputs;
+
+    bool HasCycle() const;
+    bool ValidateEdgeTypes() const;
 };
 
-} // namespace atlas::tile
+}

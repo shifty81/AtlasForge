@@ -1,68 +1,76 @@
 #pragma once
 #include <cstdint>
-#include <map>
-#include <string>
-#include <unordered_map>
 #include <vector>
+#include <string>
+#include <memory>
+#include <unordered_map>
 
 namespace atlas::sound {
 
-enum class GeneratorType : uint8_t {
-    Sine,
-    Saw,
-    Square,
-    Noise,
-    Sample
+enum class SoundPinType : uint8_t {
+    AudioBuffer,   // PCM sample buffer
+    Float,         // Scalar parameter (frequency, gain, etc.)
+    Seed,          // RNG seed for variation
+    Trigger,       // Event trigger signal
+    Envelope       // ADSR envelope data
 };
 
-enum class SoundNodeType : uint8_t {
-    Generator,
-    Filter,
-    Envelope,
-    Mixer,
-    Output
+struct SoundValue {
+    SoundPinType type;
+    std::vector<float> data;
 };
 
-struct SoundParam {
+struct SoundPort {
     std::string name;
-    float value = 0.0f;
-    float minVal = 0.0f;
-    float maxVal = 1.0f;
+    SoundPinType type;
 };
 
-struct SoundNode {
-    uint32_t id = 0;
-    SoundNodeType type = SoundNodeType::Generator;
-    GeneratorType generatorType = GeneratorType::Sine;
-    std::vector<SoundParam> params;
+using SoundNodeID = uint32_t;
+using SoundPortID = uint16_t;
+
+struct SoundEdge {
+    SoundNodeID fromNode;
+    SoundPortID fromPort;
+    SoundNodeID toNode;
+    SoundPortID toPort;
 };
 
-struct SoundActionBinding {
-    std::string actionName;
-    uint32_t soundNodeId = 0;
-    std::map<std::string, std::string> paramBindings;
+struct SoundContext {
+    uint32_t sampleRate;
+    uint32_t bufferSize;
+    uint64_t seed;
+};
+
+class SoundNode {
+public:
+    virtual ~SoundNode() = default;
+    virtual const char* GetName() const = 0;
+    virtual const char* GetCategory() const = 0;
+    virtual std::vector<SoundPort> Inputs() const = 0;
+    virtual std::vector<SoundPort> Outputs() const = 0;
+    virtual void Evaluate(const SoundContext& ctx, const std::vector<SoundValue>& inputs, std::vector<SoundValue>& outputs) const = 0;
 };
 
 class SoundGraph {
 public:
-    void Init();
-    uint32_t AddNode(SoundNodeType type, GeneratorType genType);
-    void RemoveNode(uint32_t id);
-    const SoundNode* GetNode(uint32_t id) const;
+    SoundNodeID AddNode(std::unique_ptr<SoundNode> node);
+    void RemoveNode(SoundNodeID id);
+    void AddEdge(const SoundEdge& edge);
+    void RemoveEdge(const SoundEdge& edge);
+    bool Compile();
+    bool Execute(const SoundContext& ctx);
+    const SoundValue* GetOutput(SoundNodeID node, SoundPortID port) const;
     size_t NodeCount() const;
-
-    void SetParam(uint32_t nodeId, const std::string& paramName, float value);
-
-    void BindAction(const std::string& actionName, uint32_t nodeId);
-    const SoundActionBinding* GetBinding(const std::string& actionName) const;
-    size_t BindingCount() const;
-
-    float Evaluate(float time) const;
-
+    bool IsCompiled() const;
 private:
-    std::unordered_map<uint32_t, SoundNode> m_nodes;
-    std::unordered_map<std::string, SoundActionBinding> m_bindings;
-    uint32_t m_nextId = 1;
+    SoundNodeID m_nextID = 1;
+    std::unordered_map<SoundNodeID, std::unique_ptr<SoundNode>> m_nodes;
+    std::vector<SoundEdge> m_edges;
+    std::vector<SoundNodeID> m_executionOrder;
+    bool m_compiled = false;
+    std::unordered_map<uint64_t, SoundValue> m_outputs;
+    bool HasCycle() const;
+    bool ValidateEdgeTypes() const;
 };
 
-} // namespace atlas::sound
+}

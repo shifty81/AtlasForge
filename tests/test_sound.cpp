@@ -1,83 +1,116 @@
 #include "../engine/sound/SoundGraph.h"
+#include "../engine/sound/SoundNodes.h"
 #include <iostream>
 #include <cassert>
 #include <cmath>
 
-using namespace atlas::sound;
-
-void test_sound_add_node() {
-    SoundGraph graph;
-    graph.Init();
-
-    uint32_t id = graph.AddNode(SoundNodeType::Generator, GeneratorType::Sine);
-    assert(id > 0);
-    assert(graph.GetNode(id) != nullptr);
-    assert(graph.GetNode(id)->type == SoundNodeType::Generator);
-    assert(graph.GetNode(id)->generatorType == GeneratorType::Sine);
+void test_soundgraph_add_nodes() {
+    atlas::sound::SoundGraph graph;
+    auto id = graph.AddNode(std::make_unique<atlas::sound::OscillatorNode>());
+    assert(id == 1);
     assert(graph.NodeCount() == 1);
+    std::cout << "[PASS] test_soundgraph_add_nodes" << std::endl;
+}
 
-    uint32_t id2 = graph.AddNode(SoundNodeType::Filter, GeneratorType::Saw);
-    assert(id2 > id);
-    assert(graph.NodeCount() == 2);
-
+void test_soundgraph_remove_node() {
+    atlas::sound::SoundGraph graph;
+    auto id = graph.AddNode(std::make_unique<atlas::sound::OscillatorNode>());
     graph.RemoveNode(id);
-    assert(graph.GetNode(id) == nullptr);
-    assert(graph.NodeCount() == 1);
-
-    std::cout << "[PASS] test_sound_add_node" << std::endl;
+    assert(graph.NodeCount() == 0);
+    std::cout << "[PASS] test_soundgraph_remove_node" << std::endl;
 }
 
-void test_sound_set_param() {
-    SoundGraph graph;
-    graph.Init();
-
-    uint32_t id = graph.AddNode(SoundNodeType::Generator, GeneratorType::Sine);
-    graph.SetParam(id, "frequency", 440.0f);
-
-    const SoundNode* node = graph.GetNode(id);
-    assert(node != nullptr);
-    assert(node->params.size() == 1);
-    assert(node->params[0].name == "frequency");
-    assert(std::abs(node->params[0].value - 440.0f) < 0.01f);
-
-    graph.SetParam(id, "frequency", 880.0f);
-    node = graph.GetNode(id);
-    assert(node->params.size() == 1);
-    assert(std::abs(node->params[0].value - 880.0f) < 0.01f);
-
-    std::cout << "[PASS] test_sound_set_param" << std::endl;
+void test_soundgraph_compile_empty() {
+    atlas::sound::SoundGraph graph;
+    assert(graph.Compile());
+    assert(graph.IsCompiled());
+    std::cout << "[PASS] test_soundgraph_compile_empty" << std::endl;
 }
 
-void test_sound_bind_action() {
-    SoundGraph graph;
-    graph.Init();
+void test_soundgraph_compile_single_node() {
+    atlas::sound::SoundGraph graph;
+    auto id = graph.AddNode(std::make_unique<atlas::sound::OscillatorNode>());
+    assert(graph.Compile());
 
-    uint32_t id = graph.AddNode(SoundNodeType::Generator, GeneratorType::Square);
-    graph.BindAction("jump", id);
+    atlas::sound::SoundContext ctx{44100, 256, 42};
+    assert(graph.Execute(ctx));
 
-    assert(graph.BindingCount() == 1);
-    const SoundActionBinding* binding = graph.GetBinding("jump");
-    assert(binding != nullptr);
-    assert(binding->actionName == "jump");
-    assert(binding->soundNodeId == id);
-
-    assert(graph.GetBinding("attack") == nullptr);
-
-    std::cout << "[PASS] test_sound_bind_action" << std::endl;
+    auto* output = graph.GetOutput(id, 0);
+    assert(output != nullptr);
+    assert(output->type == atlas::sound::SoundPinType::AudioBuffer);
+    assert(output->data.size() == 256);
+    std::cout << "[PASS] test_soundgraph_compile_single_node" << std::endl;
 }
 
-void test_sound_evaluate() {
-    SoundGraph graph;
-    graph.Init();
+void test_soundgraph_compile_chain() {
+    atlas::sound::SoundGraph graph;
 
-    uint32_t id = graph.AddNode(SoundNodeType::Generator, GeneratorType::Sine);
-    graph.SetParam(id, "frequency", 440.0f);
+    auto oscId = graph.AddNode(std::make_unique<atlas::sound::OscillatorNode>());
+    auto gainId = graph.AddNode(std::make_unique<atlas::sound::GainNode>());
 
-    float val = graph.Evaluate(0.0f);
-    assert(std::abs(val) < 0.01f);
+    // Oscillator AudioBuffer -> Gain AudioBuffer input
+    graph.AddEdge({oscId, 0, gainId, 0});
 
-    float val2 = graph.Evaluate(0.001f);
-    assert(std::abs(val2) > 0.0f);
+    assert(graph.Compile());
 
-    std::cout << "[PASS] test_sound_evaluate" << std::endl;
+    atlas::sound::SoundContext ctx{44100, 128, 0};
+    assert(graph.Execute(ctx));
+
+    auto* output = graph.GetOutput(gainId, 0);
+    assert(output != nullptr);
+    assert(output->type == atlas::sound::SoundPinType::AudioBuffer);
+    assert(output->data.size() == 128);
+    std::cout << "[PASS] test_soundgraph_compile_chain" << std::endl;
+}
+
+void test_soundgraph_execute() {
+    atlas::sound::SoundGraph graph;
+
+    // Two oscillators -> Mix
+    auto osc1 = graph.AddNode(std::make_unique<atlas::sound::OscillatorNode>());
+    auto osc2 = graph.AddNode(std::make_unique<atlas::sound::OscillatorNode>());
+    auto mixId = graph.AddNode(std::make_unique<atlas::sound::MixNode>());
+
+    graph.AddEdge({osc1, 0, mixId, 0});
+    graph.AddEdge({osc2, 0, mixId, 1});
+
+    assert(graph.Compile());
+
+    atlas::sound::SoundContext ctx{44100, 64, 0};
+    assert(graph.Execute(ctx));
+
+    auto* output = graph.GetOutput(mixId, 0);
+    assert(output != nullptr);
+    assert(output->type == atlas::sound::SoundPinType::AudioBuffer);
+    assert(output->data.size() == 64);
+
+    // Mixed identical signals should equal the original
+    auto* osc1Out = graph.GetOutput(osc1, 0);
+    for (size_t i = 0; i < 64; ++i) {
+        float expected = osc1Out->data[i]; // (a+a)/2 == a
+        assert(std::fabs(output->data[i] - expected) < 1e-5f);
+    }
+    std::cout << "[PASS] test_soundgraph_execute" << std::endl;
+}
+
+void test_soundgraph_deterministic() {
+    auto buildAndRun = [](uint64_t seed) -> std::vector<float> {
+        atlas::sound::SoundGraph graph;
+        auto oscId = graph.AddNode(std::make_unique<atlas::sound::OscillatorNode>());
+        auto gainId = graph.AddNode(std::make_unique<atlas::sound::GainNode>());
+        graph.AddEdge({oscId, 0, gainId, 0});
+        graph.Compile();
+        atlas::sound::SoundContext ctx{44100, 256, seed};
+        graph.Execute(ctx);
+        return graph.GetOutput(gainId, 0)->data;
+    };
+
+    auto a = buildAndRun(42);
+    auto b = buildAndRun(42);
+    assert(a == b);
+
+    // Running a second time with the same parameters must still match
+    auto c = buildAndRun(42);
+    assert(a == c);
+    std::cout << "[PASS] test_soundgraph_deterministic" << std::endl;
 }

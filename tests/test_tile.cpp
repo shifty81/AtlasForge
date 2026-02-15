@@ -1,66 +1,132 @@
 #include "../engine/tile/TileGraph.h"
-#include <cassert>
+#include "../engine/tile/TileNodes.h"
 #include <iostream>
+#include <cassert>
 
-using namespace atlas::tile;
-
-void test_tile_init() {
-    TileMap tm;
-    tm.Init(10, 8);
-    assert(tm.Width() == 10);
-    assert(tm.Height() == 8);
-    assert(tm.DefinitionCount() == 0);
-    std::cout << "[PASS] test_tile_init" << std::endl;
+void test_tilegraph_add_nodes() {
+    atlas::tile::TileGraph graph;
+    auto node = std::make_unique<atlas::tile::BaseTileNode>();
+    node->tileID = 1.0f;
+    auto id = graph.AddNode(std::move(node));
+    assert(id == 1);
+    assert(graph.NodeCount() == 1);
+    std::cout << "[PASS] test_tilegraph_add_nodes" << std::endl;
 }
 
-void test_tile_register() {
-    TileMap tm;
-    tm.Init(4, 4);
-    uint32_t id1 = tm.RegisterTile("Grass", TileType::Ground, {true, true, false});
-    uint32_t id2 = tm.RegisterTile("Stone", TileType::Wall, {false, false, true});
-    assert(tm.DefinitionCount() == 2);
-    const TileDefinition* def = tm.GetDefinition(id1);
-    assert(def != nullptr);
-    assert(def->name == "Grass");
-    assert(def->flags.walkable == true);
-    const TileDefinition* def2 = tm.GetDefinition(id2);
-    assert(def2 != nullptr);
-    assert(def2->flags.destructible == true);
-    std::cout << "[PASS] test_tile_register" << std::endl;
+void test_tilegraph_remove_node() {
+    atlas::tile::TileGraph graph;
+    auto node = std::make_unique<atlas::tile::BaseTileNode>();
+    node->tileID = 1.0f;
+    auto id = graph.AddNode(std::move(node));
+    graph.RemoveNode(id);
+    assert(graph.NodeCount() == 0);
+    std::cout << "[PASS] test_tilegraph_remove_node" << std::endl;
 }
 
-void test_tile_set_get() {
-    TileMap tm;
-    tm.Init(4, 4);
-    uint32_t grassId = tm.RegisterTile("Grass", TileType::Ground, {true, true, false});
-    tm.SetTile(1, 2, grassId);
-    const TileInstance* inst = tm.GetTile(1, 2);
-    assert(inst != nullptr);
-    assert(inst->defId == grassId);
-    assert(inst->damage == 0.0f);
-    std::cout << "[PASS] test_tile_set_get" << std::endl;
+void test_tilegraph_compile_empty() {
+    atlas::tile::TileGraph graph;
+    assert(graph.Compile());
+    assert(graph.IsCompiled());
+    std::cout << "[PASS] test_tilegraph_compile_empty" << std::endl;
 }
 
-void test_tile_damage() {
-    TileMap tm;
-    tm.Init(4, 4);
-    uint32_t wallId = tm.RegisterTile("Wall", TileType::Wall, {false, false, true});
-    tm.SetTile(0, 0, wallId);
-    tm.DamageTile(0, 0, 10.0f);
-    tm.DamageTile(0, 0, 5.0f);
-    const TileInstance* inst = tm.GetTile(0, 0);
-    assert(inst != nullptr);
-    assert(inst->damage == 15.0f);
-    std::cout << "[PASS] test_tile_damage" << std::endl;
+void test_tilegraph_compile_single_node() {
+    atlas::tile::TileGraph graph;
+    auto node = std::make_unique<atlas::tile::BaseTileNode>();
+    node->tileID = 2.0f;
+    auto id = graph.AddNode(std::move(node));
+    assert(graph.Compile());
+
+    atlas::tile::TileGenContext ctx{42, 8, 8};
+    assert(graph.Execute(ctx));
+
+    auto* output = graph.GetOutput(id, 0);
+    assert(output != nullptr);
+    assert(output->type == atlas::tile::TilePinType::TileID);
+    assert(!output->data.empty());
+    assert(output->data[0] == 2.0f);
+    std::cout << "[PASS] test_tilegraph_compile_single_node" << std::endl;
 }
 
-void test_tile_bounds() {
-    TileMap tm;
-    tm.Init(3, 3);
-    assert(tm.IsValid(0, 0) == true);
-    assert(tm.IsValid(2, 2) == true);
-    assert(tm.IsValid(3, 0) == false);
-    assert(tm.IsValid(0, 3) == false);
-    assert(tm.GetTile(99, 99) == nullptr);
-    std::cout << "[PASS] test_tile_bounds" << std::endl;
+void test_tilegraph_compile_chain() {
+    atlas::tile::TileGraph graph;
+
+    // BaseTile(grass=0) -> TileSelect input 2 (TileBelow)
+    auto grassNode = std::make_unique<atlas::tile::BaseTileNode>();
+    grassNode->tileID = 0.0f;
+    auto grassId = graph.AddNode(std::move(grassNode));
+
+    // BaseTile(stone=1) -> TileSelect input 3 (TileAbove)
+    auto stoneNode = std::make_unique<atlas::tile::BaseTileNode>();
+    stoneNode->tileID = 1.0f;
+    auto stoneId = graph.AddNode(std::move(stoneNode));
+
+    // NoiseField -> TileSelect input 0 (Field)
+    auto noiseId = graph.AddNode(std::make_unique<atlas::tile::NoiseFieldNode>());
+
+    // TileSelect
+    auto selectId = graph.AddNode(std::make_unique<atlas::tile::TileSelectNode>());
+
+    graph.AddEdge({noiseId, 0, selectId, 0});  // Field -> Field
+    graph.AddEdge({grassId, 0, selectId, 2});  // TileID -> TileBelow
+    graph.AddEdge({stoneId, 0, selectId, 3});  // TileID -> TileAbove
+
+    assert(graph.Compile());
+
+    atlas::tile::TileGenContext ctx{12345, 16, 16};
+    assert(graph.Execute(ctx));
+
+    auto* output = graph.GetOutput(selectId, 0);
+    assert(output != nullptr);
+    assert(output->type == atlas::tile::TilePinType::TileMap);
+    assert(output->data.size() == 16 * 16);
+
+    // All values should be either 0 (grass) or 1 (stone)
+    for (float v : output->data) {
+        assert(v == 0.0f || v == 1.0f);
+    }
+    std::cout << "[PASS] test_tilegraph_compile_chain" << std::endl;
+}
+
+void test_tilegraph_execute() {
+    atlas::tile::TileGraph graph;
+
+    auto noiseId = graph.AddNode(std::make_unique<atlas::tile::NoiseFieldNode>());
+
+    assert(graph.Compile());
+
+    atlas::tile::TileGenContext ctx{99, 8, 8};
+    assert(graph.Execute(ctx));
+
+    auto* output = graph.GetOutput(noiseId, 0);
+    assert(output != nullptr);
+    assert(output->type == atlas::tile::TilePinType::Float);
+    assert(output->data.size() == 64);
+
+    // All noise values should be in [0, 1]
+    for (float v : output->data) {
+        assert(v >= 0.0f && v <= 1.0f);
+    }
+    std::cout << "[PASS] test_tilegraph_execute" << std::endl;
+}
+
+void test_tilegraph_deterministic() {
+    auto buildAndRun = [](uint32_t seed) -> std::vector<float> {
+        atlas::tile::TileGraph graph;
+        auto noiseId = graph.AddNode(std::make_unique<atlas::tile::NoiseFieldNode>());
+        auto selectId = graph.AddNode(std::make_unique<atlas::tile::TileSelectNode>());
+        graph.AddEdge({noiseId, 0, selectId, 0});
+        graph.Compile();
+        atlas::tile::TileGenContext ctx{seed, 16, 16};
+        graph.Execute(ctx);
+        return graph.GetOutput(selectId, 0)->data;
+    };
+
+    auto a = buildAndRun(42);
+    auto b = buildAndRun(42);
+    assert(a == b);
+
+    auto c = buildAndRun(99);
+    assert(a != c);
+    std::cout << "[PASS] test_tilegraph_deterministic" << std::endl;
 }
