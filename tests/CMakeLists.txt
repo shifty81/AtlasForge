@@ -96,6 +96,7 @@ add_executable(AtlasTests
     test_headless_gui.cpp
     test_job_tracer.cpp
     test_include_firewall.cpp
+    test_next_steps.cpp
     ${CMAKE_SOURCE_DIR}/editor/panels/ConsolePanel.cpp
     ${CMAKE_SOURCE_DIR}/editor/panels/InteractionDebugger.cpp
     ${CMAKE_SOURCE_DIR}/editor/panels/ECSInspectorPanel.cpp
