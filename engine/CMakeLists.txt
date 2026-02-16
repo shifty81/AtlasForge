@@ -55,6 +55,8 @@ add_library(AtlasEngine STATIC
     weapon/WeaponNodes.cpp
     ui/UIGraph.cpp
     ui/UINodes.cpp
+    ui/UILogicGraph.cpp
+    ui/UILogicNodes.cpp
     ui/UIScreenGraph.cpp
     ui/UICommandBus.cpp
     ui/GUIInputRecorder.cpp
@@ -88,6 +90,10 @@ add_library(AtlasEngine STATIC
     production/BuildManifest.cpp
     procedural/ProceduralMeshGraph.cpp
     procedural/ProceduralMeshNodes.cpp
+    procedural/ProceduralMaterialGraph.cpp
+    procedural/ProceduralMaterialNodes.cpp
+    procedural/LODBakingGraph.cpp
+    procedural/LODBakingNodes.cpp
     sim/ReplayProofExporter.cpp
     sim/ReplayRecorder.cpp
     sim/StateHasher.cpp

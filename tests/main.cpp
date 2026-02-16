@@ -354,6 +354,43 @@ void test_procedural_subdivide();
 void test_procedural_noise_determinism();
 void test_procedural_full_pipeline();
 
+// Procedural Material Graph tests
+void test_material_solid_color();
+void test_material_checkerboard();
+void test_material_noise();
+void test_material_blend();
+void test_material_normal_map();
+void test_material_graph_compile();
+void test_material_graph_execute_solid();
+void test_material_graph_blend_pipeline();
+void test_material_graph_node_count();
+void test_material_graph_remove_node();
+
+// LOD Baking Graph tests
+void test_lod_decimate_mesh();
+void test_lod_merge_vertices();
+void test_lod_recompute_normals();
+void test_lod_chain_generation();
+void test_lod_graph_add_nodes();
+void test_lod_graph_remove_node();
+void test_lod_graph_compile_empty();
+void test_lod_graph_execute_basic();
+void test_lod_graph_decimate_pipeline();
+void test_lod_graph_lod_chain_output();
+
+// UI Logic Graph tests
+void test_ui_logic_add_nodes();
+void test_ui_logic_remove_node();
+void test_ui_logic_compile_empty();
+void test_ui_logic_compile_cycle_detection();
+void test_ui_logic_condition_node();
+void test_ui_logic_action_node();
+void test_ui_logic_databind_node();
+void test_ui_logic_transition_node();
+void test_ui_logic_timer_node();
+void test_ui_logic_gate_node_pass();
+void test_ui_logic_gate_node_block();
+
 // Sound Graph tests
 void test_soundgraph_add_nodes();
 void test_soundgraph_remove_node();
@@ -1540,6 +1577,46 @@ int main() {
     test_procedural_subdivide();
     test_procedural_noise_determinism();
     test_procedural_full_pipeline();
+
+    // Procedural Material Graph
+    std::cout << "\n--- Procedural Material Graph ---" << std::endl;
+    test_material_solid_color();
+    test_material_checkerboard();
+    test_material_noise();
+    test_material_blend();
+    test_material_normal_map();
+    test_material_graph_compile();
+    test_material_graph_execute_solid();
+    test_material_graph_blend_pipeline();
+    test_material_graph_node_count();
+    test_material_graph_remove_node();
+
+    // LOD Baking Graph
+    std::cout << "\n--- LOD Baking Graph ---" << std::endl;
+    test_lod_decimate_mesh();
+    test_lod_merge_vertices();
+    test_lod_recompute_normals();
+    test_lod_chain_generation();
+    test_lod_graph_add_nodes();
+    test_lod_graph_remove_node();
+    test_lod_graph_compile_empty();
+    test_lod_graph_execute_basic();
+    test_lod_graph_decimate_pipeline();
+    test_lod_graph_lod_chain_output();
+
+    // UI Logic Graph
+    std::cout << "\n--- UI Logic Graph ---" << std::endl;
+    test_ui_logic_add_nodes();
+    test_ui_logic_remove_node();
+    test_ui_logic_compile_empty();
+    test_ui_logic_compile_cycle_detection();
+    test_ui_logic_condition_node();
+    test_ui_logic_action_node();
+    test_ui_logic_databind_node();
+    test_ui_logic_transition_node();
+    test_ui_logic_timer_node();
+    test_ui_logic_gate_node_pass();
+    test_ui_logic_gate_node_block();
 
     // Sound Graph
     std::cout << "\n--- Sound Graph ---" << std::endl;
