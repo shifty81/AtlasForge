@@ -84,6 +84,7 @@ add_library(AtlasEngine STATIC
     production/AssetCooker.cpp
     production/BuildProfile.cpp
     production/PlatformTarget.cpp
+    production/BuildManifest.cpp
     sim/ReplayRecorder.cpp
     sim/StateHasher.cpp
     sim/JobTracer.cpp
@@ -97,6 +98,7 @@ add_library(AtlasEngine STATIC
     ui/HUDOverlay.cpp
     module/ModuleLoader.cpp
     render/VulkanRenderer.cpp
+    render/AtlasShaderIR.cpp
     sim/SimulationStateAuditor.cpp
     sim/DesyncReproducer.cpp
     assets/ServerAssetValidator.cpp
