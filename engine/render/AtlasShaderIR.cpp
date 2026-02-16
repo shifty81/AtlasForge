@@ -77,7 +77,7 @@ static float ReadFloat(const std::vector<uint8_t>& data, size_t& pos) {
 
 static std::string ReadString(const std::vector<uint8_t>& data, size_t& pos) {
     uint32_t len = ReadU32(data, pos);
-    if (pos + len > data.size()) return "";
+    if (len > 65536 || len > data.size() || pos > data.size() - len) return "";
     std::string s(data.begin() + static_cast<ptrdiff_t>(pos),
                   data.begin() + static_cast<ptrdiff_t>(pos + len));
     pos += len;
@@ -257,6 +257,7 @@ ShaderModule ShaderModule::Deserialize(const std::vector<uint8_t>& data) {
 
     // Inputs
     uint32_t inputCount = ReadU32(data, pos);
+    if (inputCount > 4096) return mod;
     mod.inputs.resize(inputCount);
     for (uint32_t i = 0; i < inputCount; ++i) {
         mod.inputs[i].name = ReadString(data, pos);
@@ -266,6 +267,7 @@ ShaderModule ShaderModule::Deserialize(const std::vector<uint8_t>& data) {
 
     // Outputs
     uint32_t outputCount = ReadU32(data, pos);
+    if (outputCount > 4096) return mod;
     mod.outputs.resize(outputCount);
     for (uint32_t i = 0; i < outputCount; ++i) {
         mod.outputs[i].name = ReadString(data, pos);
@@ -275,6 +277,7 @@ ShaderModule ShaderModule::Deserialize(const std::vector<uint8_t>& data) {
 
     // Uniforms
     uint32_t uniformCount = ReadU32(data, pos);
+    if (uniformCount > 4096) return mod;
     mod.uniforms.resize(uniformCount);
     for (uint32_t i = 0; i < uniformCount; ++i) {
         mod.uniforms[i].name = ReadString(data, pos);
@@ -284,6 +287,7 @@ ShaderModule ShaderModule::Deserialize(const std::vector<uint8_t>& data) {
 
     // Instructions
     uint32_t instrCount = ReadU32(data, pos);
+    if (instrCount > 1000000) return mod;
     mod.instructions.resize(instrCount);
     for (uint32_t i = 0; i < instrCount; ++i) {
         mod.instructions[i].op = static_cast<ShaderOp>(ReadU8(data, pos));
