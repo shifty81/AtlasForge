@@ -109,7 +109,7 @@ GUIQueryResult HeadlessGUI::ExecuteCommand(const std::string& command) {
 
     auto tokens = TokenizeCommand(command);
     if (tokens.empty()) {
-        return {false, "Empty command"};
+        return {false, command.empty() ? "Empty command" : "Unterminated quoted string"};
     }
 
     const std::string& name = tokens[0];
@@ -153,6 +153,9 @@ std::vector<std::string> HeadlessGUI::TokenizeCommand(const std::string& command
     }
     if (!current.empty()) {
         tokens.push_back(std::move(current));
+    }
+    if (inQuotes) {
+        tokens.clear();
     }
     return tokens;
 }

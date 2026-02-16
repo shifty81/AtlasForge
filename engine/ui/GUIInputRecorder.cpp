@@ -46,6 +46,8 @@ void GUIInputRecorder::AdvancePlayback(uint64_t currentTick) {
 
     while (m_playbackPos < m_log.events.size()) {
         const auto& evt = m_log.events[m_playbackPos];
+        // Clamp to zero if event tick precedes log start (malformed data);
+        // events fire immediately at playback start rather than being dropped.
         uint64_t offset = (evt.tick >= m_log.startTick) ? (evt.tick - m_log.startTick) : 0;
         uint64_t rebasedTick = offset + m_playbackStartTick;
         if (rebasedTick > currentTick) break;
