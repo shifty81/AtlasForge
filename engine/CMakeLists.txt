@@ -13,6 +13,7 @@ add_library(AtlasEngine STATIC
     graphvm/GraphVM.cpp
     graphvm/GraphCompiler.cpp
     graphvm/GraphSerializer.cpp
+    graphvm/CollaborativeEditor.cpp
     assets/AssetRegistry.cpp
     assets/AssetBinary.cpp
     assets/AssetImporter.cpp
@@ -51,6 +52,7 @@ add_library(AtlasEngine STATIC
     character/CharacterNodes.cpp
     animation/AnimationGraph.cpp
     animation/AnimationNodes.cpp
+    animation/DeterministicAnimationGraph.cpp
     weapon/WeaponGraph.cpp
     weapon/WeaponNodes.cpp
     ui/UIGraph.cpp

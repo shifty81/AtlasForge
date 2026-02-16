@@ -116,6 +116,8 @@ add_executable(AtlasTests
     test_procedural_material.cpp
     test_lod_baking.cpp
     test_ui_logic_graph.cpp
+    test_det_animation.cpp
+    test_collaborative_editor.cpp
     ${CMAKE_SOURCE_DIR}/editor/panels/ConsolePanel.cpp
     ${CMAKE_SOURCE_DIR}/editor/panels/InteractionDebugger.cpp
     ${CMAKE_SOURCE_DIR}/editor/panels/ECSInspectorPanel.cpp

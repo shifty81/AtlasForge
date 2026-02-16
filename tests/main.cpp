@@ -1118,6 +1118,30 @@ void test_tlc_export_report();
 void test_tlc_path_management();
 void test_tlc_extract_invariants_static();
 
+// Deterministic Animation Graph tests
+void test_det_anim_add_nodes();
+void test_det_anim_remove_node();
+void test_det_anim_compile_empty();
+void test_det_anim_rest_pose();
+void test_det_anim_fk();
+void test_det_anim_ik();
+void test_det_anim_blend_tree();
+void test_det_anim_bone_mask();
+void test_det_anim_additive_blend();
+void test_det_anim_deterministic();
+
+// Collaborative Editor tests
+void test_collab_add_peer();
+void test_collab_remove_peer();
+void test_collab_cursor_update();
+void test_collab_submit_operation();
+void test_collab_receive_remote();
+void test_collab_detect_conflicts();
+void test_collab_resolve_last_writer_wins();
+void test_collab_resolve_first_writer_wins();
+void test_collab_no_conflicts();
+void test_collab_clear();
+
 int main() {
     std::cout << "=== Atlas Engine Tests ===" << std::endl;
 
@@ -2356,6 +2380,32 @@ int main() {
     test_tlc_export_report();
     test_tlc_path_management();
     test_tlc_extract_invariants_static();
+
+    // Deterministic Animation Graph
+    std::cout << "\n--- Deterministic Animation Graph ---" << std::endl;
+    test_det_anim_add_nodes();
+    test_det_anim_remove_node();
+    test_det_anim_compile_empty();
+    test_det_anim_rest_pose();
+    test_det_anim_fk();
+    test_det_anim_ik();
+    test_det_anim_blend_tree();
+    test_det_anim_bone_mask();
+    test_det_anim_additive_blend();
+    test_det_anim_deterministic();
+
+    // Collaborative Editor
+    std::cout << "\n--- Collaborative Editor ---" << std::endl;
+    test_collab_add_peer();
+    test_collab_remove_peer();
+    test_collab_cursor_update();
+    test_collab_submit_operation();
+    test_collab_receive_remote();
+    test_collab_detect_conflicts();
+    test_collab_resolve_last_writer_wins();
+    test_collab_resolve_first_writer_wins();
+    test_collab_no_conflicts();
+    test_collab_clear();
 
     std::cout << "\n=== All tests passed! ===" << std::endl;
     return 0;
