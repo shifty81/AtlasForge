@@ -816,6 +816,16 @@ void test_engine_server_no_window();
 void test_platform_window_event_type();
 void test_platform_window_config();
 
+// Component Category
+void test_component_category_defaults();
+void test_component_category_simulated();
+void test_component_category_presentation();
+void test_component_category_debug();
+void test_component_category_derived();
+void test_component_category_assert_simulated();
+void test_component_category_assert_not_presentation();
+void test_component_category_runtime_query();
+
 int main() {
     std::cout << "=== Atlas Engine Tests ===" << std::endl;
 
@@ -1727,6 +1737,17 @@ int main() {
     test_job_trace_panel_consistent();
     test_job_trace_panel_mismatch();
     test_job_trace_panel_entries_at_tick();
+
+    // Component Category
+    std::cout << "\n--- Component Category ---" << std::endl;
+    test_component_category_defaults();
+    test_component_category_simulated();
+    test_component_category_presentation();
+    test_component_category_debug();
+    test_component_category_derived();
+    test_component_category_assert_simulated();
+    test_component_category_assert_not_presentation();
+    test_component_category_runtime_query();
 
     std::cout << "\n=== All tests passed! ===" << std::endl;
     return 0;

@@ -3,6 +3,7 @@ add_executable(AtlasTests
     test_graphvm.cpp
     test_ecs.cpp
     test_components.cpp
+    test_component_category.cpp
     test_asset.cpp
     test_net.cpp
     test_net_queue.cpp
