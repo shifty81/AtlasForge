@@ -123,6 +123,12 @@ add_executable(AtlasTests
     test_ai_diff_viewer.cpp
     test_flow_refactorer.cpp
     test_web_aggregation_kb.cpp
+    test_game_gui_asset.cpp
+    test_widget_dsl.cpp
+    test_game_gui_binding.cpp
+    test_game_mechanics_ui.cpp
+    test_determinism_versioning.cpp
+    test_certified_build.cpp
     ${CMAKE_SOURCE_DIR}/editor/panels/ConsolePanel.cpp
     ${CMAKE_SOURCE_DIR}/editor/panels/InteractionDebugger.cpp
     ${CMAKE_SOURCE_DIR}/editor/panels/ECSInspectorPanel.cpp
@@ -143,6 +149,7 @@ add_executable(AtlasTests
     ${CMAKE_SOURCE_DIR}/editor/ui/EditorAttachProtocol.cpp
     ${CMAKE_SOURCE_DIR}/editor/panels/AtlasAssistantPanel.cpp
     ${CMAKE_SOURCE_DIR}/editor/panels/AIDiffViewerPanel.cpp
+    ${CMAKE_SOURCE_DIR}/editor/panels/GameMechanicsUIPanel.cpp
     ${CMAKE_SOURCE_DIR}/editor/ui/EditorLayout.cpp
 )
 

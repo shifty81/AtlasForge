@@ -67,6 +67,9 @@ add_library(AtlasEngine STATIC
     ui/UIRenderer.cpp
     ui/UILayoutSolver.cpp
     ui/HeadlessGUI.cpp
+    ui/GameGUIAsset.cpp
+    ui/WidgetDSL.cpp
+    ui/GameGUIBinding.cpp
     flow/GameFlowGraph.cpp
     flow/GameFlowNodes.cpp
     flow/FlowGraphIR.cpp
@@ -93,6 +96,7 @@ add_library(AtlasEngine STATIC
     production/BuildProfile.cpp
     production/PlatformTarget.cpp
     production/BuildManifest.cpp
+    production/CertifiedBuild.cpp
     procedural/ProceduralMeshGraph.cpp
     procedural/ProceduralMeshNodes.cpp
     procedural/ProceduralMaterialGraph.cpp
@@ -117,6 +121,7 @@ add_library(AtlasEngine STATIC
     sim/SimulationStateAuditor.cpp
     sim/DesyncReproducer.cpp
     sim/TLCModelChecker.cpp
+    sim/DeterminismVersioning.cpp
     assets/ServerAssetValidator.cpp
 )
 

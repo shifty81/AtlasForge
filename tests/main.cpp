@@ -1201,6 +1201,76 @@ void test_kb_tags();
 void test_kb_export_import();
 void test_kb_clear();
 
+// Game GUI Asset
+void test_gui_asset_create_widget();
+void test_gui_asset_add_child();
+void test_gui_asset_find_widget();
+void test_gui_asset_remove_widget();
+void test_gui_asset_list_by_type();
+void test_gui_asset_properties();
+void test_gui_asset_bindings();
+void test_gui_asset_validate();
+void test_gui_asset_export_json();
+void test_gui_asset_clear();
+
+// Widget DSL
+void test_widget_dsl_tokenize();
+void test_widget_dsl_parse_simple();
+void test_widget_dsl_parse_nested();
+void test_widget_dsl_parse_properties();
+void test_widget_dsl_validate_valid();
+void test_widget_dsl_validate_invalid();
+void test_widget_dsl_empty();
+void test_widget_dsl_multiple_roots();
+
+// Game GUI Binding
+void test_binding_add();
+void test_binding_remove();
+void test_binding_get();
+void test_binding_list();
+void test_binding_evaluate_direct();
+void test_binding_evaluate_formatted();
+void test_binding_evaluate_computed();
+void test_binding_custom_formatter();
+void test_binding_validate();
+void test_binding_clear();
+
+// Game Mechanics UI Panel
+void test_mechanics_ui_name();
+void test_mechanics_ui_add_element();
+void test_mechanics_ui_remove_element();
+void test_mechanics_ui_get_element();
+void test_mechanics_ui_list_elements();
+void test_mechanics_ui_select_element();
+void test_mechanics_ui_preview_mode();
+void test_mechanics_ui_export();
+void test_mechanics_ui_import();
+void test_mechanics_ui_clear();
+
+// Determinism Versioning
+void test_dv_set_version();
+void test_dv_register_fork();
+void test_dv_unregister_fork();
+void test_dv_get_fork();
+void test_dv_list_forks();
+void test_dv_compatible();
+void test_dv_incompatible();
+void test_dv_check_all();
+void test_dv_report();
+void test_dv_clear();
+
+// Certified Build
+void test_cert_default_level();
+void test_cert_set_level();
+void test_cert_add_artifact();
+void test_cert_get_artifact();
+void test_cert_list_artifacts();
+void test_cert_verify_all_pass();
+void test_cert_verify_with_failure();
+void test_cert_generate_report();
+void test_cert_export_json();
+void test_cert_clear();
+
 int main() {
     std::cout << "=== Atlas Engine Tests ===" << std::endl;
 
@@ -2529,6 +2599,82 @@ int main() {
     test_kb_tags();
     test_kb_export_import();
     test_kb_clear();
+
+    // Game GUI Asset
+    std::cout << "\n--- Game GUI Asset ---" << std::endl;
+    test_gui_asset_create_widget();
+    test_gui_asset_add_child();
+    test_gui_asset_find_widget();
+    test_gui_asset_remove_widget();
+    test_gui_asset_list_by_type();
+    test_gui_asset_properties();
+    test_gui_asset_bindings();
+    test_gui_asset_validate();
+    test_gui_asset_export_json();
+    test_gui_asset_clear();
+
+    // Widget DSL
+    std::cout << "\n--- Widget DSL ---" << std::endl;
+    test_widget_dsl_tokenize();
+    test_widget_dsl_parse_simple();
+    test_widget_dsl_parse_nested();
+    test_widget_dsl_parse_properties();
+    test_widget_dsl_validate_valid();
+    test_widget_dsl_validate_invalid();
+    test_widget_dsl_empty();
+    test_widget_dsl_multiple_roots();
+
+    // Game GUI Binding
+    std::cout << "\n--- Game GUI Binding ---" << std::endl;
+    test_binding_add();
+    test_binding_remove();
+    test_binding_get();
+    test_binding_list();
+    test_binding_evaluate_direct();
+    test_binding_evaluate_formatted();
+    test_binding_evaluate_computed();
+    test_binding_custom_formatter();
+    test_binding_validate();
+    test_binding_clear();
+
+    // Game Mechanics UI Panel
+    std::cout << "\n--- Game Mechanics UI Panel ---" << std::endl;
+    test_mechanics_ui_name();
+    test_mechanics_ui_add_element();
+    test_mechanics_ui_remove_element();
+    test_mechanics_ui_get_element();
+    test_mechanics_ui_list_elements();
+    test_mechanics_ui_select_element();
+    test_mechanics_ui_preview_mode();
+    test_mechanics_ui_export();
+    test_mechanics_ui_import();
+    test_mechanics_ui_clear();
+
+    // Determinism Versioning
+    std::cout << "\n--- Determinism Versioning ---" << std::endl;
+    test_dv_set_version();
+    test_dv_register_fork();
+    test_dv_unregister_fork();
+    test_dv_get_fork();
+    test_dv_list_forks();
+    test_dv_compatible();
+    test_dv_incompatible();
+    test_dv_check_all();
+    test_dv_report();
+    test_dv_clear();
+
+    // Certified Build
+    std::cout << "\n--- Certified Build ---" << std::endl;
+    test_cert_default_level();
+    test_cert_set_level();
+    test_cert_add_artifact();
+    test_cert_get_artifact();
+    test_cert_list_artifacts();
+    test_cert_verify_all_pass();
+    test_cert_verify_with_failure();
+    test_cert_generate_report();
+    test_cert_export_json();
+    test_cert_clear();
 
     std::cout << "\n=== All tests passed! ===" << std::endl;
     return 0;
