@@ -81,16 +81,12 @@ void GLRenderer::DrawIcon(const ui::UIRect& rect, uint32_t /*iconId*/, const ui:
     glSetColor(tint);
     int cx = rect.x + rect.w / 2;
     int cy = rect.y + rect.h / 2;
-    int hw = rect.w / 2;
-    int hh = rect.h / 2;
     glBegin(GL_QUADS);
     glVertex2i(cx, rect.y);
     glVertex2i(rect.x + rect.w, cy);
     glVertex2i(cx, rect.y + rect.h);
     glVertex2i(rect.x, cy);
     glEnd();
-    (void)hw;
-    (void)hh;
 }
 
 void GLRenderer::DrawBorder(const ui::UIRect& rect, int32_t thickness, const ui::UIColor& color) {

@@ -51,11 +51,6 @@ UIRenderer* UIManager::GetRenderer() const {
 void UIManager::Render(UIRenderer* renderer) {
     if (!m_initialized || !renderer) return;
 
-    // Render all visible widgets from the screen graph
-    for (size_t i = 0; i < m_screen.WidgetCount(); ++i) {
-        // Iterate widgets by scanning IDs
-    }
-
     // Walk root-level widgets (parentId == 0) and render them
     auto roots = m_screen.GetChildren(0);
     for (uint32_t id : roots) {
