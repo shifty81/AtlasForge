@@ -119,6 +119,7 @@ add_executable(AtlasTests
     ${CMAKE_SOURCE_DIR}/editor/panels/StateHashDiffPanel.cpp
     ${CMAKE_SOURCE_DIR}/editor/panels/SaveFileBrowserPanel.cpp
     ${CMAKE_SOURCE_DIR}/editor/panels/JobTracePanel.cpp
+    ${CMAKE_SOURCE_DIR}/editor/panels/ProofViewerPanel.cpp
     ${CMAKE_SOURCE_DIR}/editor/tools/GamePackagerPanel.cpp
     ${CMAKE_SOURCE_DIR}/editor/tools/VisualDiff.cpp
     ${CMAKE_SOURCE_DIR}/editor/assistant/EditorAssistant.cpp
