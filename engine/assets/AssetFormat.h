@@ -16,6 +16,10 @@ enum class AssetType : uint16_t {
     VoxelSchema,
     GameType,
     EditorProfile,
+    Texture,
+    Audio,
+    Font,
+    SpriteSheet,
 };
 
 struct AssetHeader {

@@ -15,6 +15,8 @@ add_library(AtlasEngine STATIC
     graphvm/GraphSerializer.cpp
     assets/AssetRegistry.cpp
     assets/AssetBinary.cpp
+    assets/AssetImporter.cpp
+    assets/AssetValidator.cpp
     net/NetContext.cpp
     net/Replication.cpp
     sim/TickScheduler.cpp
