@@ -341,6 +341,19 @@ void test_tilegraph_compile_chain();
 void test_tilegraph_execute();
 void test_tilegraph_deterministic();
 
+// Procedural Mesh Graph tests
+void test_procedural_add_nodes();
+void test_procedural_remove_node();
+void test_procedural_compile_empty();
+void test_procedural_cube();
+void test_procedural_plane();
+void test_procedural_sphere();
+void test_procedural_transform();
+void test_procedural_merge();
+void test_procedural_subdivide();
+void test_procedural_noise_determinism();
+void test_procedural_full_pipeline();
+
 // Sound Graph tests
 void test_soundgraph_add_nodes();
 void test_soundgraph_remove_node();
@@ -1513,6 +1526,20 @@ int main() {
     test_tilegraph_compile_chain();
     test_tilegraph_execute();
     test_tilegraph_deterministic();
+
+    // Procedural Mesh Graph
+    std::cout << "\n--- Procedural Mesh Graph ---" << std::endl;
+    test_procedural_add_nodes();
+    test_procedural_remove_node();
+    test_procedural_compile_empty();
+    test_procedural_cube();
+    test_procedural_plane();
+    test_procedural_sphere();
+    test_procedural_transform();
+    test_procedural_merge();
+    test_procedural_subdivide();
+    test_procedural_noise_determinism();
+    test_procedural_full_pipeline();
 
     // Sound Graph
     std::cout << "\n--- Sound Graph ---" << std::endl;
