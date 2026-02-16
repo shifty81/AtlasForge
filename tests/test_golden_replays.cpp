@@ -12,6 +12,7 @@
 
 #include <cassert>
 #include <cstdio>
+#include <cstdint>
 #include <cstring>
 #include <vector>
 #include <string>
@@ -168,15 +169,15 @@ void test_replay_cross_platform_hash() {
     // This test verifies that hash computation is platform-independent
     uint64_t hash = 0;
     
-    // Simple hash of known data
+    // Simple hash of known data - pack bytes into uint64_t
     const uint8_t data[] = {0x01, 0x02, 0x03, 0x04, 0x05};
     for (size_t i = 0; i < sizeof(data); ++i) {
-        hash ^= data[i];
-        hash = (hash << 8) | (hash >> 56);
+        hash |= static_cast<uint64_t>(data[i]) << (i * 8);
     }
     
     // This hash must be identical on all platforms
-    const uint64_t EXPECTED_HASH = 0x0504030201000000;
+    // Expected: 0x05 04 03 02 01 in little-endian layout
+    const uint64_t EXPECTED_HASH = 0x0000000504030201ULL;
     
     if (hash == EXPECTED_HASH) {
         printf("  Hash: 0x%016llX (matches expected)\n", (unsigned long long)hash);
