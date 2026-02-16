@@ -127,5 +127,5 @@ void test_unity_assetstore_importer() {
     std::cout << "[PASS] test_unity_assetstore_importer" << std::endl;
 }
 
-// Note: test functions are called from main.cpp
-// This file just defines the test functions
+// Marketplace importer test functions
+// These functions are called from tests/main.cpp
