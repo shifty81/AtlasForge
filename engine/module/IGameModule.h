@@ -40,5 +40,6 @@ using CreateGameModuleFn = IGameModule*(*)();
 
 } // namespace atlas::module
 
-// Factory symbol exported by each game module (dll/so):
+// Factory symbol exported by each game module (dll/so).
+// Returns a raw pointer; the caller (ModuleLoader) takes ownership.
 // extern "C" atlas::module::IGameModule* CreateGameModule();
