@@ -181,7 +181,7 @@ Replay system closure, hash ladder verification, and TLA+ formal proofs.
 - [ ] TLC model checker CI integration
 - [ ] Proof viewer panel (syntax-highlighted TLA+ in editor)
 - [ ] Replay → proof importer (trace → checkable format)
-- [ ] Cross-platform replay equivalence verification
+- [x] Cross-platform replay equivalence verification
 - [x] Deterministic allocator (arena, stable IDs, no pointer-order dependence)
 - [ ] AtlasShaderIR (deterministic shader compilation)
 

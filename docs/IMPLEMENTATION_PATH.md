@@ -149,11 +149,14 @@ Core logic exists. Remaining:
 - [x] Show per-system state diff at divergence tick
 - [x] Export divergence report to file
 
-### 3.3 FP Drift Detector ❌
+### 3.3 FP Drift Detector ✅
 
-- [ ] Tool to run identical simulation on two platforms and compare hashes
+**Files:** `engine/sim/FPDriftDetector.h/cpp`
+**Tests:** `tests/test_next_steps.cpp` (6 tests)
+
+- [x] Tool to run identical simulation on two platforms and compare hashes
 - [ ] CI job that cross-compiles and verifies golden replay hashes
-- [ ] Report showing which systems first diverge
+- [x] Report showing which systems first diverge
 
 ### 3.4 Job Execution Trace Viewer ✅
 
@@ -192,19 +195,25 @@ hardening to match implementation reality:
 
 ## Priority 5 — Asset System Expansion
 
-### 5.1 Asset Import Pipeline ❌
+### 5.1 Asset Import Pipeline ✅
 
-- [ ] FBX/OBJ/glTF mesh importer → internal mesh format
-- [ ] Texture importer with compression (PNG, DDS, TGA → internal)
-- [ ] Audio importer (WAV, OGG, FLAC → internal)
-- [ ] Font importer (TTF, OTF → glyph atlas)
-- [ ] Sprite sheet importer with animation sequence extraction
+**Files:** `engine/assets/AssetImporter.h/cpp`
+**Tests:** `tests/test_next_steps.cpp` (11 tests)
 
-### 5.2 Asset Validation ❌
+- [x] FBX/OBJ/glTF mesh importer → internal mesh format
+- [x] Texture importer with compression (PNG, DDS, TGA → internal)
+- [x] Audio importer (WAV, OGG, FLAC → internal)
+- [x] Font importer (TTF, OTF → glyph atlas)
+- [x] Sprite sheet importer with animation sequence extraction
 
-- [ ] Hash-based immutability enforcement at API level
-- [ ] Asset version migration system (schema v1 → v2 auto-upgrade)
-- [ ] Asset dependency graph visualization in editor
+### 5.2 Asset Validation ✅
+
+**Files:** `engine/assets/AssetValidator.h/cpp`
+**Tests:** `tests/test_next_steps.cpp` (8 tests)
+
+- [x] Hash-based immutability enforcement at API level
+- [x] Asset version migration system (schema v1 → v2 auto-upgrade)
+- [x] Asset dependency graph visualization in editor
 
 ### 5.3 Asset Editor Panels ❌
 
@@ -275,7 +284,7 @@ Phase C — Integration
 Phase D — Tooling
   ✅ State hash diff visualizer
   ✅ Replay divergence inspector UI
-  → FP drift detector
+  ✅ FP drift detector
   ✅ Job execution trace viewer (JobTracer + JobTracePanel)
 
 Phase E — Documentation
@@ -283,8 +292,8 @@ Phase E — Documentation
   ✅ Write new docs (TIME_MODEL, SAVE_SYSTEM, STATE_MODEL)
 
 Phase F — Assets
-  → Mesh/texture/audio importers
-  → Asset validation and migration
+  ✅ Mesh/texture/audio importers
+  ✅ Asset validation and migration
   → Editor asset panels
 
 Phase G — Advanced (post-lockdown)

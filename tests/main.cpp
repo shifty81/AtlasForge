@@ -854,6 +854,37 @@ void test_component_category_runtime_query();
 void test_include_firewall_sim_no_render();
 void test_include_firewall_contract_no_render();
 
+// FP Drift Detector tests
+void test_fp_drift_no_drift();
+void test_fp_drift_detected();
+void test_fp_drift_system_comparison();
+void test_fp_drift_format_report();
+void test_fp_drift_export_report();
+void test_fp_drift_add_system_hashes();
+
+// Asset Import Pipeline tests
+void test_asset_import_registry_empty();
+void test_asset_import_registry_register();
+void test_asset_import_mesh_can_import();
+void test_asset_import_texture_can_import();
+void test_asset_import_audio_can_import();
+void test_asset_import_font_can_import();
+void test_asset_import_sprite_can_import();
+void test_asset_import_find_importer();
+void test_asset_import_file_roundtrip();
+void test_asset_import_file_not_found();
+void test_asset_import_registry_import();
+
+// Asset Validator tests
+void test_asset_validator_validate_valid_file();
+void test_asset_validator_validate_corrupt_file();
+void test_asset_validator_validate_header_bad_magic();
+void test_asset_validator_migration_path();
+void test_asset_validator_dependencies();
+void test_asset_validator_circular_dependency();
+void test_asset_validator_no_circular_dependency();
+void test_asset_validator_compute_file_hash();
+
 int main() {
     std::cout << "=== Atlas Engine Tests ===" << std::endl;
 
@@ -1806,6 +1837,40 @@ int main() {
     std::cout << "\n--- Include Firewall ---" << std::endl;
     test_include_firewall_sim_no_render();
     test_include_firewall_contract_no_render();
+
+    // FP Drift Detector
+    std::cout << "\n--- FP Drift Detector ---" << std::endl;
+    test_fp_drift_no_drift();
+    test_fp_drift_detected();
+    test_fp_drift_system_comparison();
+    test_fp_drift_format_report();
+    test_fp_drift_export_report();
+    test_fp_drift_add_system_hashes();
+
+    // Asset Import Pipeline
+    std::cout << "\n--- Asset Import Pipeline ---" << std::endl;
+    test_asset_import_registry_empty();
+    test_asset_import_registry_register();
+    test_asset_import_mesh_can_import();
+    test_asset_import_texture_can_import();
+    test_asset_import_audio_can_import();
+    test_asset_import_font_can_import();
+    test_asset_import_sprite_can_import();
+    test_asset_import_find_importer();
+    test_asset_import_file_roundtrip();
+    test_asset_import_file_not_found();
+    test_asset_import_registry_import();
+
+    // Asset Validator
+    std::cout << "\n--- Asset Validator ---" << std::endl;
+    test_asset_validator_validate_valid_file();
+    test_asset_validator_validate_corrupt_file();
+    test_asset_validator_validate_header_bad_magic();
+    test_asset_validator_migration_path();
+    test_asset_validator_dependencies();
+    test_asset_validator_circular_dependency();
+    test_asset_validator_no_circular_dependency();
+    test_asset_validator_compute_file_hash();
 
     std::cout << "\n=== All tests passed! ===" << std::endl;
     return 0;
