@@ -1005,6 +1005,25 @@ void test_attach_disconnect();
 void test_default_editor_dsl_parses();
 void test_default_editor_dsl_has_panels();
 
+// TLC Model Checker
+void test_tlc_register_spec();
+void test_tlc_register_multiple_specs();
+void test_tlc_register_bad_path();
+void test_tlc_unregister_spec();
+void test_tlc_get_spec();
+void test_tlc_extract_invariants_replay();
+void test_tlc_extract_invariants_ecs();
+void test_tlc_extract_invariants_layout();
+void test_tlc_validate_spec();
+void test_tlc_check_spec();
+void test_tlc_check_spec_not_found();
+void test_tlc_check_all();
+void test_tlc_ci_check_pass();
+void test_tlc_format_report();
+void test_tlc_export_report();
+void test_tlc_path_management();
+void test_tlc_extract_invariants_static();
+
 int main() {
     std::cout << "=== Atlas Engine Tests ===" << std::endl;
 
@@ -2121,6 +2140,26 @@ int main() {
     test_attach_disconnect();
     test_default_editor_dsl_parses();
     test_default_editor_dsl_has_panels();
+
+    // TLC Model Checker
+    std::cout << "\n--- TLC Model Checker ---" << std::endl;
+    test_tlc_register_spec();
+    test_tlc_register_multiple_specs();
+    test_tlc_register_bad_path();
+    test_tlc_unregister_spec();
+    test_tlc_get_spec();
+    test_tlc_extract_invariants_replay();
+    test_tlc_extract_invariants_ecs();
+    test_tlc_extract_invariants_layout();
+    test_tlc_validate_spec();
+    test_tlc_check_spec();
+    test_tlc_check_spec_not_found();
+    test_tlc_check_all();
+    test_tlc_ci_check_pass();
+    test_tlc_format_report();
+    test_tlc_export_report();
+    test_tlc_path_management();
+    test_tlc_extract_invariants_static();
 
     std::cout << "\n=== All tests passed! ===" << std::endl;
     return 0;

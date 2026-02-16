@@ -102,6 +102,7 @@ add_library(AtlasEngine STATIC
     render/AtlasShaderIR.cpp
     sim/SimulationStateAuditor.cpp
     sim/DesyncReproducer.cpp
+    sim/TLCModelChecker.cpp
     assets/ServerAssetValidator.cpp
 )
 
