@@ -899,6 +899,20 @@ void test_asset_lock_and_check();
 void test_asset_lock_multiple();
 void test_determinism_config_exists();
 
+// Lockdown Phase 2 tests
+void test_rollback_and_verify_success();
+void test_rollback_and_verify_bad_ticks();
+void test_asset_schema_lock();
+void test_asset_schema_lock_default();
+void test_layout_hash_deterministic();
+void test_layout_hash_differs_on_change();
+void test_layout_hash_empty();
+void test_mutation_ownership_register();
+void test_mutation_ownership_exclusive();
+void test_mutation_can_mutate();
+void test_mutation_owned_components();
+void test_mutation_owner_of_unregistered();
+
 int main() {
     std::cout << "=== Atlas Engine Tests ===" << std::endl;
 
@@ -1901,6 +1915,21 @@ int main() {
     test_asset_lock_and_check();
     test_asset_lock_multiple();
     test_determinism_config_exists();
+
+    // Lockdown Phase 2
+    std::cout << "\n--- Lockdown Phase 2 ---" << std::endl;
+    test_rollback_and_verify_success();
+    test_rollback_and_verify_bad_ticks();
+    test_asset_schema_lock();
+    test_asset_schema_lock_default();
+    test_layout_hash_deterministic();
+    test_layout_hash_differs_on_change();
+    test_layout_hash_empty();
+    test_mutation_ownership_register();
+    test_mutation_ownership_exclusive();
+    test_mutation_can_mutate();
+    test_mutation_owned_components();
+    test_mutation_owner_of_unregistered();
 
     std::cout << "\n=== All tests passed! ===" << std::endl;
     return 0;

@@ -25,7 +25,7 @@ Determinism bugs after lockdown are treated as P0 severity.
 - [x] Fixed tick rate immutable (locked after Engine::Run)
 - [x] All systems registered and execution order tracked
 - [ ] No hidden state in any simulation system
-- [ ] System mutation ownership enforced
+- [x] System mutation ownership enforced
 - [x] Mid-tick mutation prevention active
 
 ## Replay & Networking
@@ -36,11 +36,11 @@ Determinism bugs after lockdown are treated as P0 severity.
 - [x] Hash ladder verification operational
 - [x] Replay divergence detection and reporting functional
 - [ ] Save/load determinism verified across replay boundaries
-- [ ] Rollback/resimulation produces identical hashes
+- [x] Rollback/resimulation produces identical hashes
 
 ## Assets
 
-- [ ] Asset schemas locked and versioned
+- [x] Asset schemas locked and versioned
 - [x] Hash-based asset validation enforced
 - [ ] Editor diff → commit flow complete
 - [ ] Server-safe asset validation operational
@@ -48,7 +48,7 @@ Determinism bugs after lockdown are treated as P0 severity.
 
 ## GUI System
 
-- [ ] GUI layout solver produces identical output on all platforms
+- [x] GUI layout solver produces identical output on all platforms
 - [x] GUI input replay functional
 - [x] GUI DSL compiler operational
 - [ ] All main editor panels present and functional

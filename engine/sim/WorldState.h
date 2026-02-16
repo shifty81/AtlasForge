@@ -26,6 +26,7 @@
 #include <vector>
 #include <string>
 #include <functional>
+#include <unordered_map>
 
 namespace atlas::sim {
 
@@ -94,6 +95,27 @@ public:
     /// Discard snapshots older than the given tick.
     void PruneSnapshotsBefore(uint64_t tick);
 
+    // --- System mutation ownership ---
+
+    /// Register that a system owns (may mutate) a component type.
+    void RegisterOwnership(const std::string& systemName,
+                           const std::string& componentName);
+
+    /// Check whether a system owns a component type.
+    bool OwnsComponent(const std::string& systemName,
+                       const std::string& componentName) const;
+
+    /// Get all components owned by a system.
+    std::vector<std::string> OwnedComponents(const std::string& systemName) const;
+
+    /// Get the owning system for a component, or empty string if unowned.
+    std::string OwnerOf(const std::string& componentName) const;
+
+    /// Check whether a system is allowed to mutate a component.
+    /// Returns false if another system already owns the component.
+    bool CanMutate(const std::string& systemName,
+                   const std::string& componentName) const;
+
     /// Register a callback invoked when derived state should be rebuilt.
     void SetDerivedRebuildCallback(std::function<void(const WorldSnapshot&)> cb);
 
@@ -105,6 +127,9 @@ private:
     std::vector<WorldSnapshot> m_snapshots;
     size_t m_maxSnapshots = 60;  ///< Default: ~2 seconds at 30 Hz.
     std::function<void(const WorldSnapshot&)> m_derivedRebuildCb;
+
+    /// Maps component name → owning system name.
+    std::unordered_map<std::string, std::string> m_componentOwners;
 };
 
 }  // namespace atlas::sim

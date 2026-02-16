@@ -105,4 +105,47 @@ void WorldState::RebuildDerived() {
     }
 }
 
+// ---------------------------------------------------------------------------
+// System mutation ownership
+// ---------------------------------------------------------------------------
+
+void WorldState::RegisterOwnership(const std::string& systemName,
+                                   const std::string& componentName) {
+    // Only register if no other system already owns it.
+    auto it = m_componentOwners.find(componentName);
+    if (it == m_componentOwners.end()) {
+        m_componentOwners[componentName] = systemName;
+    }
+}
+
+bool WorldState::OwnsComponent(const std::string& systemName,
+                               const std::string& componentName) const {
+    auto it = m_componentOwners.find(componentName);
+    return it != m_componentOwners.end() && it->second == systemName;
+}
+
+std::vector<std::string> WorldState::OwnedComponents(
+        const std::string& systemName) const {
+    std::vector<std::string> result;
+    for (const auto& [comp, owner] : m_componentOwners) {
+        if (owner == systemName) {
+            result.push_back(comp);
+        }
+    }
+    return result;
+}
+
+std::string WorldState::OwnerOf(const std::string& componentName) const {
+    auto it = m_componentOwners.find(componentName);
+    if (it != m_componentOwners.end()) return it->second;
+    return {};
+}
+
+bool WorldState::CanMutate(const std::string& systemName,
+                           const std::string& componentName) const {
+    auto it = m_componentOwners.find(componentName);
+    if (it == m_componentOwners.end()) return true;  // unowned → anyone can mutate
+    return it->second == systemName;
+}
+
 }  // namespace atlas::sim
