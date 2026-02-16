@@ -84,6 +84,7 @@ add_library(AtlasEngine STATIC
     sim/StateHasher.cpp
     sim/JobTracer.cpp
     sim/ReplayDivergenceInspector.cpp
+    sim/FPDriftDetector.cpp
     sim/TimeModel.cpp
     sim/WorldState.cpp
     sim/SaveSystem.cpp
