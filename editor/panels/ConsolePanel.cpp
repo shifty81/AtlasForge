@@ -59,7 +59,53 @@ void ConsolePanel::Execute(const std::string& command) {
         }
         m_history.push_back("Net mode: " + modeStr);
     } else if (cmd == "help") {
-        m_history.push_back("Commands: spawn_entity, ecs.dump, set tickrate <N>, net.mode, help");
+        m_history.push_back("Commands: spawn_entity, ecs.dump, set tickrate <N>, net.mode, save <path>, load <path>, time.info, help");
+    } else if (cmd == "save") {
+        std::string path;
+        iss >> path;
+        if (path.empty()) {
+            m_history.push_back("Usage: save <path>");
+        } else if (!m_saveSystem) {
+            m_history.push_back("Save system not available");
+        } else {
+            auto ecsData = m_world.Serialize();
+            uint64_t tick = m_timeModel ? m_timeModel->Context().sim.tick : 0;
+            uint32_t tickRate = m_scheduler.TickRate();
+            auto result = m_saveSystem->Save(path, tick, tickRate, 0, ecsData);
+            if (result == sim::SaveResult::Success) {
+                m_history.push_back("Saved at tick " + std::to_string(tick) + " to " + path);
+            } else {
+                m_history.push_back("Save failed");
+            }
+        }
+    } else if (cmd == "load") {
+        std::string path;
+        iss >> path;
+        if (path.empty()) {
+            m_history.push_back("Usage: load <path>");
+        } else if (!m_saveSystem) {
+            m_history.push_back("Save system not available");
+        } else {
+            auto result = m_saveSystem->Load(path);
+            if (result == sim::SaveResult::Success) {
+                m_world.Deserialize(m_saveSystem->ECSData());
+                m_history.push_back("Loaded from " + path + " at tick " + std::to_string(m_saveSystem->Header().saveTick));
+            } else if (result == sim::SaveResult::FileNotFound) {
+                m_history.push_back("File not found: " + path);
+            } else {
+                m_history.push_back("Load failed");
+            }
+        }
+    } else if (cmd == "time.info") {
+        if (!m_timeModel) {
+            m_history.push_back("Time model not available");
+        } else {
+            const auto& ctx = m_timeModel->Context();
+            m_history.push_back("Tick: " + std::to_string(ctx.sim.tick)
+                + " Rate: " + std::to_string(ctx.sim.tickRate) + " Hz"
+                + " World: " + std::to_string(ctx.world.elapsed) + "s"
+                + " Dilation: " + std::to_string(ctx.world.dilation));
+        }
     } else {
         m_history.push_back("Unknown command: " + cmd);
     }

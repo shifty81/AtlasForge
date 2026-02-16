@@ -5,6 +5,9 @@
 #include "../ecs/ECS.h"
 #include "../net/NetContext.h"
 #include "../sim/TickScheduler.h"
+#include "../sim/TimeModel.h"
+#include "../sim/WorldState.h"
+#include "../sim/SaveSystem.h"
 #include "../ui/UIManager.h"
 #include "../platform/PlatformWindow.h"
 #include "../render/RenderAPI.h"
@@ -73,6 +76,9 @@ public:
     ecs::World& GetWorld() { return m_world; }
     net::NetContext& GetNet() { return m_net; }
     sim::TickScheduler& GetScheduler() { return m_scheduler; }
+    sim::TimeModel& GetTimeModel() { return m_timeModel; }
+    sim::WorldState& GetWorldState() { return m_worldState; }
+    sim::SaveSystem& GetSaveSystem() { return m_saveSystem; }
     ui::UIManager& GetUIManager() { return m_uiManager; }
 
     platform::PlatformWindow* GetWindow() { return m_window.get(); }
@@ -86,6 +92,9 @@ private:
     ecs::World m_world;
     net::NetContext m_net;
     sim::TickScheduler m_scheduler;
+    sim::TimeModel m_timeModel;
+    sim::WorldState m_worldState;
+    sim::SaveSystem m_saveSystem;
     ui::UIManager m_uiManager;
     std::unique_ptr<platform::PlatformWindow> m_window;
     std::unique_ptr<ui::UIRenderer> m_renderer;

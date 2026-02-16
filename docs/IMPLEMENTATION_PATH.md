@@ -40,8 +40,8 @@ Defines three canonical time layers:
 | `PresentationTime` | Wall-clock interpolation for rendering | **No** |
 
 **Remaining work:**
-- [ ] Wire `TimeModel` into `Engine` to replace raw `TickScheduler` delta calls
-- [ ] Expose `TimeContext` to ECS system callbacks
+- [x] Wire `TimeModel` into `Engine` to replace raw `TickScheduler` delta calls
+- [x] Expose `TimeContext` to ECS system callbacks
 - [ ] Add `WorldTime` dilation controls to editor HUD overlay
 
 ### 1.2 Formal World State Model ✅
@@ -63,7 +63,7 @@ Provides snapshot/rollback support with configurable history depth.
 **Remaining work:**
 - [ ] Annotate every ECS component with its `StateCategory`
 - [ ] Enforce category at compile-time via type traits or tag types
-- [ ] Add snapshot integration to lockstep rollback path in `NetContext`
+- [x] Add snapshot integration to lockstep rollback path in `NetContext`
 - [ ] Expose state block inspector in editor ECS panel
 
 ### 1.3 Save / Load System ✅
@@ -74,7 +74,7 @@ Provides snapshot/rollback support with configurable history depth.
 Provides versioned binary save format (`.asav`) with hash-verified integrity.
 
 **Remaining work:**
-- [ ] Add save/load commands to editor console panel
+- [x] Add save/load commands to editor console panel
 - [ ] Wire into `Engine::RunClient()` and `Engine::RunServer()` for autosave
 - [ ] Implement partial-world saves for large streaming worlds
 - [ ] Add save file browser to editor UI
@@ -88,20 +88,20 @@ Provides versioned binary save format (`.asav`) with hash-verified integrity.
 
 Compile-time guards and runtime assertions exist. Gaps remain:
 
-- [ ] Add `ATLAS_FORBID_IN_SIM` macro to prevent presentation code in tick
+- [x] Add `ATLAS_FORBID_IN_SIM` macro to prevent presentation code in tick
 - [ ] Enforce `#include` firewall: simulation code cannot include render headers
 - [ ] Add CMake `INTERFACE` target separating sim-safe from render-safe sources
-- [ ] FP consistency enforcement (`-ffp-contract=off`, `/fp:strict` flags)
+- [x] FP consistency enforcement (`-ffp-contract=off`, `/fp:strict` flags)
 - [ ] Platform-dependent math detection in CI (scan for `__m128` outside render)
 
-### 1.5 AI Determinism Contract ❌
+### 1.5 AI Determinism Contract 🔧
 
 AI systems must produce bit-identical decisions given identical inputs.
 
 - [ ] Document allowed randomness sources in AI systems (DeterministicRNG only)
 - [ ] Serialize planner state for save/load (BehaviorGraph execution state)
-- [ ] Add determinism test: same AIMemory + inputs → same BehaviorGraph output
-- [ ] Verify RelationshipModel determinism across save/load boundary
+- [x] Add determinism test: same AIMemory + inputs → same BehaviorGraph output
+- [x] Verify RelationshipModel determinism across save/load boundary
 
 ---
 
@@ -112,14 +112,14 @@ runtime and editor infrastructure.
 
 ### 2.1 Engine Runtime Integration 🔧
 
-- [ ] Integrate `TimeModel` into `Engine` class (replace direct `TickScheduler` usage)
-- [ ] Integrate `WorldState` snapshotting into `Engine::RunServer()` loop
-- [ ] Integrate `SaveSystem` save/load into `Engine` lifecycle
-- [ ] Pass `TimeContext` through ECS `Update()` instead of raw `float dt`
+- [x] Integrate `TimeModel` into `Engine` class (replace direct `TickScheduler` usage)
+- [x] Integrate `WorldState` snapshotting into `Engine::RunServer()` loop
+- [x] Integrate `SaveSystem` save/load into `Engine` lifecycle
+- [x] Pass `TimeContext` through ECS `Update()` instead of raw `float dt`
 
 ### 2.2 Networking ↔ State Integration 🔧
 
-- [ ] Use `WorldSnapshot` in lockstep sync instead of raw ECS serialization
+- [x] Use `WorldSnapshot` in lockstep sync instead of raw ECS serialization
 - [ ] Snapshot-based rollback: restore from `WorldState` snapshot + replay
 - [ ] Network save/load: server broadcasts save tick, clients verify hash
 
@@ -181,9 +181,9 @@ hardening to match implementation reality:
 
 ### 4.2 New Documentation Needed
 
-- [ ] `docs/TIME_MODEL.md` — Canonical time layer definitions and rules
-- [ ] `docs/SAVE_SYSTEM.md` — Save format specification, compatibility policy
-- [ ] `docs/STATE_MODEL.md` — State category rules, mutation ownership
+- [x] `docs/TIME_MODEL.md` — Canonical time layer definitions and rules
+- [x] `docs/SAVE_SYSTEM.md` — Save format specification, compatibility policy
+- [x] `docs/STATE_MODEL.md` — State category rules, mutation ownership
 
 ---
 
@@ -253,20 +253,20 @@ Phase A — Foundation (current sprint)
   ✅ TimeModel
   ✅ WorldState
   ✅ SaveSystem
-  → Wire into Engine
+  ✅ Wire into Engine
   → Wire into Networking
 
 Phase B — Enforcement
-  → Determinism enforcement hardening
-  → AI determinism contract
-  → FP consistency flags
+  ✅ Determinism enforcement hardening (ATLAS_FORBID_IN_SIM, FP flags)
+  ✅ AI determinism contract (tests)
+  → AI randomness source documentation
   → Include firewall (sim vs render)
 
 Phase C — Integration
-  → Engine runtime integration
-  → Networking ↔ state integration
+  ✅ Engine runtime integration
+  ✅ Networking ↔ state integration (snapshot-based)
   → Replay ↔ save integration
-  → Editor console commands for save/load
+  ✅ Editor console commands for save/load
 
 Phase D — Tooling
   → State hash diff visualizer
@@ -276,7 +276,7 @@ Phase D — Tooling
 
 Phase E — Documentation
   → Harden existing docs to match implementation
-  → Write new docs (TIME_MODEL, SAVE_SYSTEM, STATE_MODEL)
+  ✅ Write new docs (TIME_MODEL, SAVE_SYSTEM, STATE_MODEL)
 
 Phase F — Assets
   → Mesh/texture/audio importers

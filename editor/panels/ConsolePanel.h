@@ -3,6 +3,8 @@
 #include "../../engine/ecs/ECS.h"
 #include "../../engine/net/NetContext.h"
 #include "../../engine/sim/TickScheduler.h"
+#include "../../engine/sim/TimeModel.h"
+#include "../../engine/sim/SaveSystem.h"
 #include <string>
 #include <vector>
 #include <sstream>
@@ -13,6 +15,11 @@ class ConsolePanel : public EditorPanel {
 public:
     ConsolePanel(ecs::World& world, net::NetContext& net, sim::TickScheduler& scheduler)
         : m_world(world), m_net(net), m_scheduler(scheduler) {}
+
+    ConsolePanel(ecs::World& world, net::NetContext& net, sim::TickScheduler& scheduler,
+                 sim::TimeModel& timeModel, sim::SaveSystem& saveSystem)
+        : m_world(world), m_net(net), m_scheduler(scheduler),
+          m_timeModel(&timeModel), m_saveSystem(&saveSystem) {}
 
     const char* Name() const override { return "Console"; }
     void Draw() override;
@@ -28,6 +35,8 @@ private:
     ecs::World& m_world;
     net::NetContext& m_net;
     sim::TickScheduler& m_scheduler;
+    sim::TimeModel* m_timeModel = nullptr;
+    sim::SaveSystem* m_saveSystem = nullptr;
 };
 
 }

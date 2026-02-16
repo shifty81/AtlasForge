@@ -716,6 +716,21 @@ void test_save_system_invalid_format();
 void test_save_system_empty_data();
 void test_save_system_clear();
 
+// Engine Integration tests
+void test_engine_time_model_initialized();
+void test_engine_time_model_tick_rate_matches();
+void test_engine_time_model_world_time_advances();
+void test_engine_world_state_snapshots_in_server();
+void test_engine_world_state_snapshot_at_tick();
+void test_engine_save_system_accessible();
+void test_console_save_command();
+void test_console_load_command();
+void test_console_load_file_not_found();
+void test_console_save_no_path();
+void test_console_time_info();
+void test_ai_behavior_deterministic_across_runs();
+void test_ai_relationship_determinism_across_save_load();
+
 // Render and Platform tests
 void test_render_api_enum();
 void test_null_renderer();
@@ -1551,6 +1566,22 @@ int main() {
     test_save_system_invalid_format();
     test_save_system_empty_data();
     test_save_system_clear();
+
+    // Engine Integration
+    std::cout << "\n--- Engine Integration ---" << std::endl;
+    test_engine_time_model_initialized();
+    test_engine_time_model_tick_rate_matches();
+    test_engine_time_model_world_time_advances();
+    test_engine_world_state_snapshots_in_server();
+    test_engine_world_state_snapshot_at_tick();
+    test_engine_save_system_accessible();
+    test_console_save_command();
+    test_console_load_command();
+    test_console_load_file_not_found();
+    test_console_save_no_path();
+    test_console_time_info();
+    test_ai_behavior_deterministic_across_runs();
+    test_ai_relationship_determinism_across_save_load();
 
     std::cout << "\n=== All tests passed! ===" << std::endl;
     return 0;
