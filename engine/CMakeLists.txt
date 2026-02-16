@@ -13,6 +13,7 @@ add_library(AtlasEngine STATIC
     graphvm/GraphVM.cpp
     graphvm/GraphCompiler.cpp
     graphvm/GraphSerializer.cpp
+    graphvm/CollaborativeEditor.cpp
     assets/AssetRegistry.cpp
     assets/AssetBinary.cpp
     assets/AssetImporter.cpp
@@ -51,6 +52,7 @@ add_library(AtlasEngine STATIC
     character/CharacterNodes.cpp
     animation/AnimationGraph.cpp
     animation/AnimationNodes.cpp
+    animation/DeterministicAnimationGraph.cpp
     weapon/WeaponGraph.cpp
     weapon/WeaponNodes.cpp
     ui/UIGraph.cpp
@@ -65,13 +67,19 @@ add_library(AtlasEngine STATIC
     ui/UIRenderer.cpp
     ui/UILayoutSolver.cpp
     ui/HeadlessGUI.cpp
+    ui/GameGUIAsset.cpp
+    ui/WidgetDSL.cpp
+    ui/GameGUIBinding.cpp
     flow/GameFlowGraph.cpp
     flow/GameFlowNodes.cpp
     flow/FlowGraphIR.cpp
     flow/FlowGraphDebugger.cpp
+    flow/FlowGraphRefactorer.cpp
     schema/SchemaValidator.cpp
     graphvm/GraphCache.cpp
     ai/FactionRouter.cpp
+    ai/AtlasAICore.cpp
+    ai/WebAggregationKB.cpp
     asset_graph/AssetGraphExecutor.cpp
     audio/AudioEngine.cpp
     camera/Camera.cpp
@@ -88,6 +96,7 @@ add_library(AtlasEngine STATIC
     production/BuildProfile.cpp
     production/PlatformTarget.cpp
     production/BuildManifest.cpp
+    production/CertifiedBuild.cpp
     procedural/ProceduralMeshGraph.cpp
     procedural/ProceduralMeshNodes.cpp
     procedural/ProceduralMaterialGraph.cpp
@@ -112,6 +121,7 @@ add_library(AtlasEngine STATIC
     sim/SimulationStateAuditor.cpp
     sim/DesyncReproducer.cpp
     sim/TLCModelChecker.cpp
+    sim/DeterminismVersioning.cpp
     assets/ServerAssetValidator.cpp
 )
 

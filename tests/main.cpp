@@ -1118,6 +1118,159 @@ void test_tlc_export_report();
 void test_tlc_path_management();
 void test_tlc_extract_invariants_static();
 
+// Deterministic Animation Graph tests
+void test_det_anim_add_nodes();
+void test_det_anim_remove_node();
+void test_det_anim_compile_empty();
+void test_det_anim_rest_pose();
+void test_det_anim_fk();
+void test_det_anim_ik();
+void test_det_anim_blend_tree();
+void test_det_anim_bone_mask();
+void test_det_anim_additive_blend();
+void test_det_anim_deterministic();
+
+// Collaborative Editor tests
+void test_collab_add_peer();
+void test_collab_remove_peer();
+void test_collab_cursor_update();
+void test_collab_submit_operation();
+void test_collab_receive_remote();
+void test_collab_detect_conflicts();
+void test_collab_resolve_last_writer_wins();
+void test_collab_resolve_first_writer_wins();
+void test_collab_no_conflicts();
+void test_collab_clear();
+
+// AtlasAI Core
+void test_ai_core_default_permissions();
+void test_ai_core_set_permissions();
+void test_ai_core_has_permission();
+void test_ai_core_register_intent();
+void test_ai_core_unregister_intent();
+void test_ai_core_list_intents();
+void test_ai_core_process_request();
+void test_ai_core_permission_denied();
+void test_ai_core_unknown_intent();
+void test_ai_core_history();
+void test_ai_core_clear();
+
+// Atlas Assistant Panel
+void test_assistant_panel_name();
+void test_assistant_panel_context();
+void test_assistant_panel_submit_prompt();
+void test_assistant_panel_suggestions();
+void test_assistant_panel_apply_suggestion();
+void test_assistant_panel_diff_preview();
+void test_assistant_panel_conversation();
+void test_assistant_panel_clear();
+
+// AI Diff Viewer Panel
+void test_diff_viewer_name();
+void test_diff_viewer_no_diff();
+void test_diff_viewer_load();
+void test_diff_viewer_accept_hunk();
+void test_diff_viewer_reject_hunk();
+void test_diff_viewer_accept_all();
+void test_diff_viewer_reject_all();
+void test_diff_viewer_apply();
+void test_diff_viewer_history();
+void test_diff_viewer_clear();
+
+// Flow Graph Refactorer
+void test_flow_refactorer_load();
+void test_flow_refactorer_find_dead_nodes();
+void test_flow_refactorer_find_chains();
+void test_flow_refactorer_find_duplicates();
+void test_flow_refactorer_analyze();
+void test_flow_refactorer_remove_dead();
+void test_flow_refactorer_rename();
+void test_flow_refactorer_simplify_chain();
+void test_flow_refactorer_history();
+void test_flow_refactorer_clear();
+
+// Web Aggregation KB
+void test_kb_add_entry();
+void test_kb_get_entry();
+void test_kb_remove_entry();
+void test_kb_search();
+void test_kb_search_by_category();
+void test_kb_search_by_tag();
+void test_kb_categories();
+void test_kb_tags();
+void test_kb_export_import();
+void test_kb_clear();
+
+// Game GUI Asset
+void test_gui_asset_create_widget();
+void test_gui_asset_add_child();
+void test_gui_asset_find_widget();
+void test_gui_asset_remove_widget();
+void test_gui_asset_list_by_type();
+void test_gui_asset_properties();
+void test_gui_asset_bindings();
+void test_gui_asset_validate();
+void test_gui_asset_export_json();
+void test_gui_asset_clear();
+
+// Widget DSL
+void test_widget_dsl_tokenize();
+void test_widget_dsl_parse_simple();
+void test_widget_dsl_parse_nested();
+void test_widget_dsl_parse_properties();
+void test_widget_dsl_validate_valid();
+void test_widget_dsl_validate_invalid();
+void test_widget_dsl_empty();
+void test_widget_dsl_multiple_roots();
+
+// Game GUI Binding
+void test_binding_add();
+void test_binding_remove();
+void test_binding_get();
+void test_binding_list();
+void test_binding_evaluate_direct();
+void test_binding_evaluate_formatted();
+void test_binding_evaluate_computed();
+void test_binding_custom_formatter();
+void test_binding_validate();
+void test_binding_clear();
+
+// Game Mechanics UI Panel
+void test_mechanics_ui_name();
+void test_mechanics_ui_add_element();
+void test_mechanics_ui_remove_element();
+void test_mechanics_ui_get_element();
+void test_mechanics_ui_list_elements();
+void test_mechanics_ui_select_element();
+void test_mechanics_ui_preview_mode();
+void test_mechanics_ui_export();
+void test_mechanics_ui_import();
+void test_mechanics_ui_clear();
+
+// Determinism Versioning
+void test_dv_set_version();
+void test_dv_register_fork();
+void test_dv_unregister_fork();
+void test_dv_get_fork();
+void test_dv_list_forks();
+void test_dv_compatible();
+void test_dv_incompatible();
+void test_dv_check_all();
+void test_dv_report();
+void test_dv_clear();
+
+// Certified Build
+void test_cert_default_level();
+void test_cert_set_level();
+void test_cert_add_artifact();
+void test_cert_get_artifact();
+void test_cert_list_artifacts();
+void test_cert_verify_all_pass();
+void test_cert_verify_with_failure();
+void test_cert_generate_report();
+void test_cert_export_json();
+void test_cert_clear();
+
 int main() {
     std::cout << "=== Atlas Engine Tests ===" << std::endl;
 
@@ -2356,6 +2509,172 @@ int main() {
     test_tlc_export_report();
     test_tlc_path_management();
     test_tlc_extract_invariants_static();
+
+    // Deterministic Animation Graph
+    std::cout << "\n--- Deterministic Animation Graph ---" << std::endl;
+    test_det_anim_add_nodes();
+    test_det_anim_remove_node();
+    test_det_anim_compile_empty();
+    test_det_anim_rest_pose();
+    test_det_anim_fk();
+    test_det_anim_ik();
+    test_det_anim_blend_tree();
+    test_det_anim_bone_mask();
+    test_det_anim_additive_blend();
+    test_det_anim_deterministic();
+
+    // Collaborative Editor
+    std::cout << "\n--- Collaborative Editor ---" << std::endl;
+    test_collab_add_peer();
+    test_collab_remove_peer();
+    test_collab_cursor_update();
+    test_collab_submit_operation();
+    test_collab_receive_remote();
+    test_collab_detect_conflicts();
+    test_collab_resolve_last_writer_wins();
+    test_collab_resolve_first_writer_wins();
+    test_collab_no_conflicts();
+    test_collab_clear();
+
+    // AtlasAI Core
+    std::cout << "\n--- AtlasAI Core ---" << std::endl;
+    test_ai_core_default_permissions();
+    test_ai_core_set_permissions();
+    test_ai_core_has_permission();
+    test_ai_core_register_intent();
+    test_ai_core_unregister_intent();
+    test_ai_core_list_intents();
+    test_ai_core_process_request();
+    test_ai_core_permission_denied();
+    test_ai_core_unknown_intent();
+    test_ai_core_history();
+    test_ai_core_clear();
+
+    // Atlas Assistant Panel
+    std::cout << "\n--- Atlas Assistant Panel ---" << std::endl;
+    test_assistant_panel_name();
+    test_assistant_panel_context();
+    test_assistant_panel_submit_prompt();
+    test_assistant_panel_suggestions();
+    test_assistant_panel_apply_suggestion();
+    test_assistant_panel_diff_preview();
+    test_assistant_panel_conversation();
+    test_assistant_panel_clear();
+
+    // AI Diff Viewer Panel
+    std::cout << "\n--- AI Diff Viewer Panel ---" << std::endl;
+    test_diff_viewer_name();
+    test_diff_viewer_no_diff();
+    test_diff_viewer_load();
+    test_diff_viewer_accept_hunk();
+    test_diff_viewer_reject_hunk();
+    test_diff_viewer_accept_all();
+    test_diff_viewer_reject_all();
+    test_diff_viewer_apply();
+    test_diff_viewer_history();
+    test_diff_viewer_clear();
+
+    // Flow Graph Refactorer
+    std::cout << "\n--- Flow Graph Refactorer ---" << std::endl;
+    test_flow_refactorer_load();
+    test_flow_refactorer_find_dead_nodes();
+    test_flow_refactorer_find_chains();
+    test_flow_refactorer_find_duplicates();
+    test_flow_refactorer_analyze();
+    test_flow_refactorer_remove_dead();
+    test_flow_refactorer_rename();
+    test_flow_refactorer_simplify_chain();
+    test_flow_refactorer_history();
+    test_flow_refactorer_clear();
+
+    // Web Aggregation KB
+    std::cout << "\n--- Web Aggregation KB ---" << std::endl;
+    test_kb_add_entry();
+    test_kb_get_entry();
+    test_kb_remove_entry();
+    test_kb_search();
+    test_kb_search_by_category();
+    test_kb_search_by_tag();
+    test_kb_categories();
+    test_kb_tags();
+    test_kb_export_import();
+    test_kb_clear();
+
+    // Game GUI Asset
+    std::cout << "\n--- Game GUI Asset ---" << std::endl;
+    test_gui_asset_create_widget();
+    test_gui_asset_add_child();
+    test_gui_asset_find_widget();
+    test_gui_asset_remove_widget();
+    test_gui_asset_list_by_type();
+    test_gui_asset_properties();
+    test_gui_asset_bindings();
+    test_gui_asset_validate();
+    test_gui_asset_export_json();
+    test_gui_asset_clear();
+
+    // Widget DSL
+    std::cout << "\n--- Widget DSL ---" << std::endl;
+    test_widget_dsl_tokenize();
+    test_widget_dsl_parse_simple();
+    test_widget_dsl_parse_nested();
+    test_widget_dsl_parse_properties();
+    test_widget_dsl_validate_valid();
+    test_widget_dsl_validate_invalid();
+    test_widget_dsl_empty();
+    test_widget_dsl_multiple_roots();
+
+    // Game GUI Binding
+    std::cout << "\n--- Game GUI Binding ---" << std::endl;
+    test_binding_add();
+    test_binding_remove();
+    test_binding_get();
+    test_binding_list();
+    test_binding_evaluate_direct();
+    test_binding_evaluate_formatted();
+    test_binding_evaluate_computed();
+    test_binding_custom_formatter();
+    test_binding_validate();
+    test_binding_clear();
+
+    // Game Mechanics UI Panel
+    std::cout << "\n--- Game Mechanics UI Panel ---" << std::endl;
+    test_mechanics_ui_name();
+    test_mechanics_ui_add_element();
+    test_mechanics_ui_remove_element();
+    test_mechanics_ui_get_element();
+    test_mechanics_ui_list_elements();
+    test_mechanics_ui_select_element();
+    test_mechanics_ui_preview_mode();
+    test_mechanics_ui_export();
+    test_mechanics_ui_import();
+    test_mechanics_ui_clear();
+
+    // Determinism Versioning
+    std::cout << "\n--- Determinism Versioning ---" << std::endl;
+    test_dv_set_version();
+    test_dv_register_fork();
+    test_dv_unregister_fork();
+    test_dv_get_fork();
+    test_dv_list_forks();
+    test_dv_compatible();
+    test_dv_incompatible();
+    test_dv_check_all();
+    test_dv_report();
+    test_dv_clear();
+
+    // Certified Build
+    std::cout << "\n--- Certified Build ---" << std::endl;
+    test_cert_default_level();
+    test_cert_set_level();
+    test_cert_add_artifact();
+    test_cert_get_artifact();
+    test_cert_list_artifacts();
+    test_cert_verify_all_pass();
+    test_cert_verify_with_failure();
+    test_cert_generate_report();
+    test_cert_export_json();
+    test_cert_clear();
 
     std::cout << "\n=== All tests passed! ===" << std::endl;
     return 0;
