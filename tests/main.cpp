@@ -826,6 +826,10 @@ void test_component_category_assert_simulated();
 void test_component_category_assert_not_presentation();
 void test_component_category_runtime_query();
 
+// Include Firewall tests
+void test_include_firewall_sim_no_render();
+void test_include_firewall_contract_no_render();
+
 int main() {
     std::cout << "=== Atlas Engine Tests ===" << std::endl;
 
@@ -1748,6 +1752,11 @@ int main() {
     test_component_category_assert_simulated();
     test_component_category_assert_not_presentation();
     test_component_category_runtime_query();
+
+    // Include Firewall
+    std::cout << "\n--- Include Firewall ---" << std::endl;
+    test_include_firewall_sim_no_render();
+    test_include_firewall_contract_no_render();
 
     std::cout << "\n=== All tests passed! ===" << std::endl;
     return 0;
