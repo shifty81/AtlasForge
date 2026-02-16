@@ -13,6 +13,7 @@
 #include <cstdint>
 #include <string>
 #include <vector>
+#include <unordered_set>
 
 namespace atlas::asset {
 
@@ -56,7 +57,7 @@ public:
     bool IsAssetLocked(const std::string& assetId) const;
 
     /// Returns the set of all locked asset IDs.
-    const std::vector<std::string>& LockedAssets() const;
+    std::vector<std::string> LockedAssets() const;
 
     // --- Version migration ---
 
@@ -79,7 +80,7 @@ public:
 private:
     std::vector<MigrationRule> m_migrations;
     std::vector<AssetDependency> m_dependencies;
-    std::vector<std::string> m_lockedAssets;
+    std::unordered_set<std::string> m_lockedAssets;
 };
 
 }  // namespace atlas::asset

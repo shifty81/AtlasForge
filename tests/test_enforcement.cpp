@@ -173,7 +173,8 @@ void test_asset_lock_multiple() {
     validator.LockAsset("texture_brick");
     validator.LockAsset("material_stone");
 
-    assert(validator.LockedAssets().size() == 3);
+    auto locked = validator.LockedAssets();
+    assert(locked.size() == 3);
     assert(validator.IsAssetLocked("mesh_wall"));
     assert(validator.IsAssetLocked("texture_brick"));
     assert(validator.IsAssetLocked("material_stone"));
@@ -187,10 +188,10 @@ void test_asset_lock_multiple() {
 // ============================================================
 
 void test_determinism_config_exists() {
-    assert(std::filesystem::exists(
-        std::string(CMAKE_SOURCE_DIR) + "/engine/core/contract/determinism.json"));
+    auto path = std::filesystem::path(CMAKE_SOURCE_DIR) / "engine" / "core" / "contract" / "determinism.json";
+    assert(std::filesystem::exists(path));
 
-    std::ifstream f(std::string(CMAKE_SOURCE_DIR) + "/engine/core/contract/determinism.json");
+    std::ifstream f(path);
     assert(f.is_open());
     std::string content((std::istreambuf_iterator<char>(f)),
                          std::istreambuf_iterator<char>());
