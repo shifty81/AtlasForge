@@ -82,8 +82,8 @@ DesyncCapture DesyncReproducer::CaptureDesync(
 }
 
 std::string DesyncReproducer::GenerateReproCommand(const DesyncCapture& capture) {
-    return "./AtlasServer --repro --save " + capture.savePath +
-           " --replay " + capture.replayPath;
+    return "./AtlasServer --repro --save \"" + capture.savePath +
+           "\" --replay \"" + capture.replayPath + "\"";
 }
 
 size_t DesyncReproducer::CaptureCount() const {
