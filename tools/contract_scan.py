@@ -29,6 +29,8 @@ FORBIDDEN_PATTERNS = [
     ("gettimeofday", "Wall-clock time access"),
     ("clock_gettime", "Wall-clock time access"),
     ("__m128", "SIMD intrinsics forbidden in simulation code"),
+    ("__m256", "SIMD intrinsics forbidden in simulation code"),
+    ("__m512", "SIMD intrinsics forbidden in simulation code"),
 ]
 
 # Directories to scan (relative to engine root)
