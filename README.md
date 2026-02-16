@@ -505,6 +505,7 @@ See the [docs/](docs/) directory for detailed documentation:
 | [Core Contract](docs/ATLAS_CORE_CONTRACT.md) | Non-negotiable engine invariants |
 | [Determinism Enforcement](docs/ATLAS_DETERMINISM_ENFORCEMENT.md) | Compile-time, runtime, CI enforcement |
 | [Lockdown Checklist](docs/ATLAS_LOCKDOWN_CHECKLIST.md) | Engine feature-freeze gate |
+| [Editor Status](docs/EDITOR_STATUS.md) | Editor completion status and gap analysis |
 | [Building](docs/BUILDING.md) | Build prerequisites, script usage, logs, troubleshooting |
 | [Architecture Reference](docs/ARCHITECTURE.md) | Detailed module-by-module reference |
 | [Naming Conventions](docs/ATLAS_NAMING_CONVENTIONS.md) | Code style and naming rules |
