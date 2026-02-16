@@ -108,6 +108,9 @@ add_executable(AtlasTests
     test_lockdown_phase3.cpp
     test_gui_completion.cpp
     test_tlc_model_checker.cpp
+    test_proof_viewer.cpp
+    test_replay_proof_exporter.cpp
+    test_ci_dashboard.cpp
     ${CMAKE_SOURCE_DIR}/editor/panels/ConsolePanel.cpp
     ${CMAKE_SOURCE_DIR}/editor/panels/InteractionDebugger.cpp
     ${CMAKE_SOURCE_DIR}/editor/panels/ECSInspectorPanel.cpp
