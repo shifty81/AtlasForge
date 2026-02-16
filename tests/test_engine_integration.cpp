@@ -306,7 +306,7 @@ void test_console_time_info() {
 void test_ai_behavior_deterministic_across_runs() {
     // Run the same AI graph twice with identical inputs and verify
     // bit-identical output.
-    auto runGraph = [](float threat, float health, float ammo, float morale, uint32_t tick) {
+    auto runBehaviorGraph = [](float threat, float health, float ammo, float morale, uint32_t tick) {
         atlas::ai::BehaviorGraph graph;
         auto emotionId = graph.AddNode(std::make_unique<atlas::ai::EmotionUpdateNode>());
         auto utilId = graph.AddNode(std::make_unique<atlas::ai::UtilityScoreNode>());
@@ -322,12 +322,12 @@ void test_ai_behavior_deterministic_across_runs() {
         return result;
     };
 
-    auto a = runGraph(0.7f, 0.8f, 0.5f, 0.6f, 100);
-    auto b = runGraph(0.7f, 0.8f, 0.5f, 0.6f, 100);
+    auto a = runBehaviorGraph(0.7f, 0.8f, 0.5f, 0.6f, 100);
+    auto b = runBehaviorGraph(0.7f, 0.8f, 0.5f, 0.6f, 100);
     assert(a == b);
 
     // Different inputs should produce different results
-    auto c = runGraph(0.2f, 0.9f, 0.5f, 0.3f, 200);
+    auto c = runBehaviorGraph(0.2f, 0.9f, 0.5f, 0.3f, 200);
     assert(a != c);
 
     std::cout << "[PASS] test_ai_behavior_deterministic_across_runs" << std::endl;
