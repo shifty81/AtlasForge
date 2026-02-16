@@ -181,8 +181,8 @@ void test_engine_load_and_replay() {
         engine.InitNetworking();
         engine.GetScheduler().SetFramePacing(false);
 
-        bool ok = engine.LoadAndReplay(path);
-        assert(ok);
+        bool loadSucceeded = engine.LoadAndReplay(path);
+        assert(loadSucceeded);
         assert(engine.GetTimeModel().Context().sim.tick == 10);
         assert(engine.GetWorld().EntityCount() >= 1);
     }
@@ -205,8 +205,8 @@ void test_divergence_export_report() {
     report.firstMatchingTicks = 42;
     report.severity = DivergenceSeverity::Warning;
 
-    bool ok = ReplayDivergenceInspector::ExportReport(report, path);
-    assert(ok);
+    bool exportSucceeded = ReplayDivergenceInspector::ExportReport(report, path);
+    assert(exportSucceeded);
 
     std::ifstream in(path);
     assert(in.is_open());
@@ -243,13 +243,13 @@ void test_engine_rollback_to_tick() {
     const auto* snap = engine.GetWorldState().SnapshotAtTick(5);
     assert(snap != nullptr);
 
-    bool ok = engine.RollbackToTick(5);
-    assert(ok);
+    bool rollbackSucceeded = engine.RollbackToTick(5);
+    assert(rollbackSucceeded);
     assert(engine.GetTimeModel().Context().sim.tick == 5);
 
     // Rollback to non-existent tick should fail
-    bool bad = engine.RollbackToTick(9999);
-    assert(!bad);
+    bool rollbackInvalidTick = engine.RollbackToTick(9999);
+    assert(!rollbackInvalidTick);
 
     std::cout << "[PASS] test_engine_rollback_to_tick" << std::endl;
 }
@@ -412,8 +412,8 @@ void test_hash_ladder_save_load_continuity() {
         engine.InitNetworking();
         engine.GetScheduler().SetFramePacing(false);
 
-        bool ok = engine.LoadAndReplay(path);
-        assert(ok);
+        bool loadSucceeded = engine.LoadAndReplay(path);
+        assert(loadSucceeded);
 
         // Rebuild hash ladder with same seed and same data
         sim::StateHasher hasher2;
