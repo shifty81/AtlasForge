@@ -47,6 +47,7 @@ add_library(AtlasEngine STATIC
     ui/UINodes.cpp
     ui/UIScreenGraph.cpp
     ui/UICommandBus.cpp
+    ui/GUIInputRecorder.cpp
     ui/UIManager.cpp
     ui/UIRenderer.cpp
     ui/UILayoutSolver.cpp
