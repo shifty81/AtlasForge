@@ -72,6 +72,11 @@ public:
     bool ReplayFromSave(const std::string& savePath, const std::string& replayPath);
     bool RollbackToTick(uint64_t tick);
 
+    /// Rollback to a snapshot tick, resimulate forward to the target tick,
+    /// and verify that the resulting state hash matches the original snapshot.
+    /// Returns true if hashes match (determinism verified).
+    bool RollbackAndVerify(uint64_t snapshotTick, uint64_t targetTick);
+
     bool Running() const;
     void Shutdown();
 

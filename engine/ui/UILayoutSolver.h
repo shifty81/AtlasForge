@@ -47,6 +47,10 @@ public:
 
     size_t EntryCount() const;
 
+    /// Compute a deterministic hash of all resolved layout rects.
+    /// Identical inputs on any platform must produce the same hash.
+    uint64_t LayoutHash() const;
+
 private:
     std::vector<LayoutEntry> m_entries;
 };

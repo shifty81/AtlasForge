@@ -234,4 +234,23 @@ std::vector<std::string> AssetValidator::LockedAssets() const {
     return std::vector<std::string>(m_lockedAssets.begin(), m_lockedAssets.end());
 }
 
+// ---------------------------------------------------------------------------
+// Schema version locking
+// ---------------------------------------------------------------------------
+
+bool AssetValidator::LockSchema(uint16_t version) {
+    if (m_schemaLocked) return false;
+    m_schemaLocked = true;
+    m_lockedSchemaVersion = version;
+    return true;
+}
+
+bool AssetValidator::IsSchemaLocked() const {
+    return m_schemaLocked;
+}
+
+uint16_t AssetValidator::LockedSchemaVersion() const {
+    return m_lockedSchemaVersion;
+}
+
 }  // namespace atlas::asset

@@ -59,6 +59,17 @@ public:
     /// Returns the set of all locked asset IDs.
     std::vector<std::string> LockedAssets() const;
 
+    // --- Schema version locking ---
+
+    /// Lock the asset schema at the current version, preventing further changes.
+    bool LockSchema(uint16_t version);
+
+    /// Check whether the asset schema is locked.
+    bool IsSchemaLocked() const;
+
+    /// Returns the locked schema version, or 0 if not locked.
+    uint16_t LockedSchemaVersion() const;
+
     // --- Version migration ---
 
     void RegisterMigration(uint16_t fromVersion, uint16_t toVersion,
@@ -81,6 +92,8 @@ private:
     std::vector<MigrationRule> m_migrations;
     std::vector<AssetDependency> m_dependencies;
     std::unordered_set<std::string> m_lockedAssets;
+    bool m_schemaLocked = false;
+    uint16_t m_lockedSchemaVersion = 0;
 };
 
 }  // namespace atlas::asset

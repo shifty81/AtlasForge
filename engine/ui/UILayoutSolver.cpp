@@ -1,4 +1,5 @@
 #include "UILayoutSolver.h"
+#include "../sim/StateHasher.h"
 #include <algorithm>
 #include <numeric>
 
@@ -102,6 +103,22 @@ const std::vector<LayoutEntry>& UILayoutSolver::Entries() const {
 
 size_t UILayoutSolver::EntryCount() const {
     return m_entries.size();
+}
+
+uint64_t UILayoutSolver::LayoutHash() const {
+    uint64_t hash = 0;
+    for (const auto& entry : m_entries) {
+        // Hash widgetId
+        uint32_t id = entry.widgetId;
+        hash = sim::StateHasher::HashCombine(
+            hash, reinterpret_cast<const uint8_t*>(&id), sizeof(id));
+        // Hash resolved rect fields (x, y, w, h) as int32_t
+        int32_t vals[4] = { entry.resolved.x, entry.resolved.y,
+                            entry.resolved.w, entry.resolved.h };
+        hash = sim::StateHasher::HashCombine(
+            hash, reinterpret_cast<const uint8_t*>(vals), sizeof(vals));
+    }
+    return hash;
 }
 
 } // namespace atlas::ui

@@ -290,6 +290,31 @@ bool Engine::RollbackToTick(uint64_t tick) {
     return true;
 }
 
+bool Engine::RollbackAndVerify(uint64_t snapshotTick, uint64_t targetTick) {
+    if (snapshotTick >= targetTick) return false;
+
+    // Capture the target snapshot hash before rollback.
+    const auto* targetSnap = m_worldState.SnapshotAtTick(targetTick);
+    if (!targetSnap) return false;
+    uint64_t expectedHash = targetSnap->stateHash;
+
+    // Rollback to the earlier snapshot.
+    if (!RollbackToTick(snapshotTick)) return false;
+
+    // Resimulate forward from snapshotTick to targetTick.
+    m_scheduler.SetFramePacing(false);
+    while (m_timeModel.Context().sim.tick < targetTick) {
+        m_timeModel.AdvanceTick();
+        m_world.Update(m_timeModel.Context().sim.fixedDeltaTime);
+    }
+
+    // Take a fresh snapshot and compare hashes.
+    auto ecsData = m_world.Serialize();
+    auto replaySnap = m_worldState.TakeSnapshot(targetTick, ecsData);
+
+    return replaySnap.stateHash == expectedHash;
+}
+
 bool Engine::LoadAndReplay(const std::string& savePath) {
     auto result = m_saveSystem.Load(savePath);
     if (result != sim::SaveResult::Success) {
