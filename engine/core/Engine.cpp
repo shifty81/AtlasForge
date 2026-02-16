@@ -2,6 +2,7 @@
 #include "Logger.h"
 #include "../render/GLRenderer.h"
 #include "../render/VulkanRenderer.h"
+#include "../sim/StateHasher.h"
 
 #ifdef __linux__
 #include "../platform/X11Window.h"
@@ -110,6 +111,7 @@ void Engine::InitEditor() {
 
 void Engine::Run() {
     m_scheduler.SetTickRate(m_config.tickRate);
+    m_timeModel.SetTickRate(m_config.tickRate);
 
     switch (m_config.mode) {
         case EngineMode::Editor: RunEditor(); break;
@@ -159,14 +161,16 @@ void Engine::RunEditor() {
         ProcessWindowEvents();
         m_net.Poll();
         m_scheduler.Tick([this](float dt) {
-            m_world.Update(dt);
+            m_timeModel.AdvanceTick();
+            const auto& timeCtx = m_timeModel.Context();
+            m_world.Update(timeCtx.sim.fixedDeltaTime);
             ui::UIContext uiCtx{};
             if (m_window) {
                 uiCtx.screenWidth = static_cast<float>(m_window->Width());
                 uiCtx.screenHeight = static_cast<float>(m_window->Height());
             }
-            uiCtx.deltaTime = dt;
-            uiCtx.tick = static_cast<uint32_t>(m_scheduler.CurrentTick());
+            uiCtx.deltaTime = timeCtx.sim.fixedDeltaTime;
+            uiCtx.tick = static_cast<uint32_t>(timeCtx.sim.tick);
             m_uiManager.Update(uiCtx);
         });
 
@@ -191,14 +195,16 @@ void Engine::RunClient() {
         ProcessWindowEvents();
         m_net.Poll();
         m_scheduler.Tick([this](float dt) {
-            m_world.Update(dt);
+            m_timeModel.AdvanceTick();
+            const auto& timeCtx = m_timeModel.Context();
+            m_world.Update(timeCtx.sim.fixedDeltaTime);
             ui::UIContext uiCtx{};
             if (m_window) {
                 uiCtx.screenWidth = static_cast<float>(m_window->Width());
                 uiCtx.screenHeight = static_cast<float>(m_window->Height());
             }
-            uiCtx.deltaTime = dt;
-            uiCtx.tick = static_cast<uint32_t>(m_scheduler.CurrentTick());
+            uiCtx.deltaTime = timeCtx.sim.fixedDeltaTime;
+            uiCtx.tick = static_cast<uint32_t>(timeCtx.sim.tick);
             m_uiManager.Update(uiCtx);
         });
 
@@ -222,7 +228,15 @@ void Engine::RunServer() {
     while (m_running) {
         m_net.Poll();
         m_scheduler.Tick([this](float dt) {
-            m_world.Update(dt);
+            m_timeModel.AdvanceTick();
+            const auto& timeCtx = m_timeModel.Context();
+            m_world.Update(timeCtx.sim.fixedDeltaTime);
+
+            // Periodically snapshot world state for rollback support.
+            // Snapshot every tick so the server can roll back as needed.
+            auto ecsData = m_world.Serialize();
+            auto snapshot = m_worldState.TakeSnapshot(timeCtx.sim.tick, ecsData);
+            m_worldState.PushSnapshot(std::move(snapshot));
         });
         m_net.Flush();
         tickCount++;

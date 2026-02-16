@@ -54,6 +54,20 @@ static_assert(sizeof(double) == 8, "Double size mismatch — determinism at risk
 #define ATLAS_PRESENTATION_ONLY
 #define ATLAS_EDITOR_ONLY
 
+// ---- Simulation Boundary Guard ----
+//
+// ATLAS_FORBID_IN_SIM(msg) — Place at the top of any function that must
+// never be called from deterministic simulation code. In strict mode
+// (ATLAS_SIMULATION_BUILD defined), any translation unit including this
+// header that calls a marked function will produce a compile error.
+
+#if ATLAS_DETERMINISM_STRICT && defined(ATLAS_SIMULATION_BUILD)
+  #define ATLAS_FORBID_IN_SIM(msg) \
+      static_assert(false, "Presentation/IO function called in simulation build: " msg)
+#else
+  #define ATLAS_FORBID_IN_SIM(msg) ((void)0)
+#endif
+
 // ---- Forbidden API Guards (Strict Mode) ----
 //
 // In strict mode, common non-deterministic APIs are poisoned so

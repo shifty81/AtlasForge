@@ -87,6 +87,7 @@ add_executable(AtlasTests
     test_time_model.cpp
     test_world_state.cpp
     test_save_system.cpp
+    test_engine_integration.cpp
     ${CMAKE_SOURCE_DIR}/editor/panels/ConsolePanel.cpp
     ${CMAKE_SOURCE_DIR}/editor/panels/InteractionDebugger.cpp
     ${CMAKE_SOURCE_DIR}/editor/panels/ECSInspectorPanel.cpp

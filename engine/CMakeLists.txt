@@ -90,6 +90,18 @@ target_include_directories(AtlasEngine PUBLIC
     $<INSTALL_INTERFACE:include/atlas>
 )
 
+# Floating-point consistency flags — prevent compiler optimizations that
+# break determinism across platforms or compilation units.
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    target_compile_options(AtlasEngine PRIVATE
+        -ffp-contract=off        # Disable FMA contraction
+    )
+elseif(MSVC)
+    target_compile_options(AtlasEngine PRIVATE
+        /fp:strict               # Strict floating-point model
+    )
+endif()
+
 # Link dynamic loading library on Unix
 if(UNIX AND NOT APPLE)
     find_package(X11 REQUIRED)
