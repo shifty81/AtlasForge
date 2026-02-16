@@ -28,6 +28,7 @@ FORBIDDEN_PATTERNS = [
     ("clock(", "Wall-clock time access"),
     ("gettimeofday", "Wall-clock time access"),
     ("clock_gettime", "Wall-clock time access"),
+    ("__m128", "SIMD intrinsics forbidden in simulation code"),
 ]
 
 # Directories to scan (relative to engine root)
@@ -46,6 +47,8 @@ SIMULATION_DIRS = [
 # forbidden APIs in comments/error messages, not actual usage)
 SKIP_DIRS = {
     "contract",
+    "render",
+    "platform",
 }
 
 # File extensions to scan
