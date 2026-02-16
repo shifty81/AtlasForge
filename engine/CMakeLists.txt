@@ -139,6 +139,11 @@ if(UNIX AND NOT APPLE)
     endif()
 elseif(APPLE)
     target_link_libraries(AtlasEngine PUBLIC dl)
+elseif(WIN32)
+    find_package(OpenGL QUIET)
+    if(OpenGL_FOUND)
+        target_link_libraries(AtlasEngine PUBLIC OpenGL::GL)
+    endif()
 endif()
 
 # ============================================================
