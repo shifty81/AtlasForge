@@ -745,6 +745,9 @@ void test_net_broadcast_save_tick();
 void test_state_hash_diff_panel_no_divergence();
 void test_state_hash_diff_panel_with_divergence();
 void test_hash_ladder_save_load_continuity();
+void test_engine_replay_from_save();
+void test_engine_replay_from_save_bad_save();
+void test_engine_replay_from_save_bad_replay();
 
 // GUI DSL Parser tests
 void test_dsl_parse_simple_layout();
@@ -1665,6 +1668,9 @@ int main() {
     test_state_hash_diff_panel_no_divergence();
     test_state_hash_diff_panel_with_divergence();
     test_hash_ladder_save_load_continuity();
+    test_engine_replay_from_save();
+    test_engine_replay_from_save_bad_save();
+    test_engine_replay_from_save_bad_replay();
 
     // GUI DSL Parser
     std::cout << "\n--- GUI DSL Parser ---" << std::endl;
