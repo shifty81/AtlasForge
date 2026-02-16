@@ -45,9 +45,9 @@ void Engine::InitRender() {
 
 #if defined(ATLAS_HAS_X11) || defined(ATLAS_HAS_WIN32)
     {
-#ifdef ATLAS_HAS_X11
+#if defined(ATLAS_HAS_X11)
         auto window = std::make_unique<platform::X11Window>();
-#else
+#elif defined(ATLAS_HAS_WIN32)
         auto window = std::make_unique<platform::Win32Window>();
 #endif
 

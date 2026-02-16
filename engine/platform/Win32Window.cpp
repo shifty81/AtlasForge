@@ -165,7 +165,7 @@ bool Win32Window::Init(const PlatformWindowConfig& config) {
 
     // Convert title from std::string to wide string
     int titleLen = MultiByteToWideChar(CP_UTF8, 0, config.title.c_str(), -1, nullptr, 0);
-    std::wstring wideTitle(titleLen, L'\0');
+    std::wstring wideTitle(titleLen - 1, L'\0');
     MultiByteToWideChar(CP_UTF8, 0, config.title.c_str(), -1, wideTitle.data(), titleLen);
 
     m_hwnd = CreateWindowExW(

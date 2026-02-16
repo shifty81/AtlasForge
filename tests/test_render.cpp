@@ -221,21 +221,8 @@ void test_platform_has_window_implementation() {
     // At least one platform window implementation should be available
     // on any supported build target (Linux with X11 or Windows).
 #if defined(ATLAS_HAS_X11) || defined(ATLAS_HAS_WIN32)
-    // Verify the engine can create a window in non-headless mode
-    // (we don't actually init one here since tests run headless,
-    //  but we verify the compile-time guard is set)
-    bool hasPlatform = true;
-#else
-    bool hasPlatform = false;
-#endif
-
-    // On CI without a display, this just confirms the define is set
-    // On a developer machine with a display, this confirms window support
-#if defined(ATLAS_HAS_X11) || defined(ATLAS_HAS_WIN32)
-    assert(hasPlatform == true);
     std::cout << "[PASS] test_platform_has_window_implementation" << std::endl;
 #else
-    (void)hasPlatform;
     std::cout << "[SKIP] test_platform_has_window_implementation (no platform window)" << std::endl;
 #endif
 }
