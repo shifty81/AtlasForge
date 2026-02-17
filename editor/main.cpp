@@ -96,6 +96,7 @@ static void BuildEditorUI(atlas::ui::UIScreen& screen) {
     (void)theme; // Theme values are used by the renderer; stored for future use.
 
     if (result.success && result.root) {
+        // parentWidget=0 is the root; x,y=0,0 is the top-left; 1280x720 is default viewport
         ApplyDSLNode(screen, *result.root, 0, 0, 0, 1280, 720);
         return;
     }
