@@ -1,6 +1,7 @@
 #pragma once
 #include "../ui/EditorPanel.h"
 #include "../../engine/production/GamePackager.h"
+#include "../../engine/ui/UIDrawList.h"
 #include <string>
 
 namespace atlas::editor {
@@ -51,6 +52,8 @@ public:
     /// Current build progress (0.0 to 1.0).
     float CurrentProgress() const { return m_currentProgress; }
 
+    const atlas::ui::UIDrawList& GetDrawList() const { return m_drawList; }
+
 private:
     PackageSettings m_settings;
     production::GamePackager m_packager;
@@ -58,6 +61,7 @@ private:
     bool m_building = false;
     std::string m_currentStage;
     float m_currentProgress = 0.0f;
+    atlas::ui::UIDrawList m_drawList;
 };
 
 }

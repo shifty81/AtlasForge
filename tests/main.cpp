@@ -1628,6 +1628,7 @@ void test_rule_graph_editor_draw();
 void test_rule_graph_editor_draw_debug();
 void test_rule_graph_editor_draw_with_selection();
 void run_next_tasks_phase4_tests();
+void run_panel_draw_tests();
 
 int main() {
     std::cout << "=== Atlas Engine Tests ===" << std::endl;
@@ -3429,6 +3430,9 @@ int main() {
 
     // Next Tasks Phase 4
     run_next_tasks_phase4_tests();
+
+    // Panel Draw + TileEditor Input Tests
+    run_panel_draw_tests();
 
     std::cout << "\n=== All tests passed! ===" << std::endl;
     return 0;

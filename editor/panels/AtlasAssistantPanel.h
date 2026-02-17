@@ -1,5 +1,6 @@
 #pragma once
 #include "../ui/EditorPanel.h"
+#include "../../engine/ui/UIDrawList.h"
 #include <string>
 #include <vector>
 #include <cstdint>
@@ -48,10 +49,13 @@ public:
     const AssistantConversation& GetConversation() const;
     void ClearConversation();
 
+    const atlas::ui::UIDrawList& GetDrawList() const { return m_drawList; }
+
 private:
     std::string m_context;
     std::string m_diffPreview;
     AssistantConversation m_conversation;
+    atlas::ui::UIDrawList m_drawList;
 };
 
 } // namespace atlas::editor

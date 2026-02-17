@@ -4,10 +4,46 @@
 namespace atlas::editor {
 
 void ReplayTimelinePanel::Draw() {
-    // Timeline scrubber: current tick / total ticks at configured tick rate.
-    // Render marker overlays (Bookmark, Branch, Injection, Divergence).
-    // If a comparison is active, highlight divergence tick and match %.
-    // Input injection points are shown as distinct markers on the timeline.
+    m_drawList.Clear();
+
+    // Background
+    m_drawList.DrawRect({0, 0, 800, 120}, {30, 30, 30, 255});
+
+    // Title
+    m_drawList.DrawRect({0, 0, 800, 24}, {50, 50, 50, 255});
+    std::string title = "Replay Timeline  Tick: " + std::to_string(m_currentTick)
+        + " / " + std::to_string(TotalTicks())
+        + "  Rate: " + std::to_string(m_tickRate) + " Hz";
+    m_drawList.DrawText({4, 4, 790, 20}, title, {220, 220, 220, 255});
+
+    // Timeline bar
+    m_drawList.DrawRect({4, 32, 792, 20}, {60, 60, 60, 255});
+    if (TotalTicks() > 0) {
+        int32_t progressW = static_cast<int32_t>(
+            792.0 * m_currentTick / TotalTicks());
+        m_drawList.DrawRect({4, 32, progressW, 20}, {80, 140, 200, 255});
+    }
+
+    // Markers
+    for (const auto& marker : m_markers) {
+        if (TotalTicks() == 0) break;
+        int32_t mx = 4 + static_cast<int32_t>(792.0 * marker.tick / TotalTicks());
+        atlas::ui::UIColor markerColor = {200, 200, 200, 255};
+        switch (marker.type) {
+            case MarkerType::Bookmark:   markerColor = {100, 200, 255, 255}; break;
+            case MarkerType::Branch:     markerColor = {100, 255, 100, 255}; break;
+            case MarkerType::Injection:  markerColor = {255, 200, 100, 255}; break;
+            case MarkerType::Divergence: markerColor = {255, 80, 80, 255};   break;
+        }
+        m_drawList.DrawRect({mx, 28, 3, 28}, markerColor);
+        m_drawList.DrawText({mx + 4, 56, 100, 14}, marker.label, markerColor);
+    }
+
+    // Divergence indicator
+    if (HasDivergence()) {
+        std::string divText = "DIVERGENCE at tick " + std::to_string(DivergenceTick());
+        m_drawList.DrawText({4, 80, 400, 16}, divText, {255, 80, 80, 255});
+    }
 }
 
 void ReplayTimelinePanel::LoadReplay(const std::vector<atlas::sim::ReplayFrame>& frames,

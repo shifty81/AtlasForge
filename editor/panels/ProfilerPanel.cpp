@@ -5,10 +5,43 @@
 namespace atlas::editor {
 
 void ProfilerPanel::Draw() {
-    // Display data is already maintained by RecordFrame / RecordSystemMetric.
-    // Draw refreshes derived summary values accessible via AverageFrameTime(),
-    // PeakFrameTime(), FrameCount(), CurrentMetrics(), etc.
-    // A full UI backend would render frame-time graph and system metric bars here.
+    m_drawList.Clear();
+
+    // Background
+    m_drawList.DrawRect({0, 0, 600, 400}, {30, 30, 30, 255});
+
+    // Title
+    m_drawList.DrawRect({0, 0, 600, 24}, {50, 50, 50, 255});
+    m_drawList.DrawText({4, 4, 200, 20}, "Profiler", {220, 220, 220, 255});
+
+    // Summary line
+    std::string summary = "Avg: " + std::to_string(AverageFrameTime()).substr(0, 6)
+        + " ms  Peak: " + std::to_string(PeakFrameTime()).substr(0, 6)
+        + " ms  Frames: " + std::to_string(FrameCount());
+    m_drawList.DrawText({4, 28, 592, 16}, summary, {180, 220, 180, 255});
+
+    // Frame time bars
+    int32_t barY = 48;
+    size_t start = m_history.size() > 60 ? m_history.size() - 60 : 0;
+    for (size_t i = start; i < m_history.size(); ++i) {
+        int32_t barH = static_cast<int32_t>(m_history[i].frameDurationMs * 2.0);
+        if (barH < 1) barH = 1;
+        if (barH > 100) barH = 100;
+        int32_t x = static_cast<int32_t>((i - start) * 9 + 4);
+        atlas::ui::UIColor barColor = {100, 200, 100, 255};
+        if (m_history[i].frameDurationMs > 33.3) barColor = {255, 100, 100, 255};
+        else if (m_history[i].frameDurationMs > 16.6) barColor = {255, 200, 100, 255};
+        m_drawList.DrawRect({x, barY + 100 - barH, 7, barH}, barColor);
+    }
+
+    // System metrics
+    int32_t metricY = 160;
+    for (const auto& metric : m_currentMetrics) {
+        std::string line = metric.systemName + ": "
+            + std::to_string(metric.durationMs).substr(0, 6) + " ms";
+        m_drawList.DrawText({4, metricY, 400, 16}, line, {200, 200, 200, 255});
+        metricY += 18;
+    }
 }
 
 void ProfilerPanel::RecordFrame(const FrameTiming& timing) {

@@ -1,5 +1,6 @@
 #pragma once
 #include "../ui/EditorPanel.h"
+#include "../../engine/ui/UIDrawList.h"
 #include <string>
 #include <vector>
 #include <unordered_map>
@@ -36,11 +37,14 @@ public:
 
     void Clear();
 
+    const atlas::ui::UIDrawList& GetDrawList() const { return m_drawList; }
+
 private:
     std::vector<MechanicsUIElement> m_elements;
     uint64_t m_nextID = 1;
     uint64_t m_selectedID = 0;
     bool m_previewMode = false;
+    atlas::ui::UIDrawList m_drawList;
 };
 
 } // namespace atlas::editor

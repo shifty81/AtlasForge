@@ -7,8 +7,49 @@ namespace atlas::editor {
 CIDashboardPanel::CIDashboardPanel() = default;
 
 void CIDashboardPanel::Draw() {
-    // UI rendering handled by editor backend; data is maintained via the
-    // public API (StartPipelineRun, AddCheckResult, CompletePipelineRun).
+    m_drawList.Clear();
+
+    // Background
+    m_drawList.DrawRect({0, 0, 600, 400}, {30, 30, 30, 255});
+
+    // Title
+    m_drawList.DrawRect({0, 0, 600, 24}, {50, 50, 50, 255});
+    m_drawList.DrawText({4, 4, 200, 20}, "CI Dashboard", {220, 220, 220, 255});
+
+    // Summary
+    m_drawList.DrawText({4, 28, 590, 16}, Summary(), {180, 220, 180, 255});
+
+    // Pipeline runs
+    int32_t y = 48;
+    for (size_t i = m_runs.size(); i > 0 && y < 380; --i) {
+        const auto& run = m_runs[i - 1];
+        atlas::ui::UIColor statusColor = {160, 160, 160, 255};
+        std::string statusStr = "Idle";
+        switch (run.status) {
+            case CIPipelineStatus::Idle:    statusStr = "Idle"; break;
+            case CIPipelineStatus::Running:
+                statusStr = "Running";
+                statusColor = {255, 200, 100, 255};
+                break;
+            case CIPipelineStatus::Passed:
+                statusStr = "Passed";
+                statusColor = {100, 255, 100, 255};
+                break;
+            case CIPipelineStatus::Failed:
+                statusStr = "Failed";
+                statusColor = {255, 80, 80, 255};
+                break;
+            case CIPipelineStatus::PartialFailure:
+                statusStr = "Partial";
+                statusColor = {255, 200, 100, 255};
+                break;
+        }
+        std::string line = "#" + std::to_string(run.runId)
+            + " [" + statusStr + "] "
+            + run.branch + " " + run.commitHash;
+        m_drawList.DrawText({4, y, 590, 16}, line, statusColor);
+        y += 20;
+    }
 }
 
 uint64_t CIDashboardPanel::StartPipelineRun(const std::string& commitHash,

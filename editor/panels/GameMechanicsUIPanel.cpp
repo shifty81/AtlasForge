@@ -5,7 +5,29 @@
 namespace atlas::editor {
 
 void GameMechanicsUIPanel::Draw() {
-    // UI rendering handled by backend.
+    m_drawList.Clear();
+
+    // Background
+    m_drawList.DrawRect({0, 0, 600, 400}, {30, 30, 30, 255});
+
+    // Title
+    m_drawList.DrawRect({0, 0, 600, 24}, {50, 50, 50, 255});
+    std::string title = m_previewMode ? "Game Mechanics UI [Preview]" : "Game Mechanics UI";
+    m_drawList.DrawText({4, 4, 300, 20}, title, {220, 220, 220, 255});
+
+    // Element list
+    int32_t y = 28;
+    for (const auto& elem : m_elements) {
+        bool selected = (elem.id == m_selectedID);
+        atlas::ui::UIColor bgColor = selected
+            ? atlas::ui::UIColor{60, 80, 120, 255}
+            : atlas::ui::UIColor{40, 40, 40, 255};
+        m_drawList.DrawRect({0, y, 600, 20}, bgColor);
+
+        std::string line = elem.name + " (" + elem.elementType + ")";
+        m_drawList.DrawText({4, y + 2, 590, 16}, line, {200, 200, 200, 255});
+        y += 22;
+    }
 }
 
 uint64_t GameMechanicsUIPanel::AddElement(const MechanicsUIElement& element) {

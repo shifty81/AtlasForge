@@ -20,7 +20,57 @@ namespace atlas::editor {
 ProofViewerPanel::ProofViewerPanel() = default;
 
 void ProofViewerPanel::Draw() {
-    // UI rendering handled by editor backend
+    m_drawList.Clear();
+
+    // Background
+    m_drawList.DrawRect({0, 0, 700, 500}, {30, 30, 30, 255});
+
+    // Title
+    m_drawList.DrawRect({0, 0, 700, 24}, {50, 50, 50, 255});
+    m_drawList.DrawText({4, 4, 200, 20}, "Proof Viewer", {220, 220, 220, 255});
+
+    // Spec list (sidebar)
+    int32_t y = 28;
+    for (const auto& [name, spec] : m_specs) {
+        bool selected = (name == m_selectedSpec);
+        atlas::ui::UIColor bg = selected
+            ? atlas::ui::UIColor{60, 80, 120, 255}
+            : atlas::ui::UIColor{40, 40, 40, 255};
+        m_drawList.DrawRect({0, y, 180, 18}, bg);
+
+        auto vit = m_verification.find(name);
+        atlas::ui::UIColor textColor = {200, 200, 200, 255};
+        if (vit != m_verification.end()) {
+            if (vit->second.status == VerificationStatus::Passed)
+                textColor = {100, 255, 100, 255};
+            else if (vit->second.status == VerificationStatus::Failed)
+                textColor = {255, 80, 80, 255};
+            else if (vit->second.status == VerificationStatus::Running)
+                textColor = {255, 200, 100, 255};
+        }
+        m_drawList.DrawText({4, y + 1, 172, 16}, name, textColor);
+        y += 20;
+    }
+
+    // Selected spec content (syntax highlighted tokens)
+    if (!m_selectedSpec.empty()) {
+        const auto& tokens = SelectedTokens();
+        int32_t tx = 190;
+        int32_t ty = 28;
+        for (const auto& tok : tokens) {
+            atlas::ui::UIColor tokColor = {200, 200, 200, 255};
+            switch (tok.type) {
+                case TokenType::Keyword:    tokColor = {180, 120, 255, 255}; break;
+                case TokenType::Comment:    tokColor = {100, 160, 100, 255}; break;
+                case TokenType::String:     tokColor = {200, 160, 100, 255}; break;
+                case TokenType::Number:     tokColor = {100, 200, 200, 255}; break;
+                case TokenType::Operator:   tokColor = {220, 220, 180, 255}; break;
+                default: break;
+            }
+            m_drawList.DrawText({tx, ty, 500, 14}, tok.text, tokColor);
+            ty += 16;
+        }
+    }
 }
 
 // ---------------------------------------------------------------------------

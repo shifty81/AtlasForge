@@ -1,5 +1,6 @@
 #pragma once
 #include "../ui/EditorPanel.h"
+#include "../../engine/ui/UIDrawList.h"
 #include <string>
 #include <vector>
 #include <cstdint>
@@ -55,10 +56,13 @@ public:
 
     void Clear();
 
+    const atlas::ui::UIDrawList& GetDrawList() const { return m_drawList; }
+
 private:
     DiffSet m_currentDiff;
     bool m_hasDiff = false;
     std::vector<DiffSet> m_history;
+    atlas::ui::UIDrawList m_drawList;
 };
 
 } // namespace atlas::editor

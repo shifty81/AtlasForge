@@ -4,11 +4,29 @@
 namespace atlas::editor {
 
 void GamePackagerPanel::Draw() {
-    // Display state is maintained via Settings().
-    // Queryable via Settings() and SettingsSummary().
-    // A full UI backend would render target selector, mode selector,
-    // output path field, option checkboxes, and a Build button
-    // triggering: Validate → Cook → Strip → Bundle → Copy Runtime → Emit.
+    m_drawList.Clear();
+
+    // Background
+    m_drawList.DrawRect({0, 0, 500, 300}, {30, 30, 30, 255});
+
+    // Title
+    m_drawList.DrawRect({0, 0, 500, 24}, {50, 50, 50, 255});
+    m_drawList.DrawText({4, 4, 200, 20}, "Game Packager", {220, 220, 220, 255});
+
+    // Settings summary
+    m_drawList.DrawText({4, 28, 490, 16}, SettingsSummary(), {200, 200, 200, 255});
+
+    // Build status
+    if (m_building) {
+        m_drawList.DrawText({4, 50, 300, 16}, "Building: " + m_currentStage, {255, 200, 100, 255});
+        int32_t barW = static_cast<int32_t>(m_currentProgress * 400);
+        m_drawList.DrawRect({4, 70, 400, 12}, {60, 60, 60, 255});
+        m_drawList.DrawRect({4, 70, barW, 12}, {80, 180, 80, 255});
+    } else if (m_lastReport.result == production::PackageResult::Success) {
+        m_drawList.DrawText({4, 50, 400, 16}, "Build succeeded", {100, 255, 100, 255});
+    } else if (!m_lastReport.errorMessage.empty()) {
+        m_drawList.DrawText({4, 50, 490, 16}, "Error: " + m_lastReport.errorMessage, {255, 80, 80, 255});
+    }
 }
 
 std::string GamePackagerPanel::SettingsSummary() const {

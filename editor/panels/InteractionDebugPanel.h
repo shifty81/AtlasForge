@@ -1,6 +1,7 @@
 #pragma once
 #include "../ui/EditorPanel.h"
 #include "../../engine/interaction/Interaction.h"
+#include "../../engine/ui/UIDrawList.h"
 #include <string>
 #include <vector>
 
@@ -23,8 +24,11 @@ public:
     void ClearLog() { m_log.clear(); }
     size_t LogSize() const { return m_log.size(); }
 
+    const atlas::ui::UIDrawList& GetDrawList() const { return m_drawList; }
+
 private:
     std::vector<InteractionLogEntry> m_log;
+    atlas::ui::UIDrawList m_drawList;
 };
 
 }
