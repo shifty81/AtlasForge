@@ -65,7 +65,7 @@ bool FontBootstrap::Init(const std::string& assetRoot, float dpiScale) {
         m_defaultFont = 1; // reserved handle for fallback font
         m_ready = true;
 
-        Logger::Info("Font system initialised with built-in fallback (asset root: "
+        Logger::Info("Font system initialized with built-in fallback (asset root: "
                      + assetRoot + ", DPI scale: "
                      + std::to_string(m_dpiScale) + ")");
         return true;
@@ -78,7 +78,7 @@ bool FontBootstrap::Init(const std::string& assetRoot, float dpiScale) {
     m_defaultFont = 1; // reserved handle for the default font
     m_ready = true;
 
-    Logger::Info("Font system initialised (asset root: " + assetRoot +
+    Logger::Info("Font system initialized (asset root: " + assetRoot +
                  ", DPI scale: " + std::to_string(m_dpiScale) + ")");
     return true;
 }

@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cassert>
 #include <filesystem>
+#include <fstream>
 
 using namespace atlas::ui;
 
@@ -37,8 +38,16 @@ void test_font_bootstrap_init_missing_font_generates_fallback() {
 
 void test_font_bootstrap_init_unwritable_root() {
     FontBootstrap fb;
-    // Path under /proc is not writable — fallback generation should fail.
-    bool result = fb.Init("/proc/nonexistent_atlas_test", 1.0f);
+    // Use a path nested under a regular file — directory creation will fail
+    // on all platforms because you cannot create a directory inside a file.
+    auto tmpFile = std::filesystem::temp_directory_path() / "atlas_font_block";
+    std::ofstream{tmpFile.string()};  // create as a regular file
+    struct Cleanup {
+        std::filesystem::path p;
+        ~Cleanup() { std::filesystem::remove(p); }
+    } cleanup{tmpFile};
+
+    bool result = fb.Init((tmpFile / "impossible_subdir").string(), 1.0f);
     assert(!result);
     assert(!fb.IsReady());
     assert(fb.GetDefaultFont() == kInvalidFont);
