@@ -40,6 +40,8 @@ public:
         const std::string& prompt,
         const AIContext& context);
 
+    size_t BackendCount() const;
+
 private:
     std::vector<AIBackend*> m_backends;
 
