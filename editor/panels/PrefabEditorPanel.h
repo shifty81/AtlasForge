@@ -31,7 +31,11 @@ struct PrefabEntity {
 class PrefabEditorPanel : public EditorPanel {
 public:
     const char* Name() const override { return "Prefab Editor"; }
-    void Draw() override {}
+    void Draw() override {
+        // Prefab hierarchy tree with parent-child relationships.
+        // Show component list for selected entity.
+        // Display dirty indicator for unsaved changes.
+    }
 
     uint32_t AddEntity(const std::string& name) {
         PrefabEntity entity;

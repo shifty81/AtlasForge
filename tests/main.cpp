@@ -1501,6 +1501,26 @@ void test_prefab_editor_select_entity();
 void test_prefab_editor_summary();
 void test_prefab_editor_clear();
 
+// Truth UI Panel tests
+void test_truth_ui_name();
+void test_truth_ui_defaults();
+void test_truth_ui_wiring();
+void test_truth_ui_summary_stopped();
+void test_truth_ui_summary_no_pie();
+void test_truth_ui_draw();
+
+// Asset Diff Commit Flow tests
+void test_asset_diff_commit_empty();
+void test_asset_diff_commit_track_change();
+void test_asset_diff_commit_untrack();
+void test_asset_diff_commit_stage();
+void test_asset_diff_commit_commit_success();
+void test_asset_diff_commit_commit_no_staged();
+void test_asset_diff_commit_validation_failure();
+void test_asset_diff_commit_clear();
+void test_asset_diff_commit_summary();
+void test_asset_diff_commit_update_tracked();
+
 int main() {
     std::cout << "=== Atlas Engine Tests ===" << std::endl;
 
@@ -3157,6 +3177,28 @@ int main() {
     test_prefab_editor_select_entity();
     test_prefab_editor_summary();
     test_prefab_editor_clear();
+
+    // Truth UI Panel
+    std::cout << "\n--- Truth UI Panel ---" << std::endl;
+    test_truth_ui_name();
+    test_truth_ui_defaults();
+    test_truth_ui_wiring();
+    test_truth_ui_summary_stopped();
+    test_truth_ui_summary_no_pie();
+    test_truth_ui_draw();
+
+    // Asset Diff Commit Flow
+    std::cout << "\n--- Asset Diff Commit Flow ---" << std::endl;
+    test_asset_diff_commit_empty();
+    test_asset_diff_commit_track_change();
+    test_asset_diff_commit_untrack();
+    test_asset_diff_commit_stage();
+    test_asset_diff_commit_commit_success();
+    test_asset_diff_commit_commit_no_staged();
+    test_asset_diff_commit_validation_failure();
+    test_asset_diff_commit_clear();
+    test_asset_diff_commit_summary();
+    test_asset_diff_commit_update_tracked();
 
     std::cout << "\n=== All tests passed! ===" << std::endl;
     return 0;

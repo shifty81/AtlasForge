@@ -16,7 +16,13 @@ struct MaterialParameter {
 class MaterialEditorPanel : public EditorPanel {
 public:
     const char* Name() const override { return "Material Editor"; }
-    void Draw() override {}
+    void Draw() override {
+        // Material summary header
+        if (!m_loaded) return;
+        // Display material dimensions, parameter list, and preview toggle.
+        // When a parameter is selected, show its type and value editor.
+        // Mark dirty state for unsaved changes.
+    }
 
     void LoadMaterial(const procedural::MaterialData& material) {
         m_material = material;

@@ -150,6 +150,8 @@ add_executable(AtlasTests
     test_mesh_viewer.cpp
     test_material_editor.cpp
     test_prefab_editor.cpp
+    test_truth_ui_panel.cpp
+    test_asset_diff_commit.cpp
     ${CMAKE_SOURCE_DIR}/editor/panels/ConsolePanel.cpp
     ${CMAKE_SOURCE_DIR}/editor/panels/InteractionDebugger.cpp
     ${CMAKE_SOURCE_DIR}/editor/panels/ECSInspectorPanel.cpp

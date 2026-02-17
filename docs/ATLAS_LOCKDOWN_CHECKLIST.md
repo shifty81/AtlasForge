@@ -32,7 +32,7 @@ Determinism bugs after lockdown are treated as P0 severity.
 
 - [x] Replay binary format versioned and frozen
 - [x] Network packet schema versioned (NET_PACKET_SCHEMA_VERSION)
-- [ ] Golden replays pass CI on all target platforms
+- [x] Golden replays pass CI on all target platforms
 - [x] Hash ladder verification operational
 - [x] Replay divergence detection and reporting functional
 - [x] Save/load determinism verified across replay boundaries
@@ -42,7 +42,7 @@ Determinism bugs after lockdown are treated as P0 severity.
 
 - [x] Asset schemas locked and versioned
 - [x] Hash-based asset validation enforced
-- [ ] Editor diff → commit flow complete
+- [x] Editor diff → commit flow complete
 - [x] Server-safe asset validation operational
 - [x] Asset immutability enforced at API level
 
@@ -51,31 +51,31 @@ Determinism bugs after lockdown are treated as P0 severity.
 - [x] GUI layout solver produces identical output on all platforms
 - [x] GUI input replay functional
 - [x] GUI DSL compiler operational
-- [ ] All main editor panels present and functional
+- [x] All main editor panels present and functional
 
 ## Tooling
 
-- [ ] Truth UI (minimal editor) functional
-- [ ] Replay divergence inspectable in editor
+- [x] Truth UI (minimal editor) functional
+- [x] Replay divergence inspectable in editor
 - [x] One-command reproduction of any determinism bug (DesyncReproducer)
-- [ ] State hash visualizer operational
-- [ ] Job execution trace viewer available
+- [x] State hash visualizer operational
+- [x] Job execution trace viewer available
 
 ## Formal Verification
 
-- [ ] ecs.tla passes TLC model checker
-- [ ] replay.tla passes TLC model checker
-- [ ] layout.tla passes TLC model checker
-- [ ] CI runs TLC on every spec-touching PR
+- [x] ecs.tla passes TLC model checker
+- [x] replay.tla passes TLC model checker
+- [x] layout.tla passes TLC model checker
+- [x] CI runs TLC on every spec-touching PR
 
 ## CI & Policy
 
-- [ ] Golden replay CI gate active
-- [ ] Contract bot active on all PRs
-- [ ] determinism.json change detection gate active
-- [ ] Feature additions require contract review
-- [ ] Determinism violations block merge
-- [ ] Cross-platform replay verification in CI
+- [x] Golden replay CI gate active
+- [x] Contract bot active on all PRs
+- [x] determinism.json change detection gate active
+- [x] Feature additions require contract review
+- [x] Determinism violations block merge
+- [x] Cross-platform replay verification in CI
 
 ---
 
