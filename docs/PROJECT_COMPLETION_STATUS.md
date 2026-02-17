@@ -248,7 +248,7 @@ Editor Rendering   ✅ 100%   All panels produce draw commands via UIDrawList
 Production         ✅ 100%   Full packager pipeline
 CI/Enforcement     ✅ 100%   Determinism gate, contract bot
 Documentation      ✅  95%   43 docs; minor updates needed
-Testing            ✅ 100%   1315 tests, all passing
+Testing            ✅ 100%   1335 tests, all passing
 ```
 
 ---
