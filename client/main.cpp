@@ -58,50 +58,54 @@ int main(int argc, char* argv[]) {
     engine.InitNetworking();
 
     // Load game module if specified
-    atlas::module::ModuleLoader moduleLoader;
-    atlas::net::ReplicationManager replication;
-    atlas::asset::AssetRegistry assetRegistry;
-    replication.SetWorld(&engine.GetWorld());
-
     if (!modulePath.empty()) {
+        atlas::module::ModuleLoader moduleLoader;
+        atlas::net::ReplicationManager replication;
+        atlas::asset::AssetRegistry assetRegistry;
+        replication.SetWorld(&engine.GetWorld());
+
         auto result = moduleLoader.Load(modulePath);
         if (result != atlas::module::ModuleLoadResult::Success) {
             std::cerr << "Failed to load game module: " << modulePath << std::endl;
             return 1;
         }
 
-        atlas::module::GameModuleContext ctx{
-            engine.GetWorld(),
-            engine.GetNet(),
-            replication,
-            atlas::rules::ServerRules::Get(),
-            assetRegistry,
-            atlas::project::ProjectManager::Get().Descriptor()
+        auto makeCtx = [&]() -> atlas::module::GameModuleContext {
+            return {
+                engine.GetWorld(),
+                engine.GetNet(),
+                replication,
+                atlas::rules::ServerRules::Get(),
+                assetRegistry,
+                atlas::project::ProjectManager::Get().Descriptor()
+            };
         };
+
         auto* mod = moduleLoader.GetModule();
-        mod->RegisterTypes(ctx);
-        mod->ConfigureReplication(ctx);
-        mod->OnStart(ctx);
+        {
+            auto ctx = makeCtx();
+            mod->RegisterTypes(ctx);
+            mod->ConfigureReplication(ctx);
+            mod->OnStart(ctx);
+        }
 
         auto desc = mod->Describe();
         atlas::Logger::Info(std::string("Game module loaded: ") + desc.name);
-    }
 
-    // Diagnostics overlay is available (off by default in client;
-    // toggle at runtime with Ctrl+`).
+        // Diagnostics overlay is available (off by default in client;
+        // toggle at runtime with Ctrl+`).
 
-    engine.Run();
+        engine.Run();
 
-    if (moduleLoader.IsLoaded()) {
-        atlas::module::GameModuleContext ctx{
-            engine.GetWorld(),
-            engine.GetNet(),
-            replication,
-            atlas::rules::ServerRules::Get(),
-            assetRegistry,
-            atlas::project::ProjectManager::Get().Descriptor()
-        };
-        moduleLoader.GetModule()->OnShutdown(ctx);
+        {
+            auto ctx = makeCtx();
+            mod->OnShutdown(ctx);
+        }
+    } else {
+        // Diagnostics overlay is available (off by default in client;
+        // toggle at runtime with Ctrl+`).
+
+        engine.Run();
     }
 
     return 0;
