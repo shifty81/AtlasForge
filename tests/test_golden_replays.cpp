@@ -17,8 +17,10 @@
 #include <vector>
 #include <string>
 
-// Mock minimal types for testing (in real engine, would use actual classes)
-namespace atlas::sim {
+// Mock minimal types for testing (in real engine, would use actual classes).
+// Placed in a dedicated namespace to avoid ODR violations with the real
+// atlas::sim::ReplayFrame defined in engine/sim/ReplayRecorder.h.
+namespace atlas::sim::golden_test {
 
 struct ReplayFrame {
     uint64_t tick = 0;
@@ -44,7 +46,7 @@ uint64_t RunReplay(const GoldenReplay& replay) {
     return hash;
 }
 
-}  // namespace atlas::sim
+}  // namespace atlas::sim::golden_test
 
 // ============================================================
 // Test Cases
@@ -53,7 +55,7 @@ uint64_t RunReplay(const GoldenReplay& replay) {
 void test_golden_replay_01_empty_world() {
     printf("TEST: Golden Replay 01 - Empty World\n");
     
-    using namespace atlas::sim;
+    using namespace atlas::sim::golden_test;
     
     GoldenReplay replay;
     replay.name = "golden_01_empty";
@@ -85,7 +87,7 @@ void test_golden_replay_01_empty_world() {
 void test_golden_replay_02_simple_movement() {
     printf("TEST: Golden Replay 02 - Simple Movement\n");
     
-    using namespace atlas::sim;
+    using namespace atlas::sim::golden_test;
     
     GoldenReplay replay;
     replay.name = "golden_02_movement";
@@ -115,7 +117,7 @@ void test_golden_replay_02_simple_movement() {
 void test_golden_replay_03_combat_sequence() {
     printf("TEST: Golden Replay 03 - Combat Sequence\n");
     
-    using namespace atlas::sim;
+    using namespace atlas::sim::golden_test;
     
     GoldenReplay replay;
     replay.name = "golden_03_combat";
@@ -155,7 +157,7 @@ void test_golden_replay_03_combat_sequence() {
 void test_replay_divergence_detection() {
     printf("TEST: Replay Divergence Detection\n");
     
-    using namespace atlas::sim;
+    using namespace atlas::sim::golden_test;
     
     // Create two replays that should match
     GoldenReplay replay1, replay2;

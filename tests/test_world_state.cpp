@@ -1,4 +1,5 @@
 #include "../engine/sim/WorldState.h"
+#include "../engine/core/contract/SimulationGuard.h"
 #include <iostream>
 #include <cassert>
 
@@ -69,8 +70,10 @@ void test_world_state_push_and_retrieve() {
     std::vector<uint8_t> data1 = {1};
     std::vector<uint8_t> data2 = {2};
 
+    ATLAS_SIM_TICK_BEGIN();
     ws.PushSnapshot(ws.TakeSnapshot(1, data1));
     ws.PushSnapshot(ws.TakeSnapshot(2, data2));
+    ATLAS_SIM_TICK_END();
 
     assert(ws.SnapshotCount() == 2);
 
@@ -93,10 +96,12 @@ void test_world_state_max_snapshots() {
     ws.SetMaxSnapshots(3);
     assert(ws.MaxSnapshots() == 3);
 
+    ATLAS_SIM_TICK_BEGIN();
     for (uint64_t i = 0; i < 5; ++i) {
         std::vector<uint8_t> data = {static_cast<uint8_t>(i)};
         ws.PushSnapshot(ws.TakeSnapshot(i, data));
     }
+    ATLAS_SIM_TICK_END();
 
     // Should only retain the latest 3
     assert(ws.SnapshotCount() == 3);
@@ -110,10 +115,12 @@ void test_world_state_max_snapshots() {
 void test_world_state_prune() {
     WorldState ws;
 
+    ATLAS_SIM_TICK_BEGIN();
     for (uint64_t i = 0; i < 10; ++i) {
         std::vector<uint8_t> data = {static_cast<uint8_t>(i)};
         ws.PushSnapshot(ws.TakeSnapshot(i, data));
     }
+    ATLAS_SIM_TICK_END();
 
     ws.PruneSnapshotsBefore(5);
     assert(ws.SnapshotCount() == 5);
@@ -126,7 +133,9 @@ void test_world_state_prune() {
 void test_world_state_clear() {
     WorldState ws;
     std::vector<uint8_t> data = {1};
+    ATLAS_SIM_TICK_BEGIN();
     ws.PushSnapshot(ws.TakeSnapshot(1, data));
+    ATLAS_SIM_TICK_END();
     assert(ws.SnapshotCount() == 1);
 
     ws.ClearSnapshots();
@@ -152,7 +161,9 @@ void test_world_state_derived_rebuild() {
     assert(!rebuilt);
 
     std::vector<uint8_t> data = {1};
+    ATLAS_SIM_TICK_BEGIN();
     ws.PushSnapshot(ws.TakeSnapshot(42, data));
+    ATLAS_SIM_TICK_END();
     ws.RebuildDerived();
     assert(rebuilt);
     assert(rebuildTick == 42);

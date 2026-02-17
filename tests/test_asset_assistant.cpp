@@ -7,9 +7,9 @@
 using namespace atlas::editor;
 using namespace atlas::asset;
 
-class TestAssetNode : public AssetNode {
+class NamedTestAssetNode : public AssetNode {
 public:
-    explicit TestAssetNode(const std::string& name) : m_name(name) {}
+    explicit NamedTestAssetNode(const std::string& name) : m_name(name) {}
     void Evaluate(const AssetContext&) override {}
     std::string Name() const override { return m_name; }
 private:
@@ -29,7 +29,7 @@ void test_assistant_suggest_empty() {
 
 void test_assistant_suggest_with_executor() {
     AssetGraphExecutor executor;
-    executor.AddNode(std::make_unique<TestAssetNode>("Node1"));
+    executor.AddNode(std::make_unique<NamedTestAssetNode>("Node1"));
 
     AssetGraphAssistant assistant;
     assistant.SetExecutor(&executor);
@@ -51,8 +51,8 @@ void test_assistant_explain_no_executor() {
 
 void test_assistant_explain_with_nodes() {
     AssetGraphExecutor executor;
-    executor.AddNode(std::make_unique<TestAssetNode>("Node1"));
-    executor.AddNode(std::make_unique<TestAssetNode>("Node2"));
+    executor.AddNode(std::make_unique<NamedTestAssetNode>("Node1"));
+    executor.AddNode(std::make_unique<NamedTestAssetNode>("Node2"));
 
     AssetGraphAssistant assistant;
     assistant.SetExecutor(&executor);
@@ -75,7 +75,7 @@ void test_assistant_mutate_no_executor() {
 
 void test_assistant_mutate_intensity() {
     AssetGraphExecutor executor;
-    executor.AddNode(std::make_unique<TestAssetNode>("Node1"));
+    executor.AddNode(std::make_unique<NamedTestAssetNode>("Node1"));
 
     AssetGraphAssistant assistant;
     assistant.SetExecutor(&executor);
