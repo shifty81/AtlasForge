@@ -15,5 +15,7 @@ add_subdirectory(server)
 add_subdirectory(projects/eveoffline/module)
 add_subdirectory(projects/arena2d/module)
 
+add_subdirectory(tileeditor)
+
 enable_testing()
 add_subdirectory(tests)

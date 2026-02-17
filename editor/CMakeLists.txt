@@ -20,6 +20,10 @@ add_executable(AtlasEditor
     ui/LauncherScreen.cpp
     assistant/EditorAssistant.cpp
     assistant/AssetGraphAssistant.cpp
+    panels/TilePalettePanel.cpp
+    panels/RuleGraphEditorPanel.cpp
+    ui/LayoutPersistence.cpp
+    tools/PlayInEditor.cpp
 )
 
 target_link_libraries(AtlasEditor AtlasEngine)
