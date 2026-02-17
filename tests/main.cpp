@@ -1563,6 +1563,67 @@ void test_truth_ui_draw_no_divergence();
 void test_truth_ui_draw_clears_between_frames();
 void test_truth_ui_draw_has_header();
 
+// UI Style
+void test_ui_style_dark_defaults();
+void test_ui_style_light_theme();
+void test_ui_style_spacing_defaults();
+void test_ui_style_typography_defaults();
+void test_ui_style_border_defaults();
+void test_ui_style_status_colors();
+void test_ui_style_dark_light_differ();
+
+// UI Scene Graph
+void test_scene_graph_init();
+void test_scene_graph_add_child();
+void test_scene_graph_remove_child();
+void test_scene_graph_find_child();
+void test_scene_graph_find_nested_child();
+void test_scene_graph_layout_vertical();
+void test_scene_graph_layout_horizontal();
+void test_scene_graph_hit_test();
+void test_scene_graph_draw_tree();
+void test_scene_graph_invisible_child_skipped();
+void test_scene_graph_dispatch_event();
+
+// Tile Chunk Builder
+void test_chunk_builder_empty_layer();
+void test_chunk_builder_single_tile();
+void test_chunk_builder_multiple_tiles();
+void test_chunk_builder_world_to_chunk();
+void test_chunk_builder_world_to_chunk_negative();
+void test_chunk_builder_is_inside_chunk();
+void test_chunk_builder_mark_dirty();
+void test_chunk_builder_tiles_outside_chunk_ignored();
+void test_chunk_builder_deterministic();
+void test_chunk_builder_flip_flags();
+
+// Tile Palette Panel
+void test_tile_palette_name();
+void test_tile_palette_add_entries();
+void test_tile_palette_selection();
+void test_tile_palette_selection_oob();
+void test_tile_palette_filter();
+void test_tile_palette_favorites();
+void test_tile_palette_favorites_only();
+void test_tile_palette_columns();
+void test_tile_palette_clear();
+void test_tile_palette_draw();
+void test_tile_palette_draw_with_filter();
+
+// Rule Graph Editor Panel
+void test_rule_graph_editor_name();
+void test_rule_graph_editor_add_node();
+void test_rule_graph_editor_remove_node();
+void test_rule_graph_editor_add_wire();
+void test_rule_graph_editor_remove_wires_for_node();
+void test_rule_graph_editor_remove_node_removes_wires();
+void test_rule_graph_editor_selection();
+void test_rule_graph_editor_pan_zoom();
+void test_rule_graph_editor_debug_mode();
+void test_rule_graph_editor_draw();
+void test_rule_graph_editor_draw_debug();
+void test_rule_graph_editor_draw_with_selection();
+
 int main() {
     std::cout << "=== Atlas Engine Tests ===" << std::endl;
 
@@ -3287,6 +3348,72 @@ int main() {
     test_truth_ui_draw_no_divergence();
     test_truth_ui_draw_clears_between_frames();
     test_truth_ui_draw_has_header();
+
+    // UI Style
+    std::cout << "\n--- UI Style ---" << std::endl;
+    test_ui_style_dark_defaults();
+    test_ui_style_light_theme();
+    test_ui_style_spacing_defaults();
+    test_ui_style_typography_defaults();
+    test_ui_style_border_defaults();
+    test_ui_style_status_colors();
+    test_ui_style_dark_light_differ();
+
+    // UI Scene Graph
+    std::cout << "\n--- UI Scene Graph ---" << std::endl;
+    test_scene_graph_init();
+    test_scene_graph_add_child();
+    test_scene_graph_remove_child();
+    test_scene_graph_find_child();
+    test_scene_graph_find_nested_child();
+    test_scene_graph_layout_vertical();
+    test_scene_graph_layout_horizontal();
+    test_scene_graph_hit_test();
+    test_scene_graph_draw_tree();
+    test_scene_graph_invisible_child_skipped();
+    test_scene_graph_dispatch_event();
+
+    // Tile Chunk Builder
+    std::cout << "\n--- Tile Chunk Builder ---" << std::endl;
+    test_chunk_builder_empty_layer();
+    test_chunk_builder_single_tile();
+    test_chunk_builder_multiple_tiles();
+    test_chunk_builder_world_to_chunk();
+    test_chunk_builder_world_to_chunk_negative();
+    test_chunk_builder_is_inside_chunk();
+    test_chunk_builder_mark_dirty();
+    test_chunk_builder_tiles_outside_chunk_ignored();
+    test_chunk_builder_deterministic();
+    test_chunk_builder_flip_flags();
+
+    // Tile Palette Panel
+    std::cout << "\n--- Tile Palette Panel ---" << std::endl;
+    test_tile_palette_name();
+    test_tile_palette_add_entries();
+    test_tile_palette_selection();
+    test_tile_palette_selection_oob();
+    test_tile_palette_filter();
+    test_tile_palette_favorites();
+    test_tile_palette_favorites_only();
+    test_tile_palette_columns();
+    test_tile_palette_clear();
+    test_tile_palette_draw();
+    test_tile_palette_draw_with_filter();
+
+    // Rule Graph Editor Panel
+    std::cout << "\n--- Rule Graph Editor Panel ---" << std::endl;
+    test_rule_graph_editor_name();
+    test_rule_graph_editor_add_node();
+    test_rule_graph_editor_remove_node();
+    test_rule_graph_editor_add_wire();
+    test_rule_graph_editor_remove_wires_for_node();
+    test_rule_graph_editor_remove_node_removes_wires();
+    test_rule_graph_editor_selection();
+    test_rule_graph_editor_pan_zoom();
+    test_rule_graph_editor_debug_mode();
+    test_rule_graph_editor_draw();
+    test_rule_graph_editor_draw_debug();
+    test_rule_graph_editor_draw_with_selection();
 
     std::cout << "\n=== All tests passed! ===" << std::endl;
     return 0;
