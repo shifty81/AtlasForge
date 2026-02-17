@@ -40,8 +40,10 @@ struct GridCoord {
 template<>
 struct std::hash<atlas::editor::GridCoord> {
     size_t operator()(const atlas::editor::GridCoord& c) const noexcept {
-        return std::hash<int64_t>{}(
-            (static_cast<int64_t>(c.x) << 32) | static_cast<int64_t>(static_cast<uint32_t>(c.y)));
+        // Use XOR-shift hash combiner for safe handling of negative coordinates.
+        size_t h1 = std::hash<int32_t>{}(c.x);
+        size_t h2 = std::hash<int32_t>{}(c.y);
+        return h1 ^ (h2 * 2654435761u + 0x9e3779b9u + (h1 << 6) + (h1 >> 2));
     }
 };
 
