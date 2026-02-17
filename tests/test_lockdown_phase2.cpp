@@ -124,11 +124,13 @@ void test_layout_hash_differs_on_change() {
     ui::UILayoutRect bounds{0, 0, 400, 100};
 
     ui::UILayoutSolver solver1;
-    solver1.AddEntry(1, {0, 0, 100, 50, INT32_MAX, INT32_MAX, 1.0f});
+    solver1.AddEntry(1, {100, 50, 100, 50, INT32_MAX, INT32_MAX, 1.0f});
+    solver1.AddEntry(2, {100, 50, 100, 50, INT32_MAX, INT32_MAX, 1.0f});
     solver1.Solve(bounds, ui::LayoutDirection::Horizontal);
 
     ui::UILayoutSolver solver2;
-    solver2.AddEntry(1, {0, 0, 200, 50, INT32_MAX, INT32_MAX, 1.0f});
+    solver2.AddEntry(1, {200, 50, 200, 50, INT32_MAX, INT32_MAX, 1.0f});
+    solver2.AddEntry(2, {100, 50, 100, 50, INT32_MAX, INT32_MAX, 1.0f});
     solver2.Solve(bounds, ui::LayoutDirection::Horizontal);
 
     assert(solver1.LayoutHash() != solver2.LayoutHash());
