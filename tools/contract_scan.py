@@ -64,11 +64,14 @@ SKIP_DIRS = {
 # Files that legitimately use otherwise-forbidden APIs.
 # TickScheduler uses std::chrono for frame pacing (non-simulation logic).
 # JobTracer uses std::chrono for execution timing (debug/tooling, not sim).
+# TLCModelChecker uses std::chrono for timing spec validation (tooling).
 SKIP_FILES = {
     "TickScheduler.cpp",
     "TickScheduler.h",
     "JobTracer.cpp",
     "JobTracer.h",
+    "TLCModelChecker.cpp",
+    "TLCModelChecker.h",
 }
 
 # File extensions to scan

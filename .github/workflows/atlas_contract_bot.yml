@@ -24,6 +24,19 @@ jobs:
           } >> "$GITHUB_OUTPUT"
         fi
 
+    - name: Check Contract Review Required
+      id: review
+      run: |
+        # Check if this PR modifies contract-critical files
+        CRITICAL_FILES=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -E "(ATLAS_CORE_CONTRACT|determinism\.json|engine/core/contract/|engine/sim/)" || true)
+        if [ -n "$CRITICAL_FILES" ]; then
+          echo "review_required=true" >> "$GITHUB_OUTPUT"
+          echo "Modified contract-critical files:"
+          echo "$CRITICAL_FILES"
+        else
+          echo "review_required=false" >> "$GITHUB_OUTPUT"
+        fi
+
     - name: Comment on PR (violations found)
       if: steps.scan.outputs.violations == 'true'
       uses: marocchino/sticky-pull-request-comment@v2
@@ -40,7 +53,7 @@ jobs:
           ```
 
     - name: Comment on PR (no violations)
-      if: steps.scan.outputs.violations == 'false'
+      if: steps.scan.outputs.violations == 'false' && steps.review.outputs.review_required == 'false'
       uses: marocchino/sticky-pull-request-comment@v2
       with:
         header: atlas-contract
@@ -48,6 +61,17 @@ jobs:
           ✅ **Atlas Core Contract — No Violations**
 
           All simulation code passes contract validation.
+
+    - name: Comment on PR (contract review required)
+      if: steps.scan.outputs.violations == 'false' && steps.review.outputs.review_required == 'true'
+      uses: marocchino/sticky-pull-request-comment@v2
+      with:
+        header: atlas-contract
+        message: |
+          ✅ **Atlas Core Contract — No Violations**
+
+          ⚠️ **Contract Review Required**
+          This PR modifies contract-critical files. A contract review is required before merge.
 
     - name: Fail on violations
       if: steps.scan.outputs.violations == 'true'

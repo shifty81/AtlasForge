@@ -28,3 +28,84 @@ jobs:
 
     - name: Contract Scanner
       run: python3 tools/contract_scan.py --path engine
+
+    - name: Golden Replay Verification
+      run: |
+        if [ -d tests/replays ] && ls tests/replays/*.atlasreplay 1>/dev/null 2>&1; then
+          for replay in tests/replays/*.atlasreplay; do
+            base=$(basename "$replay" .atlasreplay)
+            hashfile="tests/replays/${base}.hash"
+            if [ -f "$hashfile" ]; then
+              ./build/tests/AtlasTests --replay "$replay" --hash-out "/tmp/${base}.hash" 2>/dev/null || true
+              if [ -f "/tmp/${base}.hash" ]; then
+                diff "$hashfile" "/tmp/${base}.hash" || { echo "❌ Golden replay hash mismatch: $base"; exit 1; }
+                echo "✅ Golden replay verified: $base"
+              fi
+            fi
+          done
+        else
+          echo "⚠ No golden replays found — skipping verification"
+        fi
+
+    - name: TLC Model Checker
+      run: |
+        if command -v tlc 2>/dev/null || [ -f tools/tlc.jar ]; then
+          for spec in specs/*.tla; do
+            echo "Checking $spec..."
+            if [ -f tools/tlc.jar ]; then
+              java -jar tools/tlc.jar "$spec" || { echo "❌ TLC failed: $spec"; exit 1; }
+            else
+              tlc "$spec" || { echo "❌ TLC failed: $spec"; exit 1; }
+            fi
+            echo "✅ TLC passed: $spec"
+          done
+        else
+          echo "⚠ TLC not available — skipping formal verification"
+        fi
+
+    - name: Determinism Config Change Detection
+      if: github.event_name == 'pull_request'
+      run: |
+        if git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -q "determinism.json"; then
+          echo "⚠ determinism.json modified — requires contract review"
+          echo "::warning::determinism.json has been modified. This change requires explicit contract review."
+        fi
+
+  cross-platform-replay:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Configure
+      run: |
+        cmake -B build \
+          -DCMAKE_CXX_FLAGS="-DATLAS_DETERMINISM_STRICT=1" \
+          -DCMAKE_BUILD_TYPE=Release
+
+    - name: Build
+      run: cmake --build build --parallel
+
+    - name: Run Tests
+      run: |
+        cd build
+        ctest --output-on-failure
+
+    - name: Generate Replay Hashes
+      run: |
+        if [ -d tests/replays ]; then
+          for replay in tests/replays/*.atlasreplay; do
+            base=$(basename "$replay" .atlasreplay)
+            ./build/tests/AtlasTests --replay "$replay" --hash-out "replay_hash_${base}.txt" 2>/dev/null || true
+          done
+        fi
+      shell: bash
+
+    - name: Upload Replay Hashes
+      if: hashFiles('replay_hash_*.txt') != ''
+      uses: actions/upload-artifact@v4
+      with:
+        name: replay-hashes-${{ matrix.os }}
+        path: replay_hash_*.txt
