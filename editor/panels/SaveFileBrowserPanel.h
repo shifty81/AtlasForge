@@ -1,6 +1,7 @@
 #pragma once
 #include "../ui/EditorPanel.h"
 #include "../../engine/sim/SaveSystem.h"
+#include "../../engine/ui/UIDrawList.h"
 #include <string>
 #include <vector>
 
@@ -40,10 +41,13 @@ public:
     /// Get the directory being browsed.
     const std::string& Directory() const;
 
+    const atlas::ui::UIDrawList& GetDrawList() const { return m_drawList; }
+
 private:
     std::string m_directory;
     std::vector<SaveFileInfo> m_files;
     int m_selectedIndex = -1;
+    atlas::ui::UIDrawList m_drawList;
 };
 
 }

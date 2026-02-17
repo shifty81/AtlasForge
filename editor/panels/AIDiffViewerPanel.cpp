@@ -3,7 +3,41 @@
 namespace atlas::editor {
 
 void AIDiffViewerPanel::Draw() {
-    // UI rendering handled by backend.
+    m_drawList.Clear();
+
+    // Background
+    m_drawList.DrawRect({0, 0, 700, 400}, {30, 30, 30, 255});
+
+    // Title
+    m_drawList.DrawRect({0, 0, 700, 24}, {50, 50, 50, 255});
+    m_drawList.DrawText({4, 4, 200, 20}, "AI Diff Viewer", {220, 220, 220, 255});
+
+    if (!m_hasDiff) {
+        m_drawList.DrawText({4, 30, 400, 16}, "No diff loaded", {160, 160, 160, 255});
+        return;
+    }
+
+    // Diff title and summary
+    m_drawList.DrawText({4, 28, 690, 16}, m_currentDiff.title, {200, 200, 200, 255});
+    std::string summary = std::to_string(AcceptedHunkCount()) + "/"
+        + std::to_string(TotalHunkCount()) + " hunks accepted";
+    m_drawList.DrawText({4, 46, 400, 14}, summary, {180, 220, 180, 255});
+
+    // File list with hunks
+    int32_t y = 66;
+    for (const auto& file : m_currentDiff.files) {
+        m_drawList.DrawText({4, y, 690, 16}, file.path, {100, 200, 255, 255});
+        y += 18;
+        for (const auto& hunk : file.hunks) {
+            atlas::ui::UIColor hunkColor = {200, 200, 200, 255};
+            if (hunk.accepted) hunkColor = {100, 255, 100, 255};
+            else if (hunk.rejected) hunkColor = {255, 100, 100, 255};
+            std::string hunkLabel = "L" + std::to_string(hunk.lineStart)
+                + "+" + std::to_string(hunk.lineCount);
+            m_drawList.DrawText({20, y, 300, 14}, hunkLabel, hunkColor);
+            y += 16;
+        }
+    }
 }
 
 void AIDiffViewerPanel::LoadDiffSet(const DiffSet& diff) {

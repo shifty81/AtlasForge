@@ -3,7 +3,33 @@
 namespace atlas::editor {
 
 void AtlasAssistantPanel::Draw() {
-    // UI rendering handled by backend.
+    m_drawList.Clear();
+
+    // Background
+    m_drawList.DrawRect({0, 0, 500, 400}, {30, 30, 30, 255});
+
+    // Title
+    m_drawList.DrawRect({0, 0, 500, 24}, {50, 50, 50, 255});
+    m_drawList.DrawText({4, 4, 200, 20}, "Atlas Assistant", {220, 220, 220, 255});
+
+    // Conversation
+    int32_t y = 28;
+    for (const auto& prompt : m_conversation.prompts) {
+        m_drawList.DrawText({4, y, 490, 16}, "> " + prompt.query, {100, 200, 255, 255});
+        y += 18;
+    }
+
+    // Suggestions
+    for (size_t i = 0; i < m_conversation.suggestions.size(); ++i) {
+        const auto& s = m_conversation.suggestions[i];
+        atlas::ui::UIColor color = s.applied
+            ? atlas::ui::UIColor{100, 200, 100, 255}
+            : atlas::ui::UIColor{200, 200, 200, 255};
+        m_drawList.DrawText({4, y, 490, 16}, s.title, color);
+        y += 16;
+        m_drawList.DrawText({20, y, 474, 14}, s.description, {160, 160, 160, 255});
+        y += 18;
+    }
 }
 
 void AtlasAssistantPanel::SetContext(const std::string& context) {

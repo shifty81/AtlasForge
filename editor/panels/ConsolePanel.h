@@ -5,6 +5,7 @@
 #include "../../engine/sim/TickScheduler.h"
 #include "../../engine/sim/TimeModel.h"
 #include "../../engine/sim/SaveSystem.h"
+#include "../../engine/ui/UIDrawList.h"
 #include <string>
 #include <vector>
 #include <sstream>
@@ -29,6 +30,8 @@ public:
 
     const std::vector<std::string>& History() const { return m_history; }
 
+    const atlas::ui::UIDrawList& GetDrawList() const { return m_drawList; }
+
 private:
     std::vector<std::string> m_history;
     std::string m_inputBuffer;
@@ -37,6 +40,7 @@ private:
     sim::TickScheduler& m_scheduler;
     sim::TimeModel* m_timeModel = nullptr;
     sim::SaveSystem* m_saveSystem = nullptr;
+    atlas::ui::UIDrawList m_drawList;
 };
 
 }

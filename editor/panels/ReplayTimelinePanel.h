@@ -1,6 +1,7 @@
 #pragma once
 #include "../ui/EditorPanel.h"
 #include "../../engine/sim/ReplayRecorder.h"
+#include "../../engine/ui/UIDrawList.h"
 #include <string>
 #include <vector>
 #include <cstdint>
@@ -64,6 +65,8 @@ public:
     // Branching
     std::vector<atlas::sim::ReplayFrame> BranchAt(uint32_t tick);
 
+    const atlas::ui::UIDrawList& GetDrawList() const { return m_drawList; }
+
 private:
     std::vector<atlas::sim::ReplayFrame> m_frames;
     std::vector<TimelineMarker> m_markers;
@@ -72,6 +75,7 @@ private:
     mutable ComparisonResult m_comparisonResult;
     mutable bool m_hasComparison = false;
     DivergenceCallback m_divergenceCallback;
+    atlas::ui::UIDrawList m_drawList;
 };
 
 }

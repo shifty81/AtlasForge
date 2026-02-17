@@ -1,6 +1,7 @@
 #pragma once
 #include "../ui/EditorPanel.h"
 #include "../../engine/project/ProjectManager.h"
+#include "../../engine/ui/UIDrawList.h"
 #include <string>
 #include <vector>
 
@@ -19,11 +20,14 @@ public:
 
     bool OpenProject(const std::string& atlasFilePath);
 
+    const atlas::ui::UIDrawList& GetDrawList() const { return m_drawList; }
+
 private:
     bool m_projectSelected = false;
     std::string m_selectedPath;
     std::vector<std::string> m_recentProjects;
     project::ProjectManager m_projectManager;
+    atlas::ui::UIDrawList m_drawList;
 };
 
 }

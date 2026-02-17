@@ -36,8 +36,28 @@ void TileEditorModule::RegisterModes() {
     Logger::Info("TileEditorModule: modes registered");
 }
 
-bool TileEditorModule::HandleInput(uint32_t /*keyCode*/, bool /*pressed*/) {
-    return false; // not yet wired
+bool TileEditorModule::HandleInput(uint32_t keyCode, bool pressed) {
+    if (!pressed) return false;
+
+    switch (keyCode) {
+        case 'P': case 'p':
+            SetMode(TileEditorMode::Paint);
+            return true;
+        case 'E': case 'e':
+            SetMode(TileEditorMode::Erase);
+            return true;
+        case 'S': case 's':
+            SetMode(TileEditorMode::Select);
+            return true;
+        case 'L': case 'l':
+            SetMode(TileEditorMode::LayerEdit);
+            return true;
+        case 'R': case 'r':
+            SetMode(TileEditorMode::RuleEdit);
+            return true;
+        default:
+            return false;
+    }
 }
 
 void TileEditorModule::Update(float /*deltaTime*/) {

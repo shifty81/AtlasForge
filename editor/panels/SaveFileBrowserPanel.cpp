@@ -4,7 +4,33 @@
 namespace atlas::editor {
 
 void SaveFileBrowserPanel::Draw() {
-    // UI rendering delegated to backend.
+    m_drawList.Clear();
+
+    // Background
+    m_drawList.DrawRect({0, 0, 500, 400}, {30, 30, 30, 255});
+
+    // Title
+    m_drawList.DrawRect({0, 0, 500, 24}, {50, 50, 50, 255});
+    std::string title = "Save Files: " + m_directory;
+    m_drawList.DrawText({4, 4, 490, 20}, title, {220, 220, 220, 255});
+
+    // File list
+    int32_t y = 28;
+    for (size_t i = 0; i < m_files.size(); ++i) {
+        const auto& info = m_files[i];
+        bool selected = (static_cast<int>(i) == m_selectedIndex);
+        atlas::ui::UIColor bgColor = selected
+            ? atlas::ui::UIColor{60, 80, 120, 255}
+            : atlas::ui::UIColor{40, 40, 40, 255};
+        m_drawList.DrawRect({0, y, 500, 20}, bgColor);
+
+        std::string line = info.filename + "  tick:" + std::to_string(info.saveTick);
+        atlas::ui::UIColor textColor = info.valid
+            ? atlas::ui::UIColor{200, 200, 200, 255}
+            : atlas::ui::UIColor{255, 100, 100, 255};
+        m_drawList.DrawText({4, y + 2, 490, 16}, line, textColor);
+        y += 22;
+    }
 }
 
 void SaveFileBrowserPanel::ScanDirectory(const std::string& directory) {

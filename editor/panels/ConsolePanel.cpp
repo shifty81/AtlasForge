@@ -4,11 +4,29 @@
 namespace atlas::editor {
 
 void ConsolePanel::Draw() {
-    // Populate display state for history and input buffer.
-    // In a full UI implementation this would render the console text,
-    // input field, and execute button.  The logic layer (Execute, AddLine)
-    // already maintains m_history and m_inputBuffer — Draw simply ensures
-    // callers can read the current state.
+    m_drawList.Clear();
+
+    // Background
+    m_drawList.DrawRect({0, 0, 600, 400}, {30, 30, 30, 255});
+
+    // Title bar
+    m_drawList.DrawRect({0, 0, 600, 24}, {50, 50, 50, 255});
+    m_drawList.DrawText({4, 4, 200, 20}, "Console", {220, 220, 220, 255});
+
+    // History lines
+    int32_t y = 28;
+    for (const auto& line : m_history) {
+        atlas::ui::UIColor color = {200, 200, 200, 255};
+        if (!line.empty() && line[0] == '>') {
+            color = {100, 200, 255, 255};
+        }
+        m_drawList.DrawText({4, y, 592, 16}, line, color);
+        y += 18;
+    }
+
+    // Input field
+    m_drawList.DrawRect({0, 380, 600, 20}, {40, 40, 40, 255});
+    m_drawList.DrawText({4, 382, 592, 16}, "> " + m_inputBuffer, {180, 220, 255, 255});
 }
 
 void ConsolePanel::AddLine(const std::string& line) {

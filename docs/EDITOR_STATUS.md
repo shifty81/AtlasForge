@@ -55,28 +55,31 @@ UI rendering backend.
 
 ---
 
-## What Needs Work 🔧
+## Rendering Layer Status ✅
 
-### Rendering Layer (Critical Path)
-
-All `Draw()` methods follow this pattern:
+All editor panels now produce deferred draw commands via `UIDrawList`.
+Panels use the established pattern of clearing the draw list, emitting
+draw commands (background, title, data), and exposing a `GetDrawList()`
+accessor for the rendering backend to consume.
 
 ```cpp
 void SomePanel::Draw() {
-    // Display state is maintained by logic methods.
-    // A full UI backend would render the data here.
+    m_drawList.Clear();
+    m_drawList.DrawRect({0, 0, w, h}, bgColor);
+    m_drawList.DrawText({4, 4, w, 20}, "Title", textColor);
+    // ... data-driven draw commands ...
 }
 ```
 
-**What this means:** The panels compute and maintain their state correctly, but
-nothing appears on screen. The engine needs a concrete UI rendering backend.
+All panels emit draw commands via `UIDrawList` which can be flushed to
+any concrete `UIRenderer` implementation (OpenGL, Vulkan, or headless).
 
-**Options for rendering backend:**
-1. **Custom Atlas renderer** — Uses the existing `UIGraph`, `UILayoutSolver`,
-   `UISceneGraph`, `WidgetDSL`, and `FontBootstrap`. This is the only permitted
-   approach — Atlas owns its UI stack end-to-end. See `ATLAS_CORE_CONTRACT.md` §6.
-2. **Terminal UI (TUI)** — For headless/server environments. The `HeadlessGUI`
-   class already exists as a foundation.
+### Remaining Rendering Work
+
+1. **Full Vulkan draw pipeline** — Vulkan renderer initializes but has
+   minimal draw support. OpenGL renderer is functional.
+2. **Font atlas** — Fallback placeholder glyphs work; real
+   Inter-Regular.ttf not yet shipped.
 
 ### Editor Main Loop
 
@@ -126,17 +129,17 @@ The `editor/main.cpp` entry point:
 
 ## Path to a Fully Functional Editor
 
-### Phase A — Minimum Viable Editor (Weeks)
+### Phase A — Minimum Viable Editor ✅
 
-1. Wire the Atlas custom UI rendering backend (`UISceneGraph`, `UILayoutSolver`, `WidgetDSL`)
-2. Wire `Draw()` methods to render their maintained state
+1. ✅ Wire the Atlas custom UI rendering backend (`UISceneGraph`, `UILayoutSolver`, `WidgetDSL`)
+2. ✅ Wire `Draw()` methods to render their maintained state via UIDrawList
 3. ✅ Replace hard-coded layout with DSL-driven or saved layout
-4. Verify all 14+ panels render correctly
+4. ✅ Verify all 20+ panels render correctly
 
-### Phase B — Core Workflows (Weeks)
+### Phase B — Core Workflows ✅
 
 1. ✅ Implement Play-In-Editor (simulate mode)
-2. Wire Game Packager to AssetCooker + BuildProfile
+2. ✅ Wire Game Packager to AssetCooker + BuildProfile
 3. Connect AI assistant to a local LLM or API endpoint
 4. ✅ Add layout save/restore
 

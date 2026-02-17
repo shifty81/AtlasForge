@@ -1,5 +1,6 @@
 #pragma once
 #include "../ui/EditorPanel.h"
+#include "../../engine/ui/UIDrawList.h"
 #include <string>
 #include <vector>
 #include <cstdint>
@@ -45,11 +46,14 @@ public:
     void SetPaused(bool paused);
     bool IsPaused() const;
 
+    const atlas::ui::UIDrawList& GetDrawList() const { return m_drawList; }
+
 private:
     std::vector<FrameTiming> m_history;
     std::vector<SystemMetric> m_currentMetrics;
     size_t m_maxHistory = 300;
     bool m_paused = false;
+    atlas::ui::UIDrawList m_drawList;
 };
 
 }

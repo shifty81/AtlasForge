@@ -1,5 +1,6 @@
 #pragma once
 #include "../ui/EditorPanel.h"
+#include "../../engine/ui/UIDrawList.h"
 #include <string>
 #include <vector>
 #include <cstdint>
@@ -100,10 +101,13 @@ public:
     // Summary string for current state
     std::string Summary() const;
 
+    const atlas::ui::UIDrawList& GetDrawList() const { return m_drawList; }
+
 private:
     std::vector<CIPipelineRun> m_runs;
     size_t m_maxHistory = 100;
     uint64_t m_nextRunId = 1;
+    atlas::ui::UIDrawList m_drawList;
 
     void UpdatePipelineStatus(CIPipelineRun& run);
 };

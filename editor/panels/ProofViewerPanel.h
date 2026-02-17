@@ -1,5 +1,6 @@
 #pragma once
 #include "../ui/EditorPanel.h"
+#include "../../engine/ui/UIDrawList.h"
 #include <string>
 #include <vector>
 #include <map>
@@ -76,6 +77,8 @@ public:
 
     int LineCount(const std::string& specName) const;
 
+    const atlas::ui::UIDrawList& GetDrawList() const { return m_drawList; }
+
 private:
     static std::vector<std::string> ExtractInvariants(const std::string& content);
 
@@ -83,6 +86,7 @@ private:
     std::map<std::string, SpecVerification> m_verification;
     std::string m_selectedSpec;
     std::vector<SyntaxToken> m_emptyTokens;
+    atlas::ui::UIDrawList m_drawList;
 };
 
 }  // namespace atlas::editor
