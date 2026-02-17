@@ -251,6 +251,9 @@ ReplayDivergenceInspector::MinimizeDivergence(
     }
 
     // lo is now the index of the first divergent tick
+    if (lo >= count) {
+        return result; // Should not happen given anyMismatch == true
+    }
     result.firstDivergentTick = static_cast<int64_t>(a[lo].tick);
     result.lastMatchingTick = (lo > 0) ? static_cast<int64_t>(a[lo - 1].tick) : -1;
     result.windowSize = 1;
@@ -296,6 +299,9 @@ ReplayDivergenceInspector::MinimizeDivergenceFromHashers(
         }
     }
 
+    if (lo >= count) {
+        return result; // Should not happen given pre-check
+    }
     result.firstDivergentTick = static_cast<int64_t>(lh[lo].tick);
     result.lastMatchingTick = (lo > 0) ? static_cast<int64_t>(lh[lo - 1].tick) : -1;
     result.windowSize = 1;
