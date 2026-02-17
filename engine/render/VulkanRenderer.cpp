@@ -268,7 +268,7 @@ uint32_t VulkanRenderer::BoundDescriptorSetId() const {
 }
 
 const VkDescriptorSetLayoutDesc* VulkanRenderer::GetDescriptorSetLayout(uint32_t id) const {
-    if (id == 0 || id >= m_nextDescriptorSetId) return nullptr;
+    if (id == 0 || id > m_descriptorSetLayouts.size()) return nullptr;
     return &m_descriptorSetLayouts[id - 1];
 }
 
