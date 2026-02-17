@@ -4,8 +4,10 @@
 namespace atlas::editor {
 
 void ReplayTimelinePanel::Draw() {
-    // A full UI backend would render the timeline scrubber, markers, and
-    // comparison overlay here.  All state is maintained by the public API.
+    // Timeline scrubber: current tick / total ticks at configured tick rate.
+    // Render marker overlays (Bookmark, Branch, Injection, Divergence).
+    // If a comparison is active, highlight divergence tick and match %.
+    // Input injection points are shown as distinct markers on the timeline.
 }
 
 void ReplayTimelinePanel::LoadReplay(const std::vector<atlas::sim::ReplayFrame>& frames,

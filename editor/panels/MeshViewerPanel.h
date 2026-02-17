@@ -24,7 +24,11 @@ struct MeshViewerStats {
 class MeshViewerPanel : public EditorPanel {
 public:
     const char* Name() const override { return "Mesh Viewer"; }
-    void Draw() override {}
+    void Draw() override {
+        // Mesh viewport with view mode (solid, wireframe, normals).
+        // Display vertex/triangle count and bounding box.
+        // Show normals overlay and grid when enabled.
+    }
 
     void LoadMesh(const procedural::MeshData& mesh) {
         m_mesh = mesh;
