@@ -64,24 +64,34 @@ SystemUsage AssetCategoryRegistry::SystemFor(AssetType type) const {
 }
 
 void AssetCategoryRegistry::RegisterDefaults() {
-    Register({AssetType::Mesh,        ContentCategory::Visual,    SystemUsage::Rendering,
-              "Mesh",        "3D mesh geometry"});
-    Register({AssetType::Texture,     ContentCategory::Visual,    SystemUsage::Rendering,
-              "Texture",     "2D image / texture map"});
-    Register({AssetType::Material,    ContentCategory::Visual,    SystemUsage::Rendering,
-              "Material",    "Surface material definition"});
-    Register({AssetType::Audio,       ContentCategory::Audio,     SystemUsage::General,
-              "Audio",       "Sound effect or music track"});
-    Register({AssetType::Font,        ContentCategory::Font,      SystemUsage::UI,
-              "Font",        "TrueType or OpenType font"});
-    Register({AssetType::Prefab,      ContentCategory::Composite, SystemUsage::General,
-              "Prefab",      "Reusable entity composition"});
-    Register({AssetType::Script,      ContentCategory::Data,      SystemUsage::Gameplay,
-              "Script",      "Gameplay or behavior script"});
-    Register({AssetType::Data,        ContentCategory::Data,      SystemUsage::General,
-              "Data",        "Generic data asset"});
-    Register({AssetType::SpriteSheet, ContentCategory::Visual,    SystemUsage::UI,
-              "SpriteSheet", "2D sprite atlas with frame metadata"});
+    Register({AssetType::Graph,         ContentCategory::Data,      SystemUsage::General,
+              "Graph",         "Graph definition asset"});
+    Register({AssetType::World,         ContentCategory::Composite, SystemUsage::World,
+              "World",         "World / level data"});
+    Register({AssetType::Planet,        ContentCategory::Composite, SystemUsage::World,
+              "Planet",        "Planetary body definition"});
+    Register({AssetType::Galaxy,        ContentCategory::Composite, SystemUsage::World,
+              "Galaxy",        "Galaxy / star system layout"});
+    Register({AssetType::Mesh,          ContentCategory::Visual,    SystemUsage::Rendering,
+              "Mesh",          "3D mesh geometry"});
+    Register({AssetType::Material,      ContentCategory::Visual,    SystemUsage::Rendering,
+              "Material",      "Surface material definition"});
+    Register({AssetType::Mechanic,      ContentCategory::Data,      SystemUsage::Gameplay,
+              "Mechanic",      "Gameplay mechanic definition"});
+    Register({AssetType::VoxelSchema,   ContentCategory::Data,      SystemUsage::World,
+              "VoxelSchema",   "Voxel type schema"});
+    Register({AssetType::GameType,      ContentCategory::Data,      SystemUsage::Gameplay,
+              "GameType",      "Game type definition"});
+    Register({AssetType::EditorProfile, ContentCategory::Data,      SystemUsage::General,
+              "EditorProfile", "Editor configuration profile"});
+    Register({AssetType::Texture,       ContentCategory::Visual,    SystemUsage::Rendering,
+              "Texture",       "2D image / texture map"});
+    Register({AssetType::Audio,         ContentCategory::Audio,     SystemUsage::General,
+              "Audio",         "Sound effect or music track"});
+    Register({AssetType::Font,          ContentCategory::Font,      SystemUsage::UI,
+              "Font",          "TrueType or OpenType font"});
+    Register({AssetType::SpriteSheet,   ContentCategory::Visual,    SystemUsage::UI,
+              "SpriteSheet",   "2D sprite atlas with frame metadata"});
 }
 
 void AssetCategoryRegistry::Clear() {

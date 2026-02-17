@@ -41,7 +41,7 @@ enum class SystemUsage : uint8_t {
 
 /// Full classification entry for an asset type.
 struct AssetCategoryEntry {
-    AssetType type = AssetType::Data;
+    AssetType type = AssetType::Graph;
     ContentCategory content = ContentCategory::Data;
     SystemUsage system = SystemUsage::General;
     std::string label;        ///< Human-readable name.
