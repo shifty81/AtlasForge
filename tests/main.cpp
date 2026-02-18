@@ -1726,6 +1726,42 @@ void test_ui_manager_tab_integration();
 void test_ui_manager_scroll_integration();
 void test_ui_manager_toolbar_integration();
 
+// GUI Next Managers (FocusManager, TooltipManager, DockManager, InputFieldManager)
+void test_focus_manager_init();
+void test_focus_manager_click_input_field();
+void test_focus_manager_click_outside();
+void test_focus_manager_set_focusable();
+void test_focus_manager_clear_focus();
+void test_focus_manager_tab_cycles();
+void test_focus_manager_callback();
+void test_tooltip_manager_init();
+void test_tooltip_manager_set_tooltip();
+void test_tooltip_manager_show_after_delay();
+void test_tooltip_manager_hide_on_leave();
+void test_tooltip_manager_hide_all();
+void test_tooltip_manager_remove_tooltip();
+void test_dock_manager_init();
+void test_dock_manager_register();
+void test_dock_manager_dock_panel_left();
+void test_dock_manager_dock_panel_right();
+void test_dock_manager_dock_panel_center();
+void test_dock_manager_undock_panel();
+void test_dock_manager_callback();
+void test_dock_manager_split_ratio();
+void test_input_field_manager_init();
+void test_input_field_manager_register();
+void test_input_field_manager_type_text();
+void test_input_field_manager_backspace();
+void test_input_field_manager_delete_key();
+void test_input_field_manager_arrow_keys();
+void test_input_field_manager_enter_submits();
+void test_input_field_manager_text_changed_callback();
+void test_input_field_manager_set_text();
+void test_input_field_manager_not_registered();
+void test_ui_manager_focus_integration();
+void test_ui_manager_dock_integration();
+void test_ui_manager_tooltip_integration();
+
 int main() {
     std::cout << "=== Atlas Engine Tests ===" << std::endl;
 
@@ -3639,6 +3675,51 @@ int main() {
     test_ui_manager_tab_integration();
     test_ui_manager_scroll_integration();
     test_ui_manager_toolbar_integration();
+
+    // GUI Next Managers
+    std::cout << "\n--- FocusManager ---" << std::endl;
+    test_focus_manager_init();
+    test_focus_manager_click_input_field();
+    test_focus_manager_click_outside();
+    test_focus_manager_set_focusable();
+    test_focus_manager_clear_focus();
+    test_focus_manager_tab_cycles();
+    test_focus_manager_callback();
+
+    std::cout << "\n--- TooltipManager ---" << std::endl;
+    test_tooltip_manager_init();
+    test_tooltip_manager_set_tooltip();
+    test_tooltip_manager_show_after_delay();
+    test_tooltip_manager_hide_on_leave();
+    test_tooltip_manager_hide_all();
+    test_tooltip_manager_remove_tooltip();
+
+    std::cout << "\n--- DockManager ---" << std::endl;
+    test_dock_manager_init();
+    test_dock_manager_register();
+    test_dock_manager_dock_panel_left();
+    test_dock_manager_dock_panel_right();
+    test_dock_manager_dock_panel_center();
+    test_dock_manager_undock_panel();
+    test_dock_manager_callback();
+    test_dock_manager_split_ratio();
+
+    std::cout << "\n--- InputFieldManager ---" << std::endl;
+    test_input_field_manager_init();
+    test_input_field_manager_register();
+    test_input_field_manager_type_text();
+    test_input_field_manager_backspace();
+    test_input_field_manager_delete_key();
+    test_input_field_manager_arrow_keys();
+    test_input_field_manager_enter_submits();
+    test_input_field_manager_text_changed_callback();
+    test_input_field_manager_set_text();
+    test_input_field_manager_not_registered();
+
+    std::cout << "\n--- UIManager Next Integration ---" << std::endl;
+    test_ui_manager_focus_integration();
+    test_ui_manager_dock_integration();
+    test_ui_manager_tooltip_integration();
 
     std::cout << "\n=== All tests passed! ===" << std::endl;
     return 0;

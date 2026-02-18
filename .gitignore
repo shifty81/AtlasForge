@@ -82,3 +82,4 @@ runtime/build/
 *.obj
 !*.obj
 *.out
+/tmp/

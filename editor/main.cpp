@@ -132,6 +132,9 @@ struct EditorWidgetIds {
     uint32_t tabBar, tabScene, tabGame;
     uint32_t scenePanel, gamePanel;
     uint32_t assetScroll, entityScroll, consoleScroll;
+    uint32_t consoleInput;
+    uint32_t dockArea;
+    uint32_t tbSaveBtn;
 };
 
 static EditorWidgetIds BuildEditorUI(atlas::ui::UIScreen& screen) {
@@ -311,9 +314,17 @@ static EditorWidgetIds BuildEditorUI(atlas::ui::UIScreen& screen) {
                                         112, 31, 50, 24);
     screen.SetParent(tbStop, toolbar);
 
+    uint32_t tbSaveBtn = screen.AddWidget(atlas::ui::UIWidgetType::Button, "Save",
+                                           166, 31, 50, 24);
+    screen.SetParent(tbSaveBtn, toolbar);
+
     // Left panel — Project / Asset Browser
+    uint32_t dockArea = screen.AddWidget(atlas::ui::UIWidgetType::DockArea, "MainDock",
+                                          0, 60, 1280, 630);
+
     uint32_t leftPanel = screen.AddWidget(atlas::ui::UIWidgetType::Panel, "AssetBrowser",
                                            0, 60, 260, 630);
+    screen.SetParent(leftPanel, dockArea);
 
     uint32_t assetTitle = screen.AddWidget(atlas::ui::UIWidgetType::Text, "Asset Browser",
                                             4, 64, 252, 20);
@@ -398,7 +409,8 @@ static EditorWidgetIds BuildEditorUI(atlas::ui::UIScreen& screen) {
     return EditorWidgetIds{toolbar, tbPlay, tbPause, tbStop,
                            tabBar, tabScene, tabGame,
                            scenePanel, gamePanel,
-                           assetScroll, entityScroll, consoleScroll};
+                           assetScroll, entityScroll, consoleScroll,
+                           consoleInput, dockArea, tbSaveBtn};
 }
 
 int main() {
@@ -478,6 +490,41 @@ int main() {
                               + " item=" + std::to_string(itemId));
         }
     );
+
+    // --- Set up Dock Manager ---
+    auto& dockMgr = engine.GetUIManager().GetDockManager();
+    if (ids.dockArea != 0) {
+        dockMgr.RegisterDockArea(ids.dockArea);
+    }
+
+    // --- Set up Focus Manager ---
+    auto& focusMgr = engine.GetUIManager().GetFocusManager();
+    focusMgr.SetFocusChangedCallback(
+        [](uint32_t newId, uint32_t oldId) {
+            atlas::Logger::Info("Focus changed: " + std::to_string(oldId)
+                               + " -> " + std::to_string(newId));
+        }
+    );
+
+    // --- Set up Input Field Manager ---
+    auto& inputMgr = engine.GetUIManager().GetInputFieldManager();
+    if (ids.consoleInput != 0) {
+        inputMgr.RegisterField(ids.consoleInput, "command...");
+        inputMgr.SetTextSubmitCallback(
+            [](uint32_t fieldId, const std::string& text) {
+                atlas::Logger::Info("Console command: " + text);
+            }
+        );
+    }
+
+    // --- Set up Tooltip Manager ---
+    auto& tooltipMgr = engine.GetUIManager().GetTooltipManager();
+    if (ids.tbSaveBtn != 0) {
+        auto& screen = engine.GetUIManager().GetScreen();
+        uint32_t saveTip = screen.AddWidget(atlas::ui::UIWidgetType::Tooltip,
+                                             "Save project (Ctrl+S)", 0, 0, 140, 20);
+        tooltipMgr.SetTooltip(ids.tbSaveBtn, saveTip);
+    }
 
     // Enable diagnostics overlay by default in editor
     atlas::ui::DiagnosticsOverlay::SetEnabled(true);

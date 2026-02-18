@@ -25,6 +25,10 @@ void UIManager::Init(GUIContext context) {
     m_tabManager.Init(&m_screen);
     m_scrollManager.Init(&m_screen);
     m_toolbarManager.Init(&m_screen);
+    m_focusManager.Init(&m_screen);
+    m_tooltipManager.Init(&m_screen);
+    m_dockManager.Init(&m_screen);
+    m_inputFieldManager.Init(&m_screen);
     m_initialized = true;
 }
 
@@ -343,8 +347,24 @@ bool UIManager::DispatchEvent(const UIEvent& event) {
         if (m_toolbarManager.HandleClick(event.x, event.y)) {
             return true;
         }
+        // Update focus on click
+        m_focusManager.HandleClick(event.x, event.y);
     }
-    
+
+    // Route keyboard/text events to input field manager if a field is focused
+    if (event.type == UIEvent::Type::KeyDown || event.type == UIEvent::Type::TextInput) {
+        uint32_t focusedId = m_focusManager.GetFocusedWidgetId();
+        if (focusedId != 0 && m_inputFieldManager.IsRegistered(focusedId)) {
+            if (m_inputFieldManager.HandleEvent(event, focusedId)) {
+                return true;
+            }
+        }
+        // Tab key cycles focus
+        if (m_focusManager.HandleKeyEvent(event)) {
+            return true;
+        }
+    }
+
     return m_eventRouter.Dispatch(event);
 }
 
@@ -390,6 +410,38 @@ ToolbarManager& UIManager::GetToolbarManager() {
 
 const ToolbarManager& UIManager::GetToolbarManager() const {
     return m_toolbarManager;
+}
+
+FocusManager& UIManager::GetFocusManager() {
+    return m_focusManager;
+}
+
+const FocusManager& UIManager::GetFocusManager() const {
+    return m_focusManager;
+}
+
+TooltipManager& UIManager::GetTooltipManager() {
+    return m_tooltipManager;
+}
+
+const TooltipManager& UIManager::GetTooltipManager() const {
+    return m_tooltipManager;
+}
+
+DockManager& UIManager::GetDockManager() {
+    return m_dockManager;
+}
+
+const DockManager& UIManager::GetDockManager() const {
+    return m_dockManager;
+}
+
+InputFieldManager& UIManager::GetInputFieldManager() {
+    return m_inputFieldManager;
+}
+
+const InputFieldManager& UIManager::GetInputFieldManager() const {
+    return m_inputFieldManager;
 }
 
 } // namespace atlas::ui
