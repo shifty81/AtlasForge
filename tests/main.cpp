@@ -1644,6 +1644,13 @@ void run_next_tasks_phase8_tests();
 void run_next_tasks_phase9_tests();
 void run_panel_draw_tests();
 
+// Menu System tests
+void test_menu_creation();
+void test_menu_state();
+void test_menu_manager();
+void test_menu_hover();
+void test_ui_manager_integration();
+
 int main() {
     std::cout << "=== Atlas Engine Tests ===" << std::endl;
 
@@ -3472,6 +3479,14 @@ int main() {
 
     // Panel Draw + TileEditor Input Tests
     run_panel_draw_tests();
+
+    // Menu System
+    std::cout << "\n--- Menu System ---" << std::endl;
+    test_menu_creation();
+    test_menu_state();
+    test_menu_manager();
+    test_menu_hover();
+    test_ui_manager_integration();
 
     std::cout << "\n=== All tests passed! ===" << std::endl;
     return 0;

@@ -78,6 +78,7 @@ add_library(AtlasEngine STATIC
     ui/DiagnosticsOverlay.cpp
     ui/TextRenderer.cpp
     ui/UIEventRouter.cpp
+    ui/MenuManager.cpp
     ui/UIDrawList.cpp
     ui/UIStyle.cpp
     ui/UISceneGraph.cpp

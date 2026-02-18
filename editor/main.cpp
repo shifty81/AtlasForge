@@ -150,21 +150,104 @@ static void BuildEditorUI(atlas::ui::UIScreen& screen) {
     uint32_t menuBar = screen.AddWidget(atlas::ui::UIWidgetType::Panel, "MenuBar",
                                          0, 0, 1280, 28);
 
-    uint32_t fileBtn = screen.AddWidget(atlas::ui::UIWidgetType::Button, "File",
-                                         4, 2, 50, 24);
-    screen.SetParent(fileBtn, menuBar);
+    // File menu
+    uint32_t fileMenu = screen.AddWidget(atlas::ui::UIWidgetType::Menu, "File",
+                                          4, 2, 50, 24);
+    screen.SetParent(fileMenu, menuBar);
 
-    uint32_t editBtn = screen.AddWidget(atlas::ui::UIWidgetType::Button, "Edit",
-                                         58, 2, 50, 24);
-    screen.SetParent(editBtn, menuBar);
+    uint32_t fileNew = screen.AddWidget(atlas::ui::UIWidgetType::MenuItem, "New",
+                                         4, 28, 120, 24);
+    screen.SetParent(fileNew, fileMenu);
 
-    uint32_t viewBtn = screen.AddWidget(atlas::ui::UIWidgetType::Button, "View",
-                                         112, 2, 50, 24);
-    screen.SetParent(viewBtn, menuBar);
+    uint32_t fileOpen = screen.AddWidget(atlas::ui::UIWidgetType::MenuItem, "Open",
+                                          4, 52, 120, 24);
+    screen.SetParent(fileOpen, fileMenu);
 
-    uint32_t toolsBtn = screen.AddWidget(atlas::ui::UIWidgetType::Button, "Tools",
-                                          166, 2, 55, 24);
-    screen.SetParent(toolsBtn, menuBar);
+    uint32_t fileSave = screen.AddWidget(atlas::ui::UIWidgetType::MenuItem, "Save",
+                                          4, 76, 120, 24);
+    screen.SetParent(fileSave, fileMenu);
+
+    uint32_t fileSep1 = screen.AddWidget(atlas::ui::UIWidgetType::MenuItem, "",
+                                          4, 100, 120, 8);
+    screen.SetParent(fileSep1, fileMenu);
+    screen.SetSeparator(fileSep1, true);
+
+    uint32_t fileExit = screen.AddWidget(atlas::ui::UIWidgetType::MenuItem, "Exit",
+                                          4, 108, 120, 24);
+    screen.SetParent(fileExit, fileMenu);
+
+    // Edit menu
+    uint32_t editMenu = screen.AddWidget(atlas::ui::UIWidgetType::Menu, "Edit",
+                                          58, 2, 50, 24);
+    screen.SetParent(editMenu, menuBar);
+
+    uint32_t editUndo = screen.AddWidget(atlas::ui::UIWidgetType::MenuItem, "Undo",
+                                          58, 28, 120, 24);
+    screen.SetParent(editUndo, editMenu);
+
+    uint32_t editRedo = screen.AddWidget(atlas::ui::UIWidgetType::MenuItem, "Redo",
+                                          58, 52, 120, 24);
+    screen.SetParent(editRedo, editMenu);
+
+    uint32_t editSep1 = screen.AddWidget(atlas::ui::UIWidgetType::MenuItem, "",
+                                          58, 76, 120, 8);
+    screen.SetParent(editSep1, editMenu);
+    screen.SetSeparator(editSep1, true);
+
+    uint32_t editCut = screen.AddWidget(atlas::ui::UIWidgetType::MenuItem, "Cut",
+                                         58, 84, 120, 24);
+    screen.SetParent(editCut, editMenu);
+
+    uint32_t editCopy = screen.AddWidget(atlas::ui::UIWidgetType::MenuItem, "Copy",
+                                          58, 108, 120, 24);
+    screen.SetParent(editCopy, editMenu);
+
+    uint32_t editPaste = screen.AddWidget(atlas::ui::UIWidgetType::MenuItem, "Paste",
+                                           58, 132, 120, 24);
+    screen.SetParent(editPaste, editMenu);
+
+    // View menu
+    uint32_t viewMenu = screen.AddWidget(atlas::ui::UIWidgetType::Menu, "View",
+                                          112, 2, 50, 24);
+    screen.SetParent(viewMenu, menuBar);
+
+    uint32_t viewAssets = screen.AddWidget(atlas::ui::UIWidgetType::MenuItem, "Asset Browser",
+                                            112, 28, 140, 24);
+    screen.SetParent(viewAssets, viewMenu);
+
+    uint32_t viewInspector = screen.AddWidget(atlas::ui::UIWidgetType::MenuItem, "Inspector",
+                                               112, 52, 140, 24);
+    screen.SetParent(viewInspector, viewMenu);
+
+    uint32_t viewConsole = screen.AddWidget(atlas::ui::UIWidgetType::MenuItem, "Console",
+                                             112, 76, 140, 24);
+    screen.SetParent(viewConsole, viewMenu);
+
+    // Tools menu
+    uint32_t toolsMenu = screen.AddWidget(atlas::ui::UIWidgetType::Menu, "Tools",
+                                           166, 2, 55, 24);
+    screen.SetParent(toolsMenu, menuBar);
+
+    uint32_t toolsGraphEditor = screen.AddWidget(atlas::ui::UIWidgetType::MenuItem, "Graph Editor",
+                                                  166, 28, 140, 24);
+    screen.SetParent(toolsGraphEditor, toolsMenu);
+
+    uint32_t toolsWorldGen = screen.AddWidget(atlas::ui::UIWidgetType::MenuItem, "World Generator",
+                                               166, 52, 140, 24);
+    screen.SetParent(toolsWorldGen, toolsMenu);
+
+    uint32_t toolsProfiler = screen.AddWidget(atlas::ui::UIWidgetType::MenuItem, "Profiler",
+                                               166, 76, 140, 24);
+    screen.SetParent(toolsProfiler, toolsMenu);
+
+    uint32_t toolsSep1 = screen.AddWidget(atlas::ui::UIWidgetType::MenuItem, "",
+                                           166, 100, 140, 8);
+    screen.SetParent(toolsSep1, toolsMenu);
+    screen.SetSeparator(toolsSep1, true);
+
+    uint32_t toolsSettings = screen.AddWidget(atlas::ui::UIWidgetType::MenuItem, "Settings",
+                                               166, 108, 140, 24);
+    screen.SetParent(toolsSettings, toolsMenu);
 
     // Left panel — Project / Asset Browser
     uint32_t leftPanel = screen.AddWidget(atlas::ui::UIWidgetType::Panel, "AssetBrowser",
@@ -256,6 +339,14 @@ int main() {
     }
 
     BuildEditorUI(engine.GetUIManager().GetScreen());
+
+    // Set up menu item callback
+    engine.GetUIManager().GetMenuManager().SetMenuItemCallback(
+        [](uint32_t menuId, uint32_t itemId) {
+            atlas::Logger::Info("Menu item clicked: menu=" + std::to_string(menuId) 
+                              + " item=" + std::to_string(itemId));
+        }
+    );
 
     // Enable diagnostics overlay by default in editor
     atlas::ui::DiagnosticsOverlay::SetEnabled(true);

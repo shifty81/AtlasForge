@@ -13,7 +13,9 @@ enum class UIWidgetType : uint8_t {
     Image,
     List,
     SlotGrid,
-    InputField
+    InputField,
+    Menu,
+    MenuItem
 };
 
 struct UIWidget {
@@ -26,6 +28,11 @@ struct UIWidget {
     float y = 0.0f;
     float width = 0.0f;
     float height = 0.0f;
+    
+    // Menu-specific state
+    bool isMenuOpen = false;    // For Menu widgets: is dropdown shown?
+    bool isHovered = false;     // For MenuItem widgets: is mouse over this item?
+    bool isSeparator = false;   // For MenuItem widgets: is this a separator line?
 };
 
 class UIScreen {
@@ -43,6 +50,14 @@ public:
 
     void SetParent(uint32_t childId, uint32_t parentId);
     std::vector<uint32_t> GetChildren(uint32_t parentId) const;
+
+    // Menu state management
+    void SetMenuOpen(uint32_t id, bool open);
+    bool IsMenuOpen(uint32_t id) const;
+    void SetHovered(uint32_t id, bool hovered);
+    bool IsHovered(uint32_t id) const;
+    void SetSeparator(uint32_t id, bool isSeparator);
+    UIWidget* GetWidgetMutable(uint32_t id);
 
 private:
     std::string m_name;

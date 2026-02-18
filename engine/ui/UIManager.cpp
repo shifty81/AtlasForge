@@ -13,6 +13,7 @@ void UIManager::Init(GUIContext context) {
     }
 
     m_screen.Init(screenName);
+    m_menuManager.Init(&m_screen);
     m_initialized = true;
 }
 
@@ -124,6 +125,33 @@ void UIManager::RenderWidget(UIRenderer* renderer, uint32_t widgetId, int depth)
             renderer->DrawText(rect, widget->name, textColor);
             break;
         }
+        case UIWidgetType::Menu: {
+            // Menu button in menu bar
+            UIColor bg = widget->isMenuOpen ? UIColor{65, 68, 72, 255} : UIColor{43, 43, 43, 255};
+            renderer->DrawRect(rect, bg);
+            if (widget->isHovered || widget->isMenuOpen) {
+                UIColor highlight = {75, 78, 82, 255};
+                renderer->DrawRect(rect, highlight);
+            }
+            UIColor textColor = {220, 220, 220, 255};
+            renderer->DrawText(rect, widget->name, textColor);
+            break;
+        }
+        case UIWidgetType::MenuItem: {
+            if (widget->isSeparator) {
+                // Draw separator line
+                UIColor separatorColor = {70, 73, 75, 255};
+                UIRect sepRect = {rect.x + 4, rect.y + rect.h / 2, rect.w - 8, 1};
+                renderer->DrawRect(sepRect, separatorColor);
+            } else {
+                // Normal menu item
+                UIColor bg = widget->isHovered ? UIColor{65, 115, 180, 255} : UIColor{45, 47, 50, 255};
+                renderer->DrawRect(rect, bg);
+                UIColor textColor = {220, 220, 220, 255};
+                renderer->DrawText(rect, widget->name, textColor);
+            }
+            break;
+        }
     }
 
     // Render children
@@ -188,6 +216,12 @@ const UIEventRouter& UIManager::GetEventRouter() const {
 
 bool UIManager::DispatchEvent(const UIEvent& event) {
     if (!m_initialized) return false;
+    
+    // Let menu manager handle the event first
+    if (m_menuManager.HandleEvent(event)) {
+        return true;
+    }
+    
     return m_eventRouter.Dispatch(event);
 }
 
@@ -201,6 +235,14 @@ const FontBootstrap& UIManager::GetFontBootstrap() const {
 
 bool UIManager::IsFontReady() const {
     return m_fontBootstrap.IsReady();
+}
+
+MenuManager& UIManager::GetMenuManager() {
+    return m_menuManager;
+}
+
+const MenuManager& UIManager::GetMenuManager() const {
+    return m_menuManager;
 }
 
 } // namespace atlas::ui
