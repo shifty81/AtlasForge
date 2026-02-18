@@ -15,7 +15,9 @@ enum class UIWidgetType : uint8_t {
     SlotGrid,
     InputField,
     Menu,
-    MenuItem
+    MenuItem,
+    Toolbar,
+    StatusBar
 };
 
 struct UIWidget {
@@ -33,6 +35,9 @@ struct UIWidget {
     bool isMenuOpen = false;    // For Menu widgets: is dropdown shown?
     bool isHovered = false;     // For MenuItem widgets: is mouse over this item?
     bool isSeparator = false;   // For MenuItem widgets: is this a separator line?
+    bool isDisabled = false;    // For MenuItem/Button: grayed-out and non-interactive?
+    std::string shortcutLabel;  // For MenuItem: keyboard shortcut display (e.g. "Ctrl+S")
+    bool hasSubmenu = false;    // For MenuItem: does this item open a submenu?
 };
 
 class UIScreen {
@@ -57,6 +62,10 @@ public:
     void SetHovered(uint32_t id, bool hovered);
     bool IsHovered(uint32_t id) const;
     void SetSeparator(uint32_t id, bool isSeparator);
+    void SetDisabled(uint32_t id, bool disabled);
+    bool IsDisabled(uint32_t id) const;
+    void SetShortcutLabel(uint32_t id, const std::string& label);
+    void SetHasSubmenu(uint32_t id, bool hasSubmenu);
     UIWidget* GetWidgetMutable(uint32_t id);
 
 private:

@@ -111,6 +111,35 @@ void UIScreen::SetSeparator(uint32_t id, bool isSeparator) {
     }
 }
 
+void UIScreen::SetDisabled(uint32_t id, bool disabled) {
+    auto it = m_widgets.find(id);
+    if (it != m_widgets.end()) {
+        it->second.isDisabled = disabled;
+    }
+}
+
+bool UIScreen::IsDisabled(uint32_t id) const {
+    auto it = m_widgets.find(id);
+    if (it != m_widgets.end()) {
+        return it->second.isDisabled;
+    }
+    return false;
+}
+
+void UIScreen::SetShortcutLabel(uint32_t id, const std::string& label) {
+    auto it = m_widgets.find(id);
+    if (it != m_widgets.end()) {
+        it->second.shortcutLabel = label;
+    }
+}
+
+void UIScreen::SetHasSubmenu(uint32_t id, bool hasSubmenu) {
+    auto it = m_widgets.find(id);
+    if (it != m_widgets.end()) {
+        it->second.hasSubmenu = hasSubmenu;
+    }
+}
+
 UIWidget* UIScreen::GetWidgetMutable(uint32_t id) {
     auto it = m_widgets.find(id);
     if (it != m_widgets.end()) {

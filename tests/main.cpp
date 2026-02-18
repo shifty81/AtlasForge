@@ -1652,6 +1652,38 @@ void test_menu_manager();
 void test_menu_hover();
 void test_ui_manager_integration();
 
+// GUI Full Completion tests
+void test_widget_disabled_state();
+void test_disabled_item_not_clickable();
+void test_disabled_item_widget_direct();
+void test_shortcut_label_on_widget();
+void test_shortcut_label_empty_by_default();
+void test_shortcut_label_multiple_items();
+void test_keyboard_nav_down();
+void test_keyboard_nav_up();
+void test_keyboard_nav_enter_select();
+void test_keyboard_nav_escape_close();
+void test_keyboard_nav_skip_disabled();
+void test_keyboard_nav_skip_separator();
+void test_keyboard_nav_left_right_switch_menu();
+void test_keyboard_no_consume_when_closed();
+void test_context_menu_open_close();
+void test_context_menu_item_click();
+void test_context_menu_keyboard_nav();
+void test_submenu_flag_on_widget();
+void test_submenu_open_via_keyboard();
+void test_submenu_close_via_left();
+void test_submenu_escape_closes_submenu_first();
+void test_toolbar_widget_creation();
+void test_toolbar_with_button_children();
+void test_toolbar_rendering_with_null_renderer();
+void test_statusbar_widget_creation();
+void test_statusbar_text_update();
+void test_statusbar_rendering_with_null_renderer();
+void test_full_editor_menu_setup();
+void test_menu_manager_is_any_open();
+void test_close_all_menus_clears_focus();
+
 int main() {
     std::cout << "=== Atlas Engine Tests ===" << std::endl;
 
@@ -3491,6 +3523,38 @@ int main() {
     test_menu_manager();
     test_menu_hover();
     test_ui_manager_integration();
+
+    std::cout << "\n--- GUI Full Completion ---" << std::endl;
+    test_widget_disabled_state();
+    test_disabled_item_not_clickable();
+    test_disabled_item_widget_direct();
+    test_shortcut_label_on_widget();
+    test_shortcut_label_empty_by_default();
+    test_shortcut_label_multiple_items();
+    test_keyboard_nav_down();
+    test_keyboard_nav_up();
+    test_keyboard_nav_enter_select();
+    test_keyboard_nav_escape_close();
+    test_keyboard_nav_skip_disabled();
+    test_keyboard_nav_skip_separator();
+    test_keyboard_nav_left_right_switch_menu();
+    test_keyboard_no_consume_when_closed();
+    test_context_menu_open_close();
+    test_context_menu_item_click();
+    test_context_menu_keyboard_nav();
+    test_submenu_flag_on_widget();
+    test_submenu_open_via_keyboard();
+    test_submenu_close_via_left();
+    test_submenu_escape_closes_submenu_first();
+    test_toolbar_widget_creation();
+    test_toolbar_with_button_children();
+    test_toolbar_rendering_with_null_renderer();
+    test_statusbar_widget_creation();
+    test_statusbar_text_update();
+    test_statusbar_rendering_with_null_renderer();
+    test_full_editor_menu_setup();
+    test_menu_manager_is_any_open();
+    test_close_all_menus_clears_focus();
 
     std::cout << "\n=== All tests passed! ===" << std::endl;
     return 0;
