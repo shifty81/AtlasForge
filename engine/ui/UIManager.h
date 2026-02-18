@@ -5,6 +5,7 @@
 #include "UIRenderer.h"
 #include "UIEventRouter.h"
 #include "FontBootstrap.h"
+#include "MenuManager.h"
 #include <string>
 
 namespace atlas::ui {
@@ -76,6 +77,12 @@ public:
     /// Returns true when the font system is ready for text rendering.
     bool IsFontReady() const;
 
+    // --- Menu System ---
+
+    /// Access the menu manager for menu state and interactions.
+    MenuManager& GetMenuManager();
+    const MenuManager& GetMenuManager() const;
+
 private:
     void RenderWidget(UIRenderer* renderer, uint32_t widgetId, int depth = 0);
     static constexpr int kMaxRenderDepth = 64;
@@ -86,6 +93,7 @@ private:
     UICommandBus m_commandBus;
     UIEventRouter m_eventRouter;
     FontBootstrap m_fontBootstrap;
+    MenuManager m_menuManager;
     UIRenderer* m_renderer = nullptr;
     float m_viewportWidth = 0.0f;
     float m_viewportHeight = 0.0f;

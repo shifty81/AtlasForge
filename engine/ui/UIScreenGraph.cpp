@@ -74,4 +74,49 @@ std::vector<uint32_t> UIScreen::GetChildren(uint32_t parentId) const {
     return children;
 }
 
+void UIScreen::SetMenuOpen(uint32_t id, bool open) {
+    auto it = m_widgets.find(id);
+    if (it != m_widgets.end()) {
+        it->second.isMenuOpen = open;
+    }
+}
+
+bool UIScreen::IsMenuOpen(uint32_t id) const {
+    auto it = m_widgets.find(id);
+    if (it != m_widgets.end()) {
+        return it->second.isMenuOpen;
+    }
+    return false;
+}
+
+void UIScreen::SetHovered(uint32_t id, bool hovered) {
+    auto it = m_widgets.find(id);
+    if (it != m_widgets.end()) {
+        it->second.isHovered = hovered;
+    }
+}
+
+bool UIScreen::IsHovered(uint32_t id) const {
+    auto it = m_widgets.find(id);
+    if (it != m_widgets.end()) {
+        return it->second.isHovered;
+    }
+    return false;
+}
+
+void UIScreen::SetSeparator(uint32_t id, bool isSeparator) {
+    auto it = m_widgets.find(id);
+    if (it != m_widgets.end()) {
+        it->second.isSeparator = isSeparator;
+    }
+}
+
+UIWidget* UIScreen::GetWidgetMutable(uint32_t id) {
+    auto it = m_widgets.find(id);
+    if (it != m_widgets.end()) {
+        return &it->second;
+    }
+    return nullptr;
+}
+
 } // namespace atlas::ui

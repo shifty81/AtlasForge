@@ -202,6 +202,7 @@ void Engine::ProcessWindowEvents() {
                 uiEvent.type = ui::UIEvent::Type::KeyDown;
                 uiEvent.keyCode = event.keyCode;
                 uiEvent.textChar = event.textChar;
+                m_uiManager.DispatchEvent(uiEvent);
                 m_eventRouter.Dispatch(uiEvent);
                 break;
             }
@@ -209,6 +210,7 @@ void Engine::ProcessWindowEvents() {
                 ui::UIEvent uiEvent;
                 uiEvent.type = ui::UIEvent::Type::KeyUp;
                 uiEvent.keyCode = event.keyCode;
+                m_uiManager.DispatchEvent(uiEvent);
                 m_eventRouter.Dispatch(uiEvent);
                 break;
             }
@@ -219,6 +221,7 @@ void Engine::ProcessWindowEvents() {
                 uiEvent.type = ui::UIEvent::Type::MouseMove;
                 uiEvent.x = event.mouseX;
                 uiEvent.y = event.mouseY;
+                m_uiManager.DispatchEvent(uiEvent);
                 m_eventRouter.Dispatch(uiEvent);
                 break;
             }
@@ -230,6 +233,7 @@ void Engine::ProcessWindowEvents() {
                 uiEvent.x = event.mouseX;
                 uiEvent.y = event.mouseY;
                 uiEvent.mouseButton = event.mouseButton;
+                m_uiManager.DispatchEvent(uiEvent);
                 m_eventRouter.Dispatch(uiEvent);
                 // Also enqueue on UI command bus for backward compat
                 ui::UICommand cmd;
@@ -247,6 +251,7 @@ void Engine::ProcessWindowEvents() {
                 uiEvent.x = event.mouseX;
                 uiEvent.y = event.mouseY;
                 uiEvent.mouseButton = event.mouseButton;
+                m_uiManager.DispatchEvent(uiEvent);
                 m_eventRouter.Dispatch(uiEvent);
                 break;
             }
@@ -254,6 +259,7 @@ void Engine::ProcessWindowEvents() {
                 ui::UIEvent uiEvent;
                 uiEvent.type = ui::UIEvent::Type::TextInput;
                 uiEvent.textChar = event.textChar;
+                m_uiManager.DispatchEvent(uiEvent);
                 m_eventRouter.Dispatch(uiEvent);
                 break;
             }
