@@ -66,9 +66,32 @@ bool ReplicationManager::IsDirty(uint32_t typeTag, uint32_t entityID) const {
 
 void ReplicationManager::ClearDirty() {
     m_dirty.clear();
+    m_manuallyTriggered.clear();
+}
+
+void ReplicationManager::TriggerManualReplication(uint32_t typeTag) {
+    m_manuallyTriggered.insert(typeTag);
+}
+
+void ReplicationManager::SetReliableCallback(std::function<void(const std::vector<uint8_t>&)> cb) {
+    m_reliableCallback = std::move(cb);
+}
+
+void ReplicationManager::SetUnreliableCallback(std::function<void(const std::vector<uint8_t>&)> cb) {
+    m_unreliableCallback = std::move(cb);
 }
 
 std::vector<uint8_t> ReplicationManager::CollectDelta(uint32_t tick) {
+    auto result = CollectDeltaFiltered(tick, true);
+    ClearDirty();
+    return result;
+}
+
+std::vector<uint8_t> ReplicationManager::CollectUnreliableDelta(uint32_t tick) {
+    return CollectDeltaFiltered(tick, false);
+}
+
+std::vector<uint8_t> ReplicationManager::CollectDeltaFiltered(uint32_t tick, bool collectReliable) {
     // Delta format: [tick:4][ruleCount:4][{typeTag:4, entityCount:4, [{entityID:4, dataSize:4, data...}]...}...]
     std::vector<uint8_t> buffer;
 
@@ -83,11 +106,16 @@ std::vector<uint8_t> ReplicationManager::CollectDelta(uint32_t tick) {
     // Count rules that have dirty data
     uint32_t activeRuleCount = 0;
     for (const auto& rule : m_rules) {
+        if (rule.reliable != collectReliable) continue;
         if (rule.frequency == ReplicateFrequency::EveryTick) {
             activeRuleCount++;
         } else if (rule.frequency == ReplicateFrequency::OnChange) {
             auto it = m_dirty.find(rule.typeTag);
             if (it != m_dirty.end() && !it->second.empty()) {
+                activeRuleCount++;
+            }
+        } else if (rule.frequency == ReplicateFrequency::Manual) {
+            if (m_manuallyTriggered.count(rule.typeTag)) {
                 activeRuleCount++;
             }
         }
@@ -99,6 +127,7 @@ std::vector<uint8_t> ReplicationManager::CollectDelta(uint32_t tick) {
     auto entities = m_world->GetEntities();
 
     for (const auto& rule : m_rules) {
+        if (rule.reliable != collectReliable) continue;
         bool includeRule = false;
         std::vector<uint32_t> entitiesToReplicate;
 
@@ -111,8 +140,12 @@ std::vector<uint8_t> ReplicationManager::CollectDelta(uint32_t tick) {
                 includeRule = true;
                 entitiesToReplicate = it->second;
             }
+        } else if (rule.frequency == ReplicateFrequency::Manual) {
+            if (m_manuallyTriggered.count(rule.typeTag)) {
+                includeRule = true;
+                entitiesToReplicate = entities;
+            }
         }
-        // Manual frequency: only included via explicit API (not in this basic impl)
 
         if (!includeRule) continue;
 
@@ -150,7 +183,6 @@ std::vector<uint8_t> ReplicationManager::CollectDelta(uint32_t tick) {
         std::memcpy(buffer.data() + entityCountPos, &entityCount, 4);
     }
 
-    ClearDirty();
     return buffer;
 }
 

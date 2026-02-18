@@ -132,6 +132,9 @@ public:
     ConnectionQuality GetConnectionQuality() const;
     std::string ConnectionQualityString() const;
 
+    /// Returns simulated latency = latencyMs + deterministic jitter in [-jitterMs, +jitterMs].
+    uint32_t GetSimulatedLatencyMs() const;
+
     float PacketLossPercent() const;
     float AverageBandwidthBytesPerSec() const;
 

@@ -141,6 +141,7 @@ add_executable(AtlasTests
     test_game_packager_build.cpp
     test_layout_persistence.cpp
     test_net_hardening.cpp
+    test_net_improvements.cpp
     test_play_in_editor.cpp
     test_engine_input_routing.cpp
     test_world_state_serializer.cpp

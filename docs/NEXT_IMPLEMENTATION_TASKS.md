@@ -293,6 +293,24 @@ This document tracks the remaining implementation tasks to complete the vision o
 2. ~~Ship real font — bundle Inter-Regular.ttf in builds~~ ✅ Inter-Regular.ttf bundled in assets/fonts/
 3. ~~Deploy HttpLLMBackend — configure with production API endpoint and model~~ ✅ LLMBackendFactory added for env-based and explicit configuration
 
+#### 10. Networking Improvements
+**Status**: Complete
+
+**Completed work**:
+- [x] Latency/jitter simulation (GetSimulatedLatencyMs with deterministic jitter)
+- [x] Bandwidth enforcement on Send/Broadcast (CanSendBytes gate, drop counting)
+- [x] CRC32 packet checksum validation (compute on send, verify on receive)
+- [x] Manual replication frequency (TriggerManualReplication for on-demand sync)
+- [x] Reliable/unreliable delta split (CollectDelta for reliable, CollectUnreliableDelta for unreliable)
+- [x] Hardening integration with NetContext (SetHardening, stats recording)
+- [x] 23 new tests covering all networking improvements
+
+**Files modified**:
+- `engine/net/NetHardening.h/.cpp` — Added GetSimulatedLatencyMs()
+- `engine/net/NetContext.h/.cpp` — Added SetHardening, ComputeChecksum, ValidateChecksum, bandwidth enforcement
+- `engine/net/Replication.h/.cpp` — Added TriggerManualReplication, CollectUnreliableDelta, reliable/unreliable callbacks
+- `tests/test_net_improvements.cpp` — 23 new tests
+
 ## References
 
 - Original gaps analysis: `gaps.txt`
