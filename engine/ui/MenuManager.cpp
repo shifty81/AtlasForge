@@ -387,12 +387,9 @@ bool MenuManager::HandleEvent(const UIEvent& event) {
                         }
 
                         // Toggle checkable items
-                        const UIWidget* clickedWidget = m_screen->GetWidget(i);
-                        if (clickedWidget && clickedWidget->isCheckable) {
-                            UIWidget* mutable_widget = m_screen->GetWidgetMutable(i);
-                            if (mutable_widget) {
-                                mutable_widget->isChecked = !mutable_widget->isChecked;
-                            }
+                        UIWidget* mutableWidget = m_screen->GetWidgetMutable(i);
+                        if (mutableWidget && mutableWidget->isCheckable) {
+                            mutableWidget->isChecked = !mutableWidget->isChecked;
                         }
 
                         // Invoke callback

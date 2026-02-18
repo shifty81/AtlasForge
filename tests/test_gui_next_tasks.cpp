@@ -268,7 +268,8 @@ void test_dockarea_rendering_with_null_renderer() {
     mgr.Init(atlas::ui::GUIContext::Editor);
     auto& screen = mgr.GetScreen();
     uint32_t dock = screen.AddWidget(atlas::ui::UIWidgetType::DockArea, "Dock", 0, 0, 800, 600);
-    screen.AddWidget(atlas::ui::UIWidgetType::Panel, "Child", 0, 0, 200, 600);
+    uint32_t child = screen.AddWidget(atlas::ui::UIWidgetType::Panel, "Child", 0, 0, 200, 600);
+    screen.SetParent(child, dock);
 
     atlas::ui::NullUIRenderer nullRenderer;
     mgr.Render(&nullRenderer); // Should not crash
