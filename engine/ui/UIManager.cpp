@@ -143,13 +143,54 @@ void UIManager::RenderWidget(UIRenderer* renderer, uint32_t widgetId, int depth)
                 UIColor separatorColor = {70, 73, 75, 255};
                 UIRect sepRect = {rect.x + 4, rect.y + rect.h / 2, rect.w - 8, 1};
                 renderer->DrawRect(sepRect, separatorColor);
+            } else if (widget->isDisabled) {
+                // Disabled menu item — grayed-out text, no hover highlight
+                UIColor bg = {45, 47, 50, 255};
+                renderer->DrawRect(rect, bg);
+                UIColor textColor = {100, 100, 100, 255};
+                renderer->DrawText(rect, widget->name, textColor);
+                // Draw shortcut label if present, also grayed out
+                if (!widget->shortcutLabel.empty()) {
+                    UIRect shortcutRect = {rect.x + rect.w - 80, rect.y, 70, rect.h};
+                    renderer->DrawText(shortcutRect, widget->shortcutLabel, textColor);
+                }
             } else {
                 // Normal menu item
                 UIColor bg = widget->isHovered ? UIColor{65, 115, 180, 255} : UIColor{45, 47, 50, 255};
                 renderer->DrawRect(rect, bg);
                 UIColor textColor = {220, 220, 220, 255};
                 renderer->DrawText(rect, widget->name, textColor);
+                // Draw shortcut label right-aligned if present
+                if (!widget->shortcutLabel.empty()) {
+                    UIColor shortcutColor = {160, 160, 160, 255};
+                    UIRect shortcutRect = {rect.x + rect.w - 80, rect.y, 70, rect.h};
+                    renderer->DrawText(shortcutRect, widget->shortcutLabel, shortcutColor);
+                }
+                // Draw submenu indicator arrow if this item has a submenu
+                if (widget->hasSubmenu) {
+                    UIColor arrowColor = {180, 180, 180, 255};
+                    UIRect arrowRect = {rect.x + rect.w - 16, rect.y, 12, rect.h};
+                    renderer->DrawText(arrowRect, ">", arrowColor);
+                }
             }
+            break;
+        }
+        case UIWidgetType::Toolbar: {
+            UIColor bg = {50, 52, 56, 255};
+            renderer->DrawRect(rect, bg);
+            UIColor borderBottom = {70, 73, 75, 255};
+            UIRect bottomLine = {rect.x, rect.y + rect.h - 1, rect.w, 1};
+            renderer->DrawRect(bottomLine, borderBottom);
+            break;
+        }
+        case UIWidgetType::StatusBar: {
+            UIColor bg = {30, 31, 34, 255};
+            renderer->DrawRect(rect, bg);
+            UIColor borderTop = {70, 73, 75, 255};
+            UIRect topLine = {rect.x, rect.y, rect.w, 1};
+            renderer->DrawRect(topLine, borderTop);
+            UIColor textColor = {160, 160, 160, 255};
+            renderer->DrawText(rect, widget->name, textColor);
             break;
         }
     }
