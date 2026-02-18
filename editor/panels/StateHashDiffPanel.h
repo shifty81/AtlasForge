@@ -42,6 +42,18 @@ struct DivergenceDetail {
     std::string summary;
 };
 
+struct SystemHashEntry {
+    std::string systemName;
+    uint64_t hash = 0;
+};
+
+struct PerSystemHashBreakdown {
+    uint64_t tick = 0;
+    std::vector<SystemHashEntry> localSystems;
+    std::vector<SystemHashEntry> remoteSystems;
+    std::vector<std::string> divergentSystems;
+};
+
 class StateHashDiffPanel {
 public:
     void SetLocalHasher(const sim::StateHasher* local);
@@ -66,6 +78,20 @@ public:
     /// Get detailed information about the first divergence, including which components diverge.
     DivergenceDetail GetDivergenceDetail() const;
 
+    // Per-system hash breakdown
+    void SetPerSystemBreakdown(const PerSystemHashBreakdown& breakdown);
+    const PerSystemHashBreakdown& GetPerSystemBreakdown() const;
+    bool HasPerSystemBreakdown() const;
+    std::vector<std::string> DivergentSystems() const;
+
+    // Frame-by-frame hash ladder visualization data
+    struct HashLadderFrame {
+        uint64_t tick = 0;
+        uint64_t hash = 0;
+        bool divergent = false;
+    };
+    std::vector<HashLadderFrame> BuildHashLadder(bool local = true) const;
+
 private:
     const sim::StateHasher* m_local = nullptr;
     const sim::StateHasher* m_remote = nullptr;
@@ -73,6 +99,8 @@ private:
     int64_t m_firstDivergence = -1;
     ComponentHashBreakdown m_componentBreakdown;
     bool m_hasComponentBreakdown = false;
+    PerSystemHashBreakdown m_perSystemBreakdown;
+    bool m_hasPerSystemBreakdown = false;
 };
 
 }

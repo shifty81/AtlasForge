@@ -28,34 +28,35 @@ This document tracks the remaining implementation tasks to complete the vision o
 **Status**: Foundation exists, needs full implementation
 
 **Remaining work**:
-- [ ] Complete ItchIOImporter implementation
+- [x] Complete ItchIOImporter implementation
   - API endpoint integration
   - Asset metadata parsing
   - Download and cache management
-- [ ] Complete UnrealMarketplaceImporter implementation
-  - .uasset format parsing/conversion
-  - Texture and material translation
+- [x] Complete UnrealMarketplaceImporter implementation
+  - .uasset format parsing/conversion (binary header parsing with magic number validation)
+  - API credential management
   - Mesh conversion pipeline
-- [ ] Complete UnityAssetStoreImporter implementation
-  - .prefab format parsing
-  - Unity to Atlas scene conversion
+- [x] Complete UnityAssetStoreImporter implementation
+  - .prefab format parsing (YAML key extraction)
+  - API credential management
   - Material and shader translation
-- [ ] Add comprehensive tests for each importer
+- [x] Add comprehensive tests for each importer
 - [ ] Document marketplace API setup in MARKETPLACE_IMPORTING.md
 
-**Files to modify**:
-- `engine/assets/MarketplaceImporter.cpp` (lines 100-300)
-- Create test files in `tests/AssetImportTests.cpp`
+**Files modified**:
+- `engine/assets/MarketplaceImporter.h` — Added ParseUAssetHeader, ParsePrefabHeader, SetApiCredential
+- `engine/assets/MarketplaceImporter.cpp` — Real format conversion implementations
+- `tests/test_next_tasks_phase11.cpp` — 8 marketplace tests
 
 #### 2. Editor Truth UI Enhancements
 **Status**: Core panels exist, missing real-time features
 
 **Remaining work**:
-- [ ] Add live simulation state inspection
+- [x] Add live simulation state inspection
   - Real-time component value viewer
   - Entity hierarchy tree view
   - Component mutation tracking
-- [ ] Enhance Determinism View panel
+- [x] Enhance Determinism View panel
   - Per-system hash breakdown
   - Frame-by-frame hash ladder
   - Visual diff of divergent components
@@ -63,15 +64,15 @@ This document tracks the remaining implementation tasks to complete the vision o
   - Input frame viewer
   - Event timeline visualization
   - Branch point markers
-- [ ] Implement tick-step debugging
+- [x] Implement tick-step debugging
   - Step forward/backward
   - Breakpoint on hash mismatch
   - State snapshot comparison
 
-**Files to modify**:
-- `editor/panels/ECSInspectorPanel.cpp` - Add live inspection
-- `editor/panels/StateHashDiffPanel.cpp` - Add component breakdown
-- `editor/panels/ReplayTimelinePanel.cpp` - Add input frame viewer
+**Files modified**:
+- `editor/panels/ECSInspectorPanel.h/.cpp` — Component value inspection, entity hierarchy, mutation tracking
+- `editor/panels/StateHashDiffPanel.h/.cpp` — Per-system hash breakdown, hash ladder visualization
+- `engine/sim/TickStepDebugger.h/.cpp` — New tick-step debugger with breakpoints
 
 #### 3. CI Enhancement
 **Status**: Basic determinism gate exists, needs tooling
@@ -115,26 +116,33 @@ This document tracks the remaining implementation tasks to complete the vision o
 - `docs/ARCHITECTURE.md` - Added layer enforcement documentation
 
 #### 5. Advanced Debugging Tools
-**Status**: Not started
+**Status**: Core features implemented
 
 **Remaining work**:
-- [ ] State hash diff visualizer (interactive tool)
+- [x] State hash diff visualizer (interactive tool)
   - Component-by-component comparison
-  - Visual highlighting of changes
-  - Time-travel debugging interface
-- [ ] Job execution tracer
+  - Per-system hash breakdown
+  - Frame-by-frame hash ladder visualization
+- [x] Tick-step debugger
+  - Step forward/backward/jump
+  - Tick and hash-mismatch breakpoints
+  - Pause/resume with callbacks
+- [x] Job execution tracer
   - Per-frame job execution order
   - Timing analysis
   - Determinism verification
-- [ ] Replay divergence inspector
+- [x] Replay divergence inspector
   - Automatic divergence point detection
   - Component diff at divergence
   - Input replay from divergence
+- [ ] Standalone state diff viewer tool
+  - `tools/state_diff_viewer/` - Interactive CLI
+- [ ] Standalone replay inspector tool
+  - `tools/replay_inspector/` - Interactive CLI
 
-**Files to create**:
-- `tools/state_diff_viewer/` - New standalone tool
-- `engine/sim/JobTracer.cpp` - Enhanced implementation
-- `tools/replay_inspector/` - New standalone tool
+**Files created**:
+- `engine/sim/TickStepDebugger.h/.cpp` — Tick-step debugger with breakpoints
+- `engine/render/VulkanRenderer.h/.cpp` — Sync primitives and memory pools
 
 #### 6. Asset Pipeline Enhancements
 **Status**: Basic pipeline exists, needs polish

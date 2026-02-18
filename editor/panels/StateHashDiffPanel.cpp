@@ -168,4 +168,34 @@ DivergenceDetail StateHashDiffPanel::GetDivergenceDetail() const {
     return detail;
 }
 
+void StateHashDiffPanel::SetPerSystemBreakdown(const PerSystemHashBreakdown& breakdown) {
+    m_perSystemBreakdown = breakdown;
+    m_hasPerSystemBreakdown = true;
+}
+
+const PerSystemHashBreakdown& StateHashDiffPanel::GetPerSystemBreakdown() const {
+    return m_perSystemBreakdown;
+}
+
+bool StateHashDiffPanel::HasPerSystemBreakdown() const {
+    return m_hasPerSystemBreakdown;
+}
+
+std::vector<std::string> StateHashDiffPanel::DivergentSystems() const {
+    if (!m_hasPerSystemBreakdown) return {};
+    return m_perSystemBreakdown.divergentSystems;
+}
+
+std::vector<StateHashDiffPanel::HashLadderFrame> StateHashDiffPanel::BuildHashLadder(bool local) const {
+    std::vector<HashLadderFrame> frames;
+    for (const auto& e : m_entries) {
+        HashLadderFrame f;
+        f.tick = e.tick;
+        f.hash = local ? e.localHash : e.remoteHash;
+        f.divergent = !e.matches;
+        frames.push_back(f);
+    }
+    return frames;
+}
+
 }
