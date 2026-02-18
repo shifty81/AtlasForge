@@ -11,6 +11,9 @@
 #include <string>
 
 using namespace atlas::ui;
+using atlas::platform::kModCtrl;
+using atlas::platform::kModShift;
+using atlas::platform::kModAlt;
 
 // ============================================================
 // Test: BuildEditorUI fallback layout produces actual widget content
@@ -45,7 +48,9 @@ void test_editor_ui_has_widget_content() {
     bool hasMenu = false, hasMenuItem = false, hasButton = false;
     bool hasToolbar = false, hasStatusBar = false;
 
-    for (uint32_t id = 1; id <= 20; ++id) {
+    // Iterate through all widget IDs that have been allocated
+    size_t count = screen.WidgetCount();
+    for (uint32_t id = 1; id <= count; ++id) {
         const UIWidget* w = screen.GetWidget(id);
         if (!w) continue;
         if (w->type == UIWidgetType::Menu) hasMenu = true;
@@ -104,23 +109,23 @@ void test_window_event_modifiers() {
     atlas::platform::WindowEvent event;
     assert(event.modifiers == 0);
 
-    // Set Ctrl modifier (bit 0)
-    event.modifiers = 1;
-    assert((event.modifiers & 1) != 0); // Ctrl
-    assert((event.modifiers & 2) == 0); // no Shift
-    assert((event.modifiers & 4) == 0); // no Alt
+    // Set Ctrl modifier
+    event.modifiers = kModCtrl;
+    assert((event.modifiers & kModCtrl) != 0);
+    assert((event.modifiers & kModShift) == 0);
+    assert((event.modifiers & kModAlt) == 0);
 
     // Set Ctrl+Shift
-    event.modifiers = 1 | 2;
-    assert((event.modifiers & 1) != 0); // Ctrl
-    assert((event.modifiers & 2) != 0); // Shift
-    assert((event.modifiers & 4) == 0); // no Alt
+    event.modifiers = kModCtrl | kModShift;
+    assert((event.modifiers & kModCtrl) != 0);
+    assert((event.modifiers & kModShift) != 0);
+    assert((event.modifiers & kModAlt) == 0);
 
     // Set all modifiers
-    event.modifiers = 1 | 2 | 4;
-    assert((event.modifiers & 1) != 0); // Ctrl
-    assert((event.modifiers & 2) != 0); // Shift
-    assert((event.modifiers & 4) != 0); // Alt
+    event.modifiers = kModCtrl | kModShift | kModAlt;
+    assert((event.modifiers & kModCtrl) != 0);
+    assert((event.modifiers & kModShift) != 0);
+    assert((event.modifiers & kModAlt) != 0);
 
     std::cout << "[PASS] test_window_event_modifiers" << std::endl;
 }
@@ -133,15 +138,15 @@ void test_ui_event_modifiers() {
     UIEvent event;
     assert(event.modifiers == 0);
 
-    event.modifiers = 1; // Ctrl
-    assert((event.modifiers & 1) != 0);
+    event.modifiers = kModCtrl;
+    assert((event.modifiers & kModCtrl) != 0);
 
     event.type = UIEvent::Type::KeyDown;
     event.keyCode = '`';
-    event.modifiers = 1;
+    event.modifiers = kModCtrl;
     // Simulates Ctrl+` — the modifier is properly carried
     assert(event.keyCode == '`');
-    assert((event.modifiers & 1) != 0);
+    assert((event.modifiers & kModCtrl) != 0);
 
     std::cout << "[PASS] test_ui_event_modifiers" << std::endl;
 }
@@ -155,7 +160,7 @@ void test_modifier_propagation() {
     atlas::platform::WindowEvent wEvent;
     wEvent.type = atlas::platform::WindowEvent::Type::KeyDown;
     wEvent.keyCode = '`';
-    wEvent.modifiers = 1; // Ctrl
+    wEvent.modifiers = kModCtrl;
 
     UIEvent uiEvent;
     uiEvent.type = UIEvent::Type::KeyDown;
@@ -163,8 +168,8 @@ void test_modifier_propagation() {
     uiEvent.modifiers = wEvent.modifiers;
 
     assert(uiEvent.keyCode == '`');
-    assert(uiEvent.modifiers == 1);
-    assert((uiEvent.modifiers & 1) != 0); // Ctrl is set
+    assert(uiEvent.modifiers == kModCtrl);
+    assert((uiEvent.modifiers & kModCtrl) != 0);
 
     std::cout << "[PASS] test_modifier_propagation" << std::endl;
 }

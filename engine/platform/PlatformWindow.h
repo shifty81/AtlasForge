@@ -4,6 +4,11 @@
 
 namespace atlas::platform {
 
+/// Modifier key bitmask constants for WindowEvent::modifiers.
+static constexpr uint8_t kModCtrl  = 1;
+static constexpr uint8_t kModShift = 2;
+static constexpr uint8_t kModAlt   = 4;
+
 struct WindowEvent {
     enum class Type : uint8_t {
         NoEvent,

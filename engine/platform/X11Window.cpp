@@ -142,9 +142,9 @@ bool X11Window::PollEvent(WindowEvent& event) {
                 KeySym sym = XLookupKeysym(&xev.xkey, 0);
                 event.keyCode = static_cast<uint32_t>(sym);
                 event.modifiers = 0;
-                if (xev.xkey.state & ControlMask) event.modifiers |= 1;
-                if (xev.xkey.state & ShiftMask)   event.modifiers |= 2;
-                if (xev.xkey.state & Mod1Mask)    event.modifiers |= 4;
+                if (xev.xkey.state & ControlMask) event.modifiers |= kModCtrl;
+                if (xev.xkey.state & ShiftMask)   event.modifiers |= kModShift;
+                if (xev.xkey.state & Mod1Mask)    event.modifiers |= kModAlt;
                 char buf[32] = {};
                 int len = XLookupString(&xev.xkey, buf, sizeof(buf) - 1, nullptr, nullptr);
                 if (len > 0) {
@@ -157,9 +157,9 @@ bool X11Window::PollEvent(WindowEvent& event) {
                 KeySym sym = XLookupKeysym(&xev.xkey, 0);
                 event.keyCode = static_cast<uint32_t>(sym);
                 event.modifiers = 0;
-                if (xev.xkey.state & ControlMask) event.modifiers |= 1;
-                if (xev.xkey.state & ShiftMask)   event.modifiers |= 2;
-                if (xev.xkey.state & Mod1Mask)    event.modifiers |= 4;
+                if (xev.xkey.state & ControlMask) event.modifiers |= kModCtrl;
+                if (xev.xkey.state & ShiftMask)   event.modifiers |= kModShift;
+                if (xev.xkey.state & Mod1Mask)    event.modifiers |= kModAlt;
                 return true;
             }
             case ButtonPress: {
