@@ -982,6 +982,9 @@ void register_next_tasks_phase15();
 // Phase 16: AI assistant LLM wiring + permission enforcement
 void register_next_tasks_phase16();
 
+// Phase 17: Component migration, SimMirror, DesyncVisualizerPanel
+void register_next_tasks_phase17();
+
 // Networking improvements: latency/jitter, CRC, bandwidth enforcement, manual replication, reliable/unreliable
 void register_net_improvements_tests();
 
@@ -1975,6 +1978,9 @@ int main() {
 
     // Phase 16: AI assistant LLM wiring + permission enforcement
     register_next_tasks_phase16();
+
+    // Phase 17: Component migration, SimMirror, DesyncVisualizerPanel
+    register_next_tasks_phase17();
 
     // Networking improvements
     register_net_improvements_tests();
