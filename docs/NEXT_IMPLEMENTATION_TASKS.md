@@ -311,6 +311,34 @@ This document tracks the remaining implementation tasks to complete the vision o
 - `engine/net/Replication.h/.cpp` — Added TriggerManualReplication, CollectUnreliableDelta, reliable/unreliable callbacks
 - `tests/test_net_improvements.cpp` — 23 new tests
 
+#### 11. AI Assistant LLM Wiring + Permission Enforcement
+**Status**: Complete
+
+**Completed work**:
+- [x] EditorAssistant wired to LLMBackendRegistry
+  - SetLLMBackend() / GetLLMBackend() methods
+  - Unknown intents forwarded to LLM backend when available
+  - Falls back to hardcoded responses when no LLM configured
+  - Known intents (ExplainPerformance, ExplainGraphNode) unchanged
+- [x] AssetGraphAssistant wired to LLMBackendRegistry
+  - SetLLMBackend() / GetLLMBackend() methods
+  - SuggestNodes() uses LLM for context-aware suggestions
+  - ExplainGraph() uses LLM for richer explanations
+  - MutateGraph() uses LLM for AI-powered mutation descriptions
+  - All methods fall back to template responses when no LLM
+- [x] EditorAttachProtocol permission enforcement
+  - RequestOperation() validates connection state + permission tier + mode restrictions
+  - Replay mode: read-only (blocks ModifyState, InjectInput, EditAssets, RunCI)
+  - HeadlessServer mode: blocks StepSimulation
+  - Permission tier check via IsOperationAllowed()
+- [x] 21 new tests covering all changes
+
+**Files modified**:
+- `editor/assistant/EditorAssistant.h/.cpp` — Added LLM backend integration
+- `editor/assistant/AssetGraphAssistant.h/.cpp` — Added LLM backend integration
+- `editor/ui/EditorAttachProtocol.h/.cpp` — Added RequestOperation() with mode-aware enforcement
+- `tests/test_next_tasks_phase16.cpp` — 21 new tests
+
 ## References
 
 - Original gaps analysis: `gaps.txt`

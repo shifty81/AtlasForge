@@ -12,7 +12,7 @@
 
 Atlas is a deterministic, data-driven game engine built in C++20. The
 project is **approximately 98–99% complete** across its core systems.
-All 1037+ tests pass. The engine compiles and runs on Linux with
+All 1041+ tests pass. The engine compiles and runs on Linux with
 OpenGL and Vulkan rendering backends. The Vulkan renderer records
 and submits draw commands through a GPU command buffer pipeline with
 render pass, pipeline state, GPU resource management, descriptor set
@@ -180,7 +180,7 @@ Server rules support config-driven hot-reload with change tracking.
 - [x] Contributor rules (`ATLAS_CONTRIBUTOR_RULES.md`)
 
 ### Testing (`tests/`)
-- [x] 1037+ tests across 166+ test files — all passing
+- [x] 1041+ tests across 166+ test files — all passing
 - [x] Covers ECS, networking, replay, assets, UI, editor panels, graphs, etc.
 
 ---
@@ -241,10 +241,11 @@ commands via `UIDrawList`.
 - [x] AtlasAICore — intent registry, permissions, request routing
 - [x] AtlasAssistantPanel — prompt/suggestion UI framework
 - [x] AIDiffViewerPanel — hunk accept/reject workflow
-- [x] EditorAssistant — router for explain/suggest/mutate
+- [x] EditorAssistant — router with LLM backend integration (falls back to hardcoded when no LLM)
+- [x] AssetGraphAssistant — LLM-powered suggestions, explanations, mutations (falls back to templates)
 - [x] AIAggregator — multi-backend routing, best-response selection, type-prefixed prompts
 - [x] TemplateAIBackend — offline template-based responses (Layer 1)
-- [ ] LLM AIBackend — external LLM service integration (Layer 3)
+- [x] LLM AIBackend — HttpLLMBackend for external LLM service integration (Layer 3)
 
 ### HttpLLMBackend (`engine/ai/LLMBackend`)
 - [x] OpenAI-compatible chat completions API client
@@ -329,7 +330,7 @@ Editor Rendering   ✅ 100%   All panels produce draw commands via UIDrawList
 Production         ✅ 100%   Full packager pipeline
 CI/Enforcement     ✅ 100%   Determinism gate, contract bot, crash reporter
 Documentation      ✅  95%   43 docs; minor updates needed
-Testing            ✅ 100%   1037+ tests, all passing
+Testing            ✅ 100%   1041+ tests, all passing
 ```
 
 ---
@@ -342,7 +343,7 @@ Testing            ✅ 100%   1037+ tests, all passing
 | AtlasServer | ✅ | ✅ | Headless, no graphics deps |
 | AtlasClient | ✅ | ✅ | Player runtime |
 | AtlasRuntime | ✅ | ✅ | Unified CLI runtime |
-| AtlasTests | ✅ | ✅ | 1037+ tests passing |
+| AtlasTests | ✅ | ✅ | 1041+ tests passing |
 | TileEditor | ✅ | ✅ | Standalone tile tool |
 
 ---
@@ -364,7 +365,7 @@ Testing            ✅ 100%   1037+ tests, all passing
 | World Gen | ~30 | ✅ All pass |
 | Tile Editor | ~40 | ✅ All pass |
 | CI/Tooling | ~12 | ✅ All pass |
-| **Total** | **1037+** | **✅ All pass** |
+| **Total** | **1041+** | **✅ All pass** |
 
 ---
 
@@ -405,7 +406,7 @@ diff viewing and replay inspection are available in `tools/`. The
 networking layer includes packet loss simulation, latency/jitter
 simulation, CRC32 checksum validation, bandwidth enforcement on send,
 manual replication triggers, and reliable/unreliable delta splitting
-with connection quality diagnostics. All 1037+ tests pass. The IHttpClient interface now supports
+with connection quality diagnostics. All 1041+ tests pass. The IHttpClient interface now supports
 HTTP POST, and the HttpLLMBackend uses proper POST requests for API
 communication. The LLMBackendFactory enables environment-based
 configuration via ATLAS_LLM_ENDPOINT, ATLAS_LLM_MODEL, and

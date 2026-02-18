@@ -96,18 +96,17 @@ The `editor/main.cpp` entry point:
 
 | Component | Status | Gap |
 |-----------|--------|-----|
-| `AtlasAICore` | ✅ Intent registry, permissions, request routing | No LLM backend |
+| `AtlasAICore` | ✅ Intent registry, permissions, request routing | — |
 | `AtlasAssistantPanel` | ✅ Prompt/suggestion UI framework | Suggestions are placeholder |
 | `AIDiffViewerPanel` | ✅ Hunk accept/reject workflow | No generated diffs |
-| `EditorAssistant` | ✅ Router for explain/suggest/mutate | Returns hardcoded text |
-| `AssetGraphAssistant` | ✅ Method signatures | Returns empty results |
-| `AIBackend` | 📋 Virtual base class defined | No implementations |
+| `EditorAssistant` | ✅ Router with LLM backend integration | Falls back to hardcoded when no LLM |
+| `AssetGraphAssistant` | ✅ LLM-powered suggestions, explanations, mutations | Falls back to templates when no LLM |
+| `AIBackend` | ✅ OfflineLLMBackend + HttpLLMBackend + LLMBackendFactory | Production deployment via env vars |
 
 ### Game Packager
 
 - ✅ UI scaffolding (target selection, build mode, settings)
-- 📋 **No actual build/cook logic** — pressing "Build" does nothing
-- Needs integration with `AssetCooker`, `BuildProfile`, and `PlatformTarget`
+- ✅ Build wired to `GamePackager::Package()` with `AssetCooker` + `BuildProfile` integration
 
 ---
 
@@ -119,9 +118,9 @@ The `editor/main.cpp` entry point:
 | **Mesh Viewer** | ✅ Implemented — 3D preview with wireframe toggle, normals, vertex selection | Done |
 | **Material Editor** | ✅ Implemented — Shader parameter editing, preview mode, dirty tracking | Done |
 | **Prefab Editor** | ✅ Implemented — Entity hierarchy, component composition, parent-child relationships | Done |
-| **Quest/Story Editor** | Visual narrative authoring UI | No |
-| **Inventory Editor** | Item management UI | No |
-| **Permission Enforcement** | Attach protocol tiers not enforced | Medium |
+| **Quest/Story Editor** | ✅ Implemented — Node graph, connections, preview mode, export/import | Done |
+| **Inventory Editor** | ✅ Implemented — Items, filtering, sorting, export/import | Done |
+| **Permission Enforcement** | ✅ Implemented — RequestOperation validates tier + mode restrictions | Done |
 | **Layout Persistence** | ✅ Implemented — Save/restore panel arrangement to/from JSON | Done |
 | **Live Edit Rules** | Config hot-reload gating, schema rebuild | Low |
 
