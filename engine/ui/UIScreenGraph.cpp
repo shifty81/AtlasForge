@@ -140,6 +140,51 @@ void UIScreen::SetHasSubmenu(uint32_t id, bool hasSubmenu) {
     }
 }
 
+void UIScreen::SetCheckable(uint32_t id, bool checkable) {
+    auto it = m_widgets.find(id);
+    if (it != m_widgets.end()) {
+        it->second.isCheckable = checkable;
+    }
+}
+
+bool UIScreen::IsCheckable(uint32_t id) const {
+    auto it = m_widgets.find(id);
+    if (it != m_widgets.end()) {
+        return it->second.isCheckable;
+    }
+    return false;
+}
+
+void UIScreen::SetChecked(uint32_t id, bool checked) {
+    auto it = m_widgets.find(id);
+    if (it != m_widgets.end()) {
+        it->second.isChecked = checked;
+    }
+}
+
+bool UIScreen::IsChecked(uint32_t id) const {
+    auto it = m_widgets.find(id);
+    if (it != m_widgets.end()) {
+        return it->second.isChecked;
+    }
+    return false;
+}
+
+void UIScreen::SetIconId(uint32_t id, uint32_t iconId) {
+    auto it = m_widgets.find(id);
+    if (it != m_widgets.end()) {
+        it->second.iconId = iconId;
+    }
+}
+
+uint32_t UIScreen::GetIconId(uint32_t id) const {
+    auto it = m_widgets.find(id);
+    if (it != m_widgets.end()) {
+        return it->second.iconId;
+    }
+    return 0;
+}
+
 UIWidget* UIScreen::GetWidgetMutable(uint32_t id) {
     auto it = m_widgets.find(id);
     if (it != m_widgets.end()) {

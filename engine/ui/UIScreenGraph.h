@@ -17,7 +17,11 @@ enum class UIWidgetType : uint8_t {
     Menu,
     MenuItem,
     Toolbar,
-    StatusBar
+    StatusBar,
+    Tooltip,
+    Tab,
+    ScrollView,
+    DockArea
 };
 
 struct UIWidget {
@@ -38,6 +42,9 @@ struct UIWidget {
     bool isDisabled = false;    // For MenuItem/Button: grayed-out and non-interactive?
     std::string shortcutLabel;  // For MenuItem: keyboard shortcut display (e.g. "Ctrl+S")
     bool hasSubmenu = false;    // For MenuItem: does this item open a submenu?
+    bool isCheckable = false;   // For MenuItem: can this item be checked/unchecked?
+    bool isChecked = false;     // For MenuItem: is this item currently checked?
+    uint32_t iconId = 0;        // Icon texture/atlas ID (0 = no icon)
 };
 
 class UIScreen {
@@ -66,6 +73,12 @@ public:
     bool IsDisabled(uint32_t id) const;
     void SetShortcutLabel(uint32_t id, const std::string& label);
     void SetHasSubmenu(uint32_t id, bool hasSubmenu);
+    void SetCheckable(uint32_t id, bool checkable);
+    bool IsCheckable(uint32_t id) const;
+    void SetChecked(uint32_t id, bool checked);
+    bool IsChecked(uint32_t id) const;
+    void SetIconId(uint32_t id, uint32_t iconId);
+    uint32_t GetIconId(uint32_t id) const;
     UIWidget* GetWidgetMutable(uint32_t id);
 
 private:
