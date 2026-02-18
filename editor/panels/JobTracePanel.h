@@ -1,5 +1,7 @@
 #pragma once
+#include "../ui/EditorPanel.h"
 #include "../../engine/sim/JobTracer.h"
+#include "../../engine/ui/UIDrawList.h"
 #include <string>
 #include <vector>
 
@@ -16,8 +18,11 @@ struct JobTraceSummary {
 /// Editor panel for visualizing job execution traces.
 /// Shows which systems ran in what order each tick and detects
 /// non-deterministic execution ordering.
-class JobTracePanel {
+class JobTracePanel : public EditorPanel {
 public:
+    const char* Name() const override { return "Job Trace"; }
+    void Draw() override;
+
     void SetTracer(const sim::JobTracer* tracer);
     void SetReferenceTracer(const sim::JobTracer* reference);
     void Refresh();
@@ -30,11 +35,14 @@ public:
     /// Get detailed entries for a specific tick.
     std::vector<sim::JobTraceEntry> EntriesAtTick(uint64_t tick) const;
 
+    const atlas::ui::UIDrawList& GetDrawList() const { return m_drawList; }
+
 private:
     const sim::JobTracer* m_tracer = nullptr;
     const sim::JobTracer* m_reference = nullptr;
     std::vector<JobTraceSummary> m_summaries;
     int64_t m_firstMismatch = -1;
+    atlas::ui::UIDrawList m_drawList;
 };
 
 }  // namespace atlas::editor

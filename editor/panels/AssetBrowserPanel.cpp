@@ -7,6 +7,48 @@ namespace atlas::editor {
 
 void AssetBrowserPanel::Draw() {
     Refresh();
+
+    m_drawList.Clear();
+
+    // Background
+    m_drawList.DrawRect({0, 0, 600, 400}, {30, 30, 30, 255});
+
+    // Title bar
+    m_drawList.DrawRect({0, 0, 600, 24}, {50, 50, 50, 255});
+    m_drawList.DrawText({4, 4, 300, 20}, "Asset Browser", {220, 220, 220, 255});
+
+    // Summary line (count + filter + sort mode)
+    int32_t y = 28;
+    const char* sortLabel = "Name";
+    switch (m_sortMode) {
+        case AssetSortMode::ByType: sortLabel = "Type"; break;
+        case AssetSortMode::ByPath: sortLabel = "Path"; break;
+        default: break;
+    }
+    std::string info = "Assets: " + std::to_string(m_entries.size()) + "  Sort: " + sortLabel;
+    if (!m_filter.empty()) {
+        info += "  Filter: " + m_filter;
+    }
+    m_drawList.DrawText({4, y, 590, 16}, info, {160, 180, 200, 255});
+    y += 20;
+
+    if (m_entries.empty()) {
+        m_drawList.DrawText({4, y, 590, 16}, "No assets found", {160, 160, 160, 255});
+        return;
+    }
+
+    // Asset list
+    for (const auto& entry : m_entries) {
+        bool selected = (entry.id == m_selectedAsset);
+        atlas::ui::UIColor bgColor = selected
+            ? atlas::ui::UIColor{60, 80, 120, 255}
+            : atlas::ui::UIColor{40, 40, 40, 255};
+        m_drawList.DrawRect({0, y, 600, 20}, bgColor);
+
+        std::string label = entry.id + "  " + entry.extension;
+        m_drawList.DrawText({4, y + 2, 590, 16}, label, {200, 200, 200, 255});
+        y += 22;
+    }
 }
 
 void AssetBrowserPanel::Refresh() {

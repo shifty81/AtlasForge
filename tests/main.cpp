@@ -985,6 +985,9 @@ void register_next_tasks_phase16();
 // Networking improvements: latency/jitter, CRC, bandwidth enforcement, manual replication, reliable/unreliable
 void register_net_improvements_tests();
 
+// Panel Draw() implementations
+void register_panel_draw_impl_tests();
+
 // Component Category
 void test_component_category_defaults();
 void test_component_category_simulated();
@@ -1975,6 +1978,9 @@ int main() {
 
     // Networking improvements
     register_net_improvements_tests();
+
+    // Panel Draw() implementations
+    register_panel_draw_impl_tests();
 
     // Noise
     std::cout << "\n--- Noise Generator ---" << std::endl;
