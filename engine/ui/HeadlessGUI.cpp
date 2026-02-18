@@ -1,4 +1,5 @@
 #include "HeadlessGUI.h"
+#include "DiagnosticsOverlay.h"
 #include <sstream>
 #include <algorithm>
 
@@ -183,6 +184,18 @@ void HeadlessGUI::RegisterBuiltinCommands() {
     RegisterCommand("status", [this](const std::vector<std::string>& args) {
         return CmdStatus(args);
     });
+    RegisterCommand("diag.toggle", [this](const std::vector<std::string>& args) {
+        return CmdDiagToggle(args);
+    });
+    RegisterCommand("diag.show", [this](const std::vector<std::string>& args) {
+        return CmdDiagShow(args);
+    });
+    RegisterCommand("diag.hide", [this](const std::vector<std::string>& args) {
+        return CmdDiagHide(args);
+    });
+    RegisterCommand("diag.status", [this](const std::vector<std::string>& args) {
+        return CmdDiagStatus(args);
+    });
 }
 
 // ---------------------------------------------------------------------------
@@ -272,6 +285,25 @@ GUIQueryResult HeadlessGUI::CmdStatus(const std::vector<std::string>& /*args*/) 
         << "widgets:  " << m_manager->GetScreen().WidgetCount() << '\n'
         << "pending:  " << m_manager->GetCommandBus().PendingCount() << '\n';
     return {true, out.str()};
+}
+
+GUIQueryResult HeadlessGUI::CmdDiagToggle(const std::vector<std::string>& /*args*/) {
+    DiagnosticsOverlay::Toggle();
+    return {true, DiagnosticsOverlay::IsEnabled() ? "on" : "off"};
+}
+
+GUIQueryResult HeadlessGUI::CmdDiagShow(const std::vector<std::string>& /*args*/) {
+    DiagnosticsOverlay::SetEnabled(true);
+    return {true, "on"};
+}
+
+GUIQueryResult HeadlessGUI::CmdDiagHide(const std::vector<std::string>& /*args*/) {
+    DiagnosticsOverlay::SetEnabled(false);
+    return {true, "off"};
+}
+
+GUIQueryResult HeadlessGUI::CmdDiagStatus(const std::vector<std::string>& /*args*/) {
+    return {true, DiagnosticsOverlay::IsEnabled() ? "on" : "off"};
 }
 
 } // namespace atlas::ui

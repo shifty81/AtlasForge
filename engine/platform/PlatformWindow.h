@@ -9,6 +9,11 @@ static constexpr uint8_t kModCtrl  = 1;
 static constexpr uint8_t kModShift = 2;
 static constexpr uint8_t kModAlt   = 4;
 
+/// Platform-independent virtual key codes for non-printable keys.
+/// On X11 these map to KeySym values; on Win32 to VK_ constants.
+/// The platform window implementation translates native codes to these.
+static constexpr uint32_t kKeyF3 = 0x100 + 3;
+
 struct WindowEvent {
     enum class Type : uint8_t {
         NoEvent,

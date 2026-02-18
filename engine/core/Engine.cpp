@@ -225,8 +225,9 @@ void Engine::ProcessWindowEvents() {
                 }
                 break;
             case platform::WindowEvent::Type::KeyDown: {
-                // Ctrl+Backtick toggles diagnostics overlay
-                if (event.keyCode == '`' && (event.modifiers & platform::kModCtrl)) {
+                // Ctrl+Backtick or F3 toggles diagnostics overlay
+                if ((event.keyCode == '`' && (event.modifiers & platform::kModCtrl)) ||
+                    event.keyCode == platform::kKeyF3) {
                     ui::DiagnosticsOverlay::Toggle();
                 }
                 ui::UIEvent uiEvent;

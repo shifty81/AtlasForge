@@ -13,6 +13,12 @@ namespace atlas::platform {
 
 static const wchar_t* ATLAS_WINDOW_CLASS = L"AtlasWindowClass";
 
+/// Translate a Win32 virtual-key code to a platform-independent key code.
+static uint32_t TranslateVK(uint32_t vk) {
+    if (vk == VK_F3) return kKeyF3;
+    return vk;
+}
+
 Win32Window::~Win32Window() {
     Shutdown();
 }
@@ -62,7 +68,7 @@ LRESULT CALLBACK Win32Window::WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
             if (self) {
                 WindowEvent event;
                 event.type = WindowEvent::Type::KeyDown;
-                event.keyCode = static_cast<uint32_t>(wParam);
+                event.keyCode = TranslateVK(static_cast<uint32_t>(wParam));
                 event.modifiers = 0;
                 if (GetKeyState(VK_CONTROL) & 0x8000) event.modifiers |= kModCtrl;
                 if (GetKeyState(VK_SHIFT) & 0x8000)   event.modifiers |= kModShift;
@@ -75,7 +81,7 @@ LRESULT CALLBACK Win32Window::WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
             if (self) {
                 WindowEvent event;
                 event.type = WindowEvent::Type::KeyUp;
-                event.keyCode = static_cast<uint32_t>(wParam);
+                event.keyCode = TranslateVK(static_cast<uint32_t>(wParam));
                 event.modifiers = 0;
                 if (GetKeyState(VK_CONTROL) & 0x8000) event.modifiers |= kModCtrl;
                 if (GetKeyState(VK_SHIFT) & 0x8000)   event.modifiers |= kModShift;

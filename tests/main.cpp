@@ -918,6 +918,9 @@ void test_headless_gui_status();
 void test_headless_gui_enqueue();
 void test_headless_gui_custom_command();
 void test_headless_gui_quoted_args();
+void test_headless_gui_diag_toggle();
+void test_headless_gui_diag_show_hide();
+void test_headless_gui_diag_status();
 
 // Job Execution Tracer
 void test_job_tracer_empty();
@@ -1462,6 +1465,7 @@ void test_engine_has_event_router();
 void test_engine_mouse_tracking_defaults();
 void test_engine_event_router_register();
 void test_diagnostics_overlay_toggle_state();
+void test_f3_key_constant_defined();
 
 // World State Serializer
 void test_serializer_default_version();
@@ -2890,6 +2894,9 @@ int main() {
     test_headless_gui_enqueue();
     test_headless_gui_custom_command();
     test_headless_gui_quoted_args();
+    test_headless_gui_diag_toggle();
+    test_headless_gui_diag_show_hide();
+    test_headless_gui_diag_status();
 
     // Job Execution Tracer
     std::cout << "\n--- Job Execution Tracer ---" << std::endl;
@@ -3435,6 +3442,7 @@ int main() {
     test_engine_mouse_tracking_defaults();
     test_engine_event_router_register();
     test_diagnostics_overlay_toggle_state();
+    test_f3_key_constant_defined();
 
     // World State Serializer
     std::cout << "\n--- World State Serializer ---" << std::endl;

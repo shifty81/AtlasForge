@@ -11,6 +11,12 @@
 
 namespace atlas::platform {
 
+/// Translate an X11 KeySym to a platform-independent key code.
+static uint32_t TranslateKeySym(unsigned long sym) {
+    if (sym == XK_F3) return kKeyF3;
+    return static_cast<uint32_t>(sym);
+}
+
 X11Window::~X11Window() {
     Shutdown();
 }
@@ -140,7 +146,7 @@ bool X11Window::PollEvent(WindowEvent& event) {
             case KeyPress: {
                 event.type = WindowEvent::Type::KeyDown;
                 KeySym sym = XLookupKeysym(&xev.xkey, 0);
-                event.keyCode = static_cast<uint32_t>(sym);
+                event.keyCode = TranslateKeySym(sym);
                 event.modifiers = 0;
                 if (xev.xkey.state & ControlMask) event.modifiers |= kModCtrl;
                 if (xev.xkey.state & ShiftMask)   event.modifiers |= kModShift;
@@ -155,7 +161,7 @@ bool X11Window::PollEvent(WindowEvent& event) {
             case KeyRelease: {
                 event.type = WindowEvent::Type::KeyUp;
                 KeySym sym = XLookupKeysym(&xev.xkey, 0);
-                event.keyCode = static_cast<uint32_t>(sym);
+                event.keyCode = TranslateKeySym(sym);
                 event.modifiers = 0;
                 if (xev.xkey.state & ControlMask) event.modifiers |= kModCtrl;
                 if (xev.xkey.state & ShiftMask)   event.modifiers |= kModShift;

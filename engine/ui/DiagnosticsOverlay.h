@@ -16,8 +16,10 @@ struct UIContext;
 ///   - Mouse position
 ///   - UI input capture flags
 ///
-/// Toggle with DiagnosticsOverlay::Toggle() (wired to backtick key
-/// in Engine::ProcessWindowEvents).  Custom implementation — no ImGui dependency.
+/// Toggle with DiagnosticsOverlay::Toggle() (wired to Ctrl+Backtick or F3
+/// in Engine::ProcessWindowEvents, or via HeadlessGUI commands:
+/// diag.toggle, diag.show, diag.hide, diag.status).
+/// Custom implementation — no ImGui dependency.
 class DiagnosticsOverlay {
 public:
     /// Toggle the overlay on/off.
