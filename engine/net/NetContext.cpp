@@ -1,4 +1,5 @@
 #include "NetContext.h"
+#include "NetHardening.h"
 #include "../ecs/ECS.h"
 #include <algorithm>
 #include <cstring>
@@ -11,6 +12,9 @@ void NetContext::Init(NetMode mode) {
     m_snapshots.clear();
     m_inputHistory.clear();
     m_nextPeerID = 1;
+    m_hardening = nullptr;
+    m_droppedSendCount = 0;
+    m_invalidChecksumCount = 0;
     while (!m_outgoing.empty()) m_outgoing.pop();
     while (!m_incoming.empty()) m_incoming.pop();
 }
@@ -34,17 +38,51 @@ void NetContext::Poll() {
 }
 
 void NetContext::Send(uint32_t peerID, const Packet& pkt) {
+    if (m_hardening) {
+        if (!m_hardening->CanSendBytes(static_cast<uint32_t>(pkt.payload.size()))) {
+            m_droppedSendCount++;
+            return;
+        }
+        if (m_hardening->ShouldDropPacket()) {
+            m_droppedSendCount++;
+            return;
+        }
+    }
+
     QueuedPacket qp;
     qp.destPeerID = peerID;
     qp.packet = pkt;
+    qp.packet.checksum = ComputeChecksum(pkt.payload.data(), pkt.payload.size());
     m_outgoing.push(qp);
+
+    if (m_hardening) {
+        m_hardening->RecordBytesSent(static_cast<uint32_t>(pkt.payload.size()));
+        m_hardening->RecordPacketSent();
+    }
 }
 
 void NetContext::Broadcast(const Packet& pkt) {
+    if (m_hardening) {
+        if (!m_hardening->CanSendBytes(static_cast<uint32_t>(pkt.payload.size()))) {
+            m_droppedSendCount++;
+            return;
+        }
+        if (m_hardening->ShouldDropPacket()) {
+            m_droppedSendCount++;
+            return;
+        }
+    }
+
     QueuedPacket qp;
     qp.destPeerID = 0; // 0 = broadcast
     qp.packet = pkt;
+    qp.packet.checksum = ComputeChecksum(pkt.payload.data(), pkt.payload.size());
     m_outgoing.push(qp);
+
+    if (m_hardening) {
+        m_hardening->RecordBytesSent(static_cast<uint32_t>(pkt.payload.size()));
+        m_hardening->RecordPacketSent();
+    }
 }
 
 void NetContext::Flush() {
@@ -85,6 +123,10 @@ bool NetContext::Receive(Packet& outPkt) {
     if (m_incoming.empty()) return false;
     outPkt = m_incoming.front();
     m_incoming.pop();
+    if (!ValidateChecksum(outPkt)) {
+        m_invalidChecksumCount++;
+        return false;
+    }
     return true;
 }
 
@@ -177,6 +219,38 @@ uint32_t NetContext::LastSaveTick() const {
 
 uint64_t NetContext::LastSaveHash() const {
     return m_lastSaveHash;
+}
+
+void NetContext::SetHardening(NetHardening* hardening) {
+    m_hardening = hardening;
+}
+
+uint32_t NetContext::DroppedSendCount() const {
+    return m_droppedSendCount;
+}
+
+uint32_t NetContext::InvalidChecksumCount() const {
+    return m_invalidChecksumCount;
+}
+
+uint32_t NetContext::ComputeChecksum(const uint8_t* data, size_t size) {
+    uint32_t crc = 0xFFFFFFFF;
+    for (size_t i = 0; i < size; ++i) {
+        crc ^= data[i];
+        for (int bit = 0; bit < 8; ++bit) {
+            if (crc & 1)
+                crc = (crc >> 1) ^ 0xEDB88320;
+            else
+                crc = crc >> 1;
+        }
+    }
+    return crc ^ 0xFFFFFFFF;
+}
+
+bool NetContext::ValidateChecksum(const Packet& pkt) {
+    if (pkt.checksum == 0 && pkt.payload.empty()) return true;
+    uint32_t computed = ComputeChecksum(pkt.payload.data(), pkt.payload.size());
+    return computed == pkt.checksum;
 }
 
 }

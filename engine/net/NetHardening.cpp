@@ -212,4 +212,16 @@ float NetHardening::AverageBandwidthBytesPerSec() const {
     return m_totalBytesTracked / (m_totalTimeTracked / 1000.0f);
 }
 
+uint32_t NetHardening::GetSimulatedLatencyMs() const {
+    if (!m_lossSimConfig.enabled) return 0;
+    uint32_t base = static_cast<uint32_t>(m_lossSimConfig.latencyMs);
+    if (m_lossSimConfig.jitterMs <= 0.0f) return base;
+    // Deterministic jitter in [-jitterMs, +jitterMs] using m_lossCounter
+    uint32_t range = static_cast<uint32_t>(m_lossSimConfig.jitterMs) * 2 + 1;
+    int32_t offset = static_cast<int32_t>(m_lossCounter % range) -
+                     static_cast<int32_t>(m_lossSimConfig.jitterMs);
+    int32_t result = static_cast<int32_t>(base) + offset;
+    return result > 0 ? static_cast<uint32_t>(result) : 0;
+}
+
 }

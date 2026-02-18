@@ -42,8 +42,14 @@ public:
     const std::vector<ReplicationRule>& Rules() const;
     size_t RuleCount() const;
 
-    // Collect dirty components based on rules and produce a delta payload
+    // Collect dirty components based on rules and produce a delta payload (reliable only)
     std::vector<uint8_t> CollectDelta(uint32_t tick);
+
+    // Collect delta for unreliable rules only
+    std::vector<uint8_t> CollectUnreliableDelta(uint32_t tick);
+
+    // Trigger replication for a Manual-frequency component type
+    void TriggerManualReplication(uint32_t typeTag);
 
     // Apply a received delta payload to the local world
     bool ApplyDelta(const std::vector<uint8_t>& data);
@@ -57,11 +63,24 @@ public:
     // Clear all dirty flags (called after CollectDelta)
     void ClearDirty();
 
+    // Set callback for reliable delta payloads
+    void SetReliableCallback(std::function<void(const std::vector<uint8_t>&)> cb);
+
+    // Set callback for unreliable delta payloads
+    void SetUnreliableCallback(std::function<void(const std::vector<uint8_t>&)> cb);
+
 private:
     ecs::World* m_world = nullptr;
     std::vector<ReplicationRule> m_rules;
     // typeTag -> set of dirty entity IDs
     std::unordered_map<uint32_t, std::vector<uint32_t>> m_dirty;
+
+    // Manual replication triggers
+    std::vector<uint32_t> m_manuallyTriggered;
+
+    // Callbacks for reliable/unreliable deltas
+    std::function<void(const std::vector<uint8_t>&)> m_reliableCallback;
+    std::function<void(const std::vector<uint8_t>&)> m_unreliableCallback;
 };
 
 }

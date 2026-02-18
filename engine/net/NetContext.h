@@ -6,6 +6,7 @@
 #include <functional>
 
 namespace atlas::ecs { class World; }
+namespace atlas::net { class NetHardening; }
 
 namespace atlas::net {
 
@@ -25,6 +26,7 @@ struct Packet {
     uint16_t type = 0;
     uint16_t size = 0;
     uint32_t tick = 0;
+    uint32_t checksum = 0;
     std::vector<uint8_t> payload;
 };
 
@@ -97,6 +99,21 @@ public:
     /// Returns the packet schema version this context was built with.
     static uint32_t PacketSchemaVersion() { return NET_PACKET_SCHEMA_VERSION; }
 
+    /// Set a NetHardening instance for bandwidth/loss enforcement.
+    void SetHardening(NetHardening* hardening);
+
+    /// Number of packets dropped due to hardening (bandwidth/loss).
+    uint32_t DroppedSendCount() const;
+
+    /// Number of packets dropped due to invalid checksum on receive.
+    uint32_t InvalidChecksumCount() const;
+
+    /// Compute a CRC32 checksum over data.
+    static uint32_t ComputeChecksum(const uint8_t* data, size_t size);
+
+    /// Validate a packet's checksum field against its payload.
+    static bool ValidateChecksum(const Packet& pkt);
+
 private:
     NetMode m_mode = NetMode::Standalone;
     std::vector<NetPeer> m_peers;
@@ -117,6 +134,11 @@ private:
     // Save tick broadcasting state
     uint32_t m_lastSaveTick = 0;
     uint64_t m_lastSaveHash = 0;
+
+    // Hardening integration
+    NetHardening* m_hardening = nullptr;
+    uint32_t m_droppedSendCount = 0;
+    uint32_t m_invalidChecksumCount = 0;
 };
 
 }
