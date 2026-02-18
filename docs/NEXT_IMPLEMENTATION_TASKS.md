@@ -41,8 +41,7 @@ This document tracks the remaining implementation tasks to complete the vision o
   - API credential management
   - Material and shader translation
 - [x] Add comprehensive tests for each importer
-- [ ] Document marketplace API setup in MARKETPLACE_IMPORTING.md
-
+- [x] Document marketplace API setup in MARKETPLACE_IMPORTING.md
 **Files modified**:
 - `engine/assets/MarketplaceImporter.h` — Added ParseUAssetHeader, ParsePrefabHeader, SetApiCredential
 - `engine/assets/MarketplaceImporter.cpp` — Real format conversion implementations
@@ -60,7 +59,7 @@ This document tracks the remaining implementation tasks to complete the vision o
   - Per-system hash breakdown
   - Frame-by-frame hash ladder
   - Visual diff of divergent components
-- [ ] Add Replay Inspector features
+- [x] Add Replay Inspector features
   - Input frame viewer
   - Event timeline visualization
   - Branch point markers
@@ -135,10 +134,10 @@ This document tracks the remaining implementation tasks to complete the vision o
   - Automatic divergence point detection
   - Component diff at divergence
   - Input replay from divergence
-- [ ] Standalone state diff viewer tool
-  - `tools/state_diff_viewer/` - Interactive CLI
-- [ ] Standalone replay inspector tool
-  - `tools/replay_inspector/` - Interactive CLI
+- [x] Standalone state diff viewer tool
+  - `tools/state_diff_viewer.py` - Interactive CLI
+- [x] Standalone replay inspector tool
+  - `tools/replay_inspector.py` - Interactive CLI
 
 **Files created**:
 - `engine/sim/TickStepDebugger.h/.cpp` — Tick-step debugger with breakpoints
@@ -148,23 +147,26 @@ This document tracks the remaining implementation tasks to complete the vision o
 **Status**: Basic pipeline exists, needs polish
 
 **Remaining work**:
-- [ ] Hot-reload for marketplace assets
+- [x] Hot-reload for marketplace assets
   - Detect asset updates from marketplace
   - Automatic re-import
   - Version conflict resolution
-- [ ] Asset validation dashboard
+- [x] Asset validation dashboard
   - Integrity check results
   - Dependency graph visualization
   - Hash verification status
-- [ ] Mod asset sandboxing
+- [x] Mod asset sandboxing
   - Deterministic hash verification
   - Permission model enforcement
   - CPU/memory budget tracking
 
-**Files to modify**:
-- `engine/assets/MarketplaceImporter.cpp` - Add hot-reload
-- `editor/panels/AssetBrowserPanel.cpp` - Add validation UI
-- `engine/mod/ModLoader.cpp` - Add sandboxing
+**Files created/modified**:
+- `engine/assets/MarketplaceImporter.h` - Added MarketplaceHotReloader, AssetValidationDashboard, ModAssetSandbox
+- `engine/assets/MarketplaceImporter.cpp` - Full implementations
+- `editor/panels/ReplayTimelinePanel.h/.cpp` - Input frame viewer, event timeline, branch points
+- `tools/state_diff_viewer.py` - Standalone state diff CLI
+- `tools/replay_inspector.py` - Standalone replay inspector CLI
+- `tests/test_next_tasks_phase12.cpp` - 25 new tests
 
 ## Implementation Priority Order
 

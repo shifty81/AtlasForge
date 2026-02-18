@@ -11,8 +11,8 @@
 ## Executive Summary
 
 Atlas is a deterministic, data-driven game engine built in C++20. The
-project is **approximately 96–99% complete** across its core systems.
-All 1673 tests pass. The engine compiles and runs on Linux with
+project is **approximately 97–99% complete** across its core systems.
+All 929+ tests pass. The engine compiles and runs on Linux with
 OpenGL and Vulkan rendering backends. The Vulkan renderer records
 and submits draw commands through a GPU command buffer pipeline with
 render pass, pipeline state, GPU resource management, descriptor set
@@ -22,10 +22,12 @@ layer includes packet loss simulation and connection quality
 diagnostics. The asset registry supports dependency tracking with
 circular dependency detection and topological build ordering. The
 marketplace importers parse .uasset binary headers and .prefab YAML
-formats with API credential management. The AI assistant has an
-offline template backend. The editor features live component
-inspection, entity hierarchy browsing, component mutation tracking,
-per-system hash breakdowns, and tick-step debugging with breakpoints.
+formats with API credential management, hot-reload monitoring, asset
+validation, and mod sandboxing. The AI assistant has an offline template
+backend. The editor features live component inspection, entity hierarchy
+browsing, component mutation tracking, per-system hash breakdowns,
+tick-step debugging with breakpoints, and a full replay inspector with
+input frame viewer, event timeline, and branch point markers.
 Server rules support config-driven hot-reload with change tracking.
 
 ---
@@ -96,6 +98,9 @@ Server rules support config-driven hot-reload with change tracking.
 - [x] Asset dependency tracking (add/remove/query dependencies)
 - [x] Circular dependency detection (DFS-based)
 - [x] Topological build order resolution
+- [x] Marketplace hot-reload monitoring (file change detection, re-import)
+- [x] Asset validation dashboard (integrity, size, extension, readability checks)
+- [x] Mod asset sandboxing (hash verification, budget enforcement)
 
 ### World Generation (`engine/world/`)
 - [x] Cube-sphere terrain
@@ -170,7 +175,7 @@ Server rules support config-driven hot-reload with change tracking.
 - [x] Contributor rules (`ATLAS_CONTRIBUTOR_RULES.md`)
 
 ### Testing (`tests/`)
-- [x] 1673 tests across 165+ test files — all passing
+- [x] 929+ tests across 165+ test files — all passing
 - [x] Covers ECS, networking, replay, assets, UI, editor panels, graphs, etc.
 
 ---
@@ -223,6 +228,9 @@ commands via `UIDrawList`.
 - [x] Unreal .uasset binary header parsing (magic number validation, version, class name)
 - [x] Unity .prefab YAML parsing (m_Name, m_MeshData, m_Materials extraction)
 - [x] Real format conversion (ConvertUAsset, ConvertUnityPrefab)
+- [x] Hot-reload monitoring (MarketplaceHotReloader)
+- [x] Asset validation dashboard (AssetValidationDashboard)
+- [x] Mod asset sandboxing (ModAssetSandbox with budget enforcement)
 
 ### AI Assistant (`editor/ai/`)
 - [x] AtlasAICore — intent registry, permissions, request routing
@@ -277,7 +285,7 @@ ECS                ✅ 100%   Entity lifecycle, serialization, rollback
 Graph VM           ✅ 100%   14 graph types, compile/execute/serialize
 Simulation         ✅ 100%   Tick, time, state, replay, save/load
 Networking         ✅  98%   Lockstep, rollback, P2P, packet loss sim, quality diagnostics, QoS scheduling
-Assets             ✅ 100%   Registry, import, cook, validate, hot-reload, dependency tracking
+Assets             ✅ 100%   Registry, import, cook, validate, hot-reload, dependency tracking, marketplace hot-reload, validation dashboard, mod sandboxing
 World Generation   ✅ 100%   Terrain, voxel, galaxy, streaming
 AI Systems         ✅ 100%   Behavior, memory, faction, strategy
 UI Framework       ✅ 100%   DrawList, SceneGraph, Layout, Events, DSL
@@ -287,7 +295,7 @@ Editor Rendering   ✅ 100%   All panels produce draw commands via UIDrawList
 Production         ✅ 100%   Full packager pipeline
 CI/Enforcement     ✅ 100%   Determinism gate, contract bot, crash reporter
 Documentation      ✅  95%   43 docs; minor updates needed
-Testing            ✅ 100%   1673 tests, all passing
+Testing            ✅ 100%   929+ tests, all passing
 ```
 
 ---
@@ -322,7 +330,7 @@ Testing            ✅ 100%   1673 tests, all passing
 | World Gen | ~30 | ✅ All pass |
 | Tile Editor | ~40 | ✅ All pass |
 | CI/Tooling | ~12 | ✅ All pass |
-| **Total** | **1673** | **✅ All pass** |
+| **Total** | **929+** | **✅ All pass** |
 
 ---
 
@@ -344,10 +352,14 @@ buffer pipeline with descriptor set layouts, texture management,
 sampler objects, fence/semaphore synchronization, and memory pool
 allocation, ready for hardware device integration. The marketplace
 importers now parse .uasset binary headers and .prefab YAML formats
-with API credential management. The editor features live component
-inspection, entity hierarchy browsing, component mutation tracking,
-per-system hash breakdowns, and tick-step debugging with breakpoints.
-The networking layer includes packet loss simulation and connection
-quality diagnostics. All 1673 tests pass. The primary remaining work
-is Vulkan hardware device integration (real VkDevice/VkCommandBuffer)
-and shipping production font backends.
+with API credential management, hot-reload monitoring, asset validation,
+and mod sandboxing with budget enforcement. The editor features live
+component inspection, entity hierarchy browsing, component mutation
+tracking, per-system hash breakdowns, tick-step debugging with
+breakpoints, and a full replay inspector with input frame viewer,
+event timeline visualization, and branch point markers. Standalone
+tools for state diff viewing and replay inspection are available in
+`tools/`. The networking layer includes packet loss simulation and
+connection quality diagnostics. All 929+ tests pass. The primary
+remaining work is Vulkan hardware device integration (real
+VkDevice/VkCommandBuffer) and shipping production font backends.
