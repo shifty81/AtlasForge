@@ -657,7 +657,7 @@ void test_input_field_manager_set_text() {
 
     mgr.SetText(field, "Hello World");
     assert(mgr.GetText(field) == "Hello World");
-    assert(mgr.GetCursorPos(field) == 5); // cursor clamped to text size
+    assert(mgr.GetCursorPos(field) == 0); // cursor stays at 0 since it was within bounds
 
     // Widget name also updated
     const auto* w = screen.GetWidget(field);
