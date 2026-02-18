@@ -191,4 +191,30 @@ private:
     uint64_t m_nextRequestId = 1;
 };
 
+/// Factory that creates and configures an HttpLLMBackend from environment
+/// variables or explicit parameters.
+///
+/// Environment variables (used when Create() is called without arguments):
+///   ATLAS_LLM_ENDPOINT  — API endpoint (e.g. "https://api.openai.com/v1/chat/completions")
+///   ATLAS_LLM_MODEL     — Model name (e.g. "gpt-4")
+///   ATLAS_LLM_API_KEY   — API key
+///   ATLAS_LLM_TIMEOUT   — Timeout in milliseconds (optional, default 30000)
+class LLMBackendFactory {
+public:
+    /// Create an HttpLLMBackend from environment variables.
+    /// Returns nullptr if required variables are missing.
+    static std::shared_ptr<HttpLLMBackend> CreateFromEnv(atlas::asset::IHttpClient* httpClient);
+
+    /// Create an HttpLLMBackend with explicit parameters.
+    static std::shared_ptr<HttpLLMBackend> Create(
+        atlas::asset::IHttpClient* httpClient,
+        const std::string& endpoint,
+        const std::string& model,
+        const std::string& apiKey,
+        uint32_t timeoutMs = 30000);
+
+    /// Check if the required environment variables are set.
+    static bool HasEnvConfig();
+};
+
 } // namespace atlas::ai

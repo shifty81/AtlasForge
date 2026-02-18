@@ -669,7 +669,13 @@ size_t VulkanRenderer::PoolFreeSize(uint32_t poolId) const {
     return 0;
 }
 
-// --- Vulkan device management (stub – real VkDevice integration pending Vulkan SDK) ---
+// --- Vulkan device management ---
+// When ATLAS_HAS_VULKAN_SDK is defined, InitDevice() calls into the real
+// Vulkan API.  Otherwise a simulated GPU is used for testing.
+
+#ifdef ATLAS_HAS_VULKAN_SDK
+#include <vulkan/vulkan.h>
+#endif
 
 bool VulkanRenderer::InitDevice(const VkDeviceConfig& config) {
     if (m_deviceInitialized) {
@@ -678,6 +684,125 @@ bool VulkanRenderer::InitDevice(const VkDeviceConfig& config) {
     }
     m_deviceConfig = config;
 
+#ifdef ATLAS_HAS_VULKAN_SDK
+    // --- Real Vulkan SDK path ---
+    VkApplicationInfo appInfo{};
+    appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
+    appInfo.pApplicationName = config.applicationName.c_str();
+    appInfo.applicationVersion = config.applicationVersion;
+    appInfo.apiVersion = VK_API_VERSION_1_3;
+
+    VkInstanceCreateInfo createInfo{};
+    createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+    createInfo.pApplicationInfo = &appInfo;
+
+    VkInstance instance = VK_NULL_HANDLE;
+    VkResult result = vkCreateInstance(&createInfo, nullptr, &instance);
+    if (result != VK_SUCCESS || instance == VK_NULL_HANDLE) {
+        Logger::Warn("[VulkanRenderer] vkCreateInstance failed, falling back to stub");
+        goto stub_fallback;
+    }
+
+    {
+        uint32_t deviceCount = 0;
+        vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
+        if (deviceCount == 0) {
+            vkDestroyInstance(instance, nullptr);
+            Logger::Warn("[VulkanRenderer] No Vulkan physical devices found, falling back to stub");
+            goto stub_fallback;
+        }
+
+        std::vector<VkPhysicalDevice> physDevices(deviceCount);
+        vkEnumeratePhysicalDevices(instance, &deviceCount, physDevices.data());
+
+        m_availableDevices.clear();
+        for (const auto& pd : physDevices) {
+            VkPhysicalDeviceProperties props;
+            vkGetPhysicalDeviceProperties(pd, &props);
+
+            VkPhysicalDeviceMemoryProperties memProps;
+            vkGetPhysicalDeviceMemoryProperties(pd, &memProps);
+
+            VkPhysicalDeviceFeatures features;
+            vkGetPhysicalDeviceFeatures(pd, &features);
+
+            VkPhysicalDeviceInfo info;
+            info.deviceName = props.deviceName;
+            info.vendorId = props.vendorID;
+            info.deviceId = props.deviceID;
+            info.driverVersion = props.driverVersion;
+            info.apiVersion = props.apiVersion;
+            info.supportsGeometryShader = features.geometryShader;
+            info.supportsTessellation = features.tessellationShader;
+            info.supportsCompute = true;
+
+            switch (props.deviceType) {
+                case VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU:
+                    info.deviceType = VkPhysicalDeviceInfo::DeviceType::IntegratedGPU;
+                    break;
+                case VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU:
+                    info.deviceType = VkPhysicalDeviceInfo::DeviceType::DiscreteGPU;
+                    break;
+                case VK_PHYSICAL_DEVICE_TYPE_VIRTUAL_GPU:
+                    info.deviceType = VkPhysicalDeviceInfo::DeviceType::VirtualGPU;
+                    break;
+                case VK_PHYSICAL_DEVICE_TYPE_CPU:
+                    info.deviceType = VkPhysicalDeviceInfo::DeviceType::CPU;
+                    break;
+                default:
+                    info.deviceType = VkPhysicalDeviceInfo::DeviceType::Other;
+                    break;
+            }
+
+            size_t totalMem = 0;
+            for (uint32_t i = 0; i < memProps.memoryHeapCount; ++i) {
+                if (memProps.memoryHeaps[i].flags & VK_MEMORY_HEAP_DEVICE_LOCAL_BIT) {
+                    totalMem += memProps.memoryHeaps[i].size;
+                }
+            }
+            info.totalMemoryBytes = totalMem;
+
+            m_availableDevices.push_back(info);
+        }
+
+        // Select first discrete GPU, or first device
+        size_t selectedIdx = 0;
+        for (size_t i = 0; i < m_availableDevices.size(); ++i) {
+            if (m_availableDevices[i].deviceType == VkPhysicalDeviceInfo::DeviceType::DiscreteGPU) {
+                selectedIdx = i;
+                break;
+            }
+        }
+        m_selectedDevice = m_availableDevices[selectedIdx];
+
+        // Enumerate queue families for selected device
+        uint32_t queueFamilyCount = 0;
+        vkGetPhysicalDeviceQueueFamilyProperties(physDevices[selectedIdx], &queueFamilyCount, nullptr);
+        std::vector<VkQueueFamilyProperties> queueFamilyProps(queueFamilyCount);
+        vkGetPhysicalDeviceQueueFamilyProperties(physDevices[selectedIdx], &queueFamilyCount, queueFamilyProps.data());
+
+        m_queueFamilies.clear();
+        for (uint32_t i = 0; i < queueFamilyCount; ++i) {
+            VkQueueFamilyInfo qfi;
+            qfi.index = i;
+            qfi.queueCount = queueFamilyProps[i].queueCount;
+            qfi.supportsGraphics = (queueFamilyProps[i].queueFlags & VK_QUEUE_GRAPHICS_BIT) != 0;
+            qfi.supportsCompute = (queueFamilyProps[i].queueFlags & VK_QUEUE_COMPUTE_BIT) != 0;
+            qfi.supportsTransfer = (queueFamilyProps[i].queueFlags & VK_QUEUE_TRANSFER_BIT) != 0;
+            qfi.supportsPresent = qfi.supportsGraphics; // Simplified; real check requires surface
+            m_queueFamilies.push_back(qfi);
+        }
+
+        vkDestroyInstance(instance, nullptr);
+    }
+
+    m_deviceInitialized = true;
+    Logger::Info("[VulkanRenderer] Device initialized (Vulkan SDK): " + m_selectedDevice.deviceName +
+                 " (app: " + config.applicationName + ")");
+    return true;
+
+stub_fallback:
+#endif
     // Simulate discovering a GPU.
     VkPhysicalDeviceInfo gpu;
     gpu.deviceName = "Atlas Simulated GPU";
@@ -725,7 +850,7 @@ bool VulkanRenderer::InitDevice(const VkDeviceConfig& config) {
 
     m_deviceInitialized = true;
 
-    Logger::Info("[VulkanRenderer] Device initialized: " + gpu.deviceName +
+    Logger::Info("[VulkanRenderer] Device initialized (stub): " + gpu.deviceName +
                  " (app: " + config.applicationName + ")");
     return true;
 }

@@ -132,6 +132,138 @@ HttpResponse SocketHttpClient::DownloadFile(
     return resp;
 }
 
+HttpResponse SocketHttpClient::Post(
+    const std::string& url,
+    const std::string& body,
+    const std::vector<std::pair<std::string, std::string>>& headers) {
+
+    std::string host, path;
+    uint16_t port = 80;
+
+    if (!ParseURL(url, host, port, path)) {
+        HttpResponse resp;
+        resp.statusCode = 0;
+        resp.errorMessage = "Invalid or unsupported URL: " + url;
+        return resp;
+    }
+
+    ++m_requestCount;
+    atlas::Logger::Info("[SocketHttpClient] POST " + url);
+    return DoPost(host, port, path, body, headers);
+}
+
+HttpResponse SocketHttpClient::DoPost(
+    const std::string& host, uint16_t port,
+    const std::string& path,
+    const std::string& body,
+    const std::vector<std::pair<std::string, std::string>>& headers) {
+
+    HttpResponse resp;
+
+#ifndef _WIN32
+    int sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    if (sockfd < 0) {
+        resp.statusCode = 0;
+        resp.errorMessage = "Failed to create socket";
+        return resp;
+    }
+
+    // Set connect and read timeouts
+    struct timeval tv{};
+    tv.tv_sec = static_cast<time_t>(m_config.connectTimeoutMs / 1000);
+    tv.tv_usec = static_cast<suseconds_t>((m_config.connectTimeoutMs % 1000) * 1000);
+    setsockopt(sockfd, SOL_SOCKET, SO_SNDTIMEO, &tv, sizeof(tv));
+
+    struct timeval rtv{};
+    rtv.tv_sec = static_cast<time_t>(m_config.readTimeoutMs / 1000);
+    rtv.tv_usec = static_cast<suseconds_t>((m_config.readTimeoutMs % 1000) * 1000);
+    setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, &rtv, sizeof(rtv));
+
+    // Resolve host using getaddrinfo (thread-safe, IPv4/IPv6 aware)
+    struct addrinfo hints{}, *result = nullptr;
+    hints.ai_family = AF_INET;
+    hints.ai_socktype = SOCK_STREAM;
+    std::string portStr = std::to_string(port);
+    int gai = getaddrinfo(host.c_str(), portStr.c_str(), &hints, &result);
+    if (gai != 0 || !result) {
+        close(sockfd);
+        resp.statusCode = 0;
+        resp.errorMessage = "Failed to resolve host: " + host;
+        return resp;
+    }
+
+    if (connect(sockfd, result->ai_addr, result->ai_addrlen) < 0) {
+        freeaddrinfo(result);
+        close(sockfd);
+        resp.statusCode = 0;
+        resp.errorMessage = "Connection refused: " + host + ":" + std::to_string(port);
+        return resp;
+    }
+    freeaddrinfo(result);
+
+    // Build HTTP POST request
+    std::string request = "POST " + path + " HTTP/1.1\r\n";
+    request += "Host: " + host + "\r\n";
+    request += "User-Agent: " + m_config.userAgent + "\r\n";
+    request += "Connection: close\r\n";
+    request += "Content-Length: " + std::to_string(body.size()) + "\r\n";
+    for (const auto& [key, value] : headers) {
+        request += key + ": " + value + "\r\n";
+    }
+    request += "\r\n";
+    request += body;
+
+    ssize_t sent = send(sockfd, request.c_str(), request.size(), 0);
+    if (sent < 0) {
+        close(sockfd);
+        resp.statusCode = 0;
+        resp.errorMessage = "Failed to send request";
+        return resp;
+    }
+
+    // Read response
+    std::string rawResponse;
+    char buf[4096];
+    while (true) {
+        ssize_t n = recv(sockfd, buf, sizeof(buf), 0);
+        if (n <= 0) break;
+        rawResponse.append(buf, static_cast<size_t>(n));
+        if (rawResponse.size() > m_config.maxResponseSizeBytes) {
+            atlas::Logger::Info("[SocketHttpClient] Response truncated at " +
+                                std::to_string(m_config.maxResponseSizeBytes) + " bytes");
+            break;
+        }
+    }
+    close(sockfd);
+
+    // Parse status line
+    size_t statusEnd = rawResponse.find("\r\n");
+    if (statusEnd == std::string::npos) {
+        resp.statusCode = 0;
+        resp.errorMessage = "Invalid HTTP response";
+        return resp;
+    }
+
+    std::string statusLine = rawResponse.substr(0, statusEnd);
+    size_t spacePos = statusLine.find(' ');
+    if (spacePos != std::string::npos) {
+        std::string codeStr = statusLine.substr(spacePos + 1, 3);
+        try { resp.statusCode = std::stoi(codeStr); } catch (...) { resp.statusCode = 0; }
+    }
+
+    // Find body after \r\n\r\n
+    size_t headerEnd = rawResponse.find("\r\n\r\n");
+    if (headerEnd != std::string::npos) {
+        resp.body = rawResponse.substr(headerEnd + 4);
+    }
+#else
+    resp.statusCode = 0;
+    resp.errorMessage = "Socket HTTP not supported on Windows";
+#endif
+
+    return resp;
+}
+
 HttpResponse SocketHttpClient::DoGet(
     const std::string& host, uint16_t port,
     const std::string& path,

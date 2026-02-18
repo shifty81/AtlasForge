@@ -26,6 +26,11 @@ public:
         const std::string& url,
         const std::vector<std::pair<std::string, std::string>>& headers = {}) override;
 
+    HttpResponse Post(
+        const std::string& url,
+        const std::string& body,
+        const std::vector<std::pair<std::string, std::string>>& headers = {}) override;
+
     HttpResponse DownloadFile(
         const std::string& url,
         const std::string& outputPath,
@@ -52,6 +57,12 @@ private:
     HttpResponse DoGet(const std::string& host, uint16_t port,
                        const std::string& path,
                        const std::vector<std::pair<std::string, std::string>>& headers);
+
+    /// Internal: perform raw HTTP POST and return response
+    HttpResponse DoPost(const std::string& host, uint16_t port,
+                        const std::string& path,
+                        const std::string& body,
+                        const std::vector<std::pair<std::string, std::string>>& headers);
 };
 
 } // namespace atlas::asset
