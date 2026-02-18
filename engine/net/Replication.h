@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <unordered_map>
+#include <unordered_set>
 #include <functional>
 
 namespace atlas::ecs { class World; }
@@ -70,13 +71,16 @@ public:
     void SetUnreliableCallback(std::function<void(const std::vector<uint8_t>&)> cb);
 
 private:
+    // Shared implementation for CollectDelta and CollectUnreliableDelta
+    std::vector<uint8_t> CollectDeltaFiltered(uint32_t tick, bool collectReliable);
+
     ecs::World* m_world = nullptr;
     std::vector<ReplicationRule> m_rules;
     // typeTag -> set of dirty entity IDs
     std::unordered_map<uint32_t, std::vector<uint32_t>> m_dirty;
 
     // Manual replication triggers
-    std::vector<uint32_t> m_manuallyTriggered;
+    std::unordered_set<uint32_t> m_manuallyTriggered;
 
     // Callbacks for reliable/unreliable deltas
     std::function<void(const std::vector<uint8_t>&)> m_reliableCallback;
