@@ -1,6 +1,6 @@
 # Atlas Engine — Project Completion Status
 
-> Last updated: 2026-02-17
+> Last updated: 2026-02-18
 >
 > This document provides a comprehensive inventory of what is complete,
 > what is partially implemented, and what remains to bring Atlas to a
@@ -11,18 +11,21 @@
 ## Executive Summary
 
 Atlas is a deterministic, data-driven game engine built in C++20. The
-project is **approximately 95–98% complete** across its core systems.
-All 1483 tests pass. The engine compiles and runs on Linux with
+project is **approximately 96–99% complete** across its core systems.
+All 1673 tests pass. The engine compiles and runs on Linux with
 OpenGL and Vulkan rendering backends. The Vulkan renderer records
 and submits draw commands through a GPU command buffer pipeline with
 render pass, pipeline state, GPU resource management, descriptor set
-layouts, texture management, and sampler objects. The networking
+layouts, texture management, sampler objects, fence/semaphore
+synchronization, and memory pool allocation. The networking
 layer includes packet loss simulation and connection quality
 diagnostics. The asset registry supports dependency tracking with
 circular dependency detection and topological build ordering. The
-AI assistant has an offline template backend. The marketplace system
-has both a null and a socket-based HTTP client for remote API
-downloads. The editor attach protocol enforces permission tiers.
+marketplace importers parse .uasset binary headers and .prefab YAML
+formats with API credential management. The AI assistant has an
+offline template backend. The editor features live component
+inspection, entity hierarchy browsing, component mutation tracking,
+per-system hash breakdowns, and tick-step debugging with breakpoints.
 Server rules support config-driven hot-reload with change tracking.
 
 ---
@@ -60,6 +63,7 @@ Server rules support config-driven hot-reload with change tracking.
 - [x] Desync reproducer
 - [x] Determinism crash report bundle (`.atlascrash` manifest with state + replay + metadata)
 - [x] TLA+ model checker integration (CI stub mode)
+- [x] Tick-step debugger (step forward/backward/jump, tick and hash-mismatch breakpoints)
 
 ### Graph VM (`engine/graphvm/`)
 - [x] Graph compiler
@@ -166,7 +170,7 @@ Server rules support config-driven hot-reload with change tracking.
 - [x] Contributor rules (`ATLAS_CONTRIBUTOR_RULES.md`)
 
 ### Testing (`tests/`)
-- [x] 1495 tests across 160+ test files — all passing
+- [x] 1673 tests across 165+ test files — all passing
 - [x] Covers ECS, networking, replay, assets, UI, editor panels, graphs, etc.
 
 ---
@@ -215,6 +219,10 @@ commands via `UIDrawList`.
 - [x] HTTP client interface (`IHttpClient`, `NullHttpClient`)
 - [x] API download paths for itch.io, Unreal, Unity (via pluggable HTTP client)
 - [x] Socket-based HTTP client (`SocketHttpClient` with POSIX sockets, URL parsing, timeouts)
+- [x] API credential management (SetApiCredential, HasApiCredential)
+- [x] Unreal .uasset binary header parsing (magic number validation, version, class name)
+- [x] Unity .prefab YAML parsing (m_Name, m_MeshData, m_Materials extraction)
+- [x] Real format conversion (ConvertUAsset, ConvertUnityPrefab)
 
 ### AI Assistant (`editor/ai/`)
 - [x] AtlasAICore — intent registry, permissions, request routing
@@ -236,6 +244,9 @@ commands via `UIDrawList`.
 - [x] Descriptor set layout management (create, bind, query)
 - [x] Texture management (create, destroy, query, mip levels)
 - [x] Sampler management (create, destroy, filter/wrap modes)
+- [x] Fence management (create, destroy, wait, reset, signal query)
+- [x] Semaphore management (create, destroy, signal, wait)
+- [x] Memory pool management (create, destroy, allocate, free, usage tracking)
 - [ ] Full hardware Vulkan device integration (requires Vulkan SDK)
 
 ### Font System (`engine/ui/FontBootstrap.cpp`)
@@ -270,13 +281,13 @@ Assets             ✅ 100%   Registry, import, cook, validate, hot-reload, depe
 World Generation   ✅ 100%   Terrain, voxel, galaxy, streaming
 AI Systems         ✅ 100%   Behavior, memory, faction, strategy
 UI Framework       ✅ 100%   DrawList, SceneGraph, Layout, Events, DSL
-Rendering          ✅  98%   OpenGL working; Vulkan render pipeline (passes, states, resources, descriptors, textures, samplers) active (hardware device pending)
+Rendering          ✅  98%   OpenGL working; Vulkan render pipeline (passes, states, resources, descriptors, textures, samplers, fences, semaphores, memory pools) active (hardware device pending)
 Editor Logic       ✅ 100%   All panels have full business logic
 Editor Rendering   ✅ 100%   All panels produce draw commands via UIDrawList
 Production         ✅ 100%   Full packager pipeline
 CI/Enforcement     ✅ 100%   Determinism gate, contract bot, crash reporter
 Documentation      ✅  95%   43 docs; minor updates needed
-Testing            ✅ 100%   1495 tests, all passing
+Testing            ✅ 100%   1673 tests, all passing
 ```
 
 ---
@@ -289,7 +300,7 @@ Testing            ✅ 100%   1495 tests, all passing
 | AtlasServer | ✅ | ✅ | Headless, no graphics deps |
 | AtlasClient | ✅ | ✅ | Player runtime |
 | AtlasRuntime | ✅ | ✅ | Unified CLI runtime |
-| AtlasTests | ✅ | ✅ | 1483 tests passing |
+| AtlasTests | ✅ | ✅ | 1673 tests passing |
 | TileEditor | ✅ | ✅ | Standalone tile tool |
 
 ---
@@ -311,7 +322,7 @@ Testing            ✅ 100%   1495 tests, all passing
 | World Gen | ~30 | ✅ All pass |
 | Tile Editor | ~40 | ✅ All pass |
 | CI/Tooling | ~12 | ✅ All pass |
-| **Total** | **1495** | **✅ All pass** |
+| **Total** | **1673** | **✅ All pass** |
 
 ---
 
@@ -329,14 +340,14 @@ Atlas is architecturally mature and functionally near-complete. The core
 simulation, determinism enforcement, networking, replay, asset, and
 build systems are all production-ready. The Vulkan renderer records
 draw commands and submits them through a triple-buffered GPU command
-buffer pipeline with descriptor set layouts, texture management, and
-sampler objects, ready for hardware device integration. The networking
-layer includes packet loss simulation and connection quality
-diagnostics. The asset registry supports dependency tracking with
-circular dependency detection and topological build ordering. The AI
-assistant has an offline template backend and the marketplace system
-has both null and socket-based HTTP clients for remote downloads.
-The editor enforces permission tiers and server rules support
-hot-reload. All 1483 tests pass. The primary remaining work is
-Vulkan hardware device integration (real VkDevice/VkCommandBuffer)
+buffer pipeline with descriptor set layouts, texture management,
+sampler objects, fence/semaphore synchronization, and memory pool
+allocation, ready for hardware device integration. The marketplace
+importers now parse .uasset binary headers and .prefab YAML formats
+with API credential management. The editor features live component
+inspection, entity hierarchy browsing, component mutation tracking,
+per-system hash breakdowns, and tick-step debugging with breakpoints.
+The networking layer includes packet loss simulation and connection
+quality diagnostics. All 1673 tests pass. The primary remaining work
+is Vulkan hardware device integration (real VkDevice/VkCommandBuffer)
 and shipping production font backends.
