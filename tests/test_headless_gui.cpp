@@ -1,4 +1,5 @@
 #include "../engine/ui/HeadlessGUI.h"
+#include "../engine/ui/DiagnosticsOverlay.h"
 #include <iostream>
 #include <cassert>
 #include <string>
@@ -13,7 +14,7 @@ void test_headless_gui_init() {
     gui.Init(&manager);
 
     assert(gui.IsInitialized());
-    assert(gui.CommandCount() == 6);
+    assert(gui.CommandCount() == 10);
 
     gui.Shutdown();
     assert(!gui.IsInitialized());
@@ -30,7 +31,7 @@ void test_headless_gui_available_commands() {
     gui.Init(&manager);
 
     auto commands = gui.AvailableCommands();
-    assert(commands.size() == 6);
+    assert(commands.size() == 10);
 
     // Check that all built-in commands are present
     bool hasHelp = false, hasStatus = false, hasWidgetList = false;
@@ -202,7 +203,7 @@ void test_headless_gui_custom_command() {
         return {true, "pong"};
     });
 
-    assert(gui.CommandCount() == 7);
+    assert(gui.CommandCount() == 11);
 
     auto result = gui.ExecuteCommand("custom.ping");
     assert(result.success);
@@ -234,4 +235,75 @@ void test_headless_gui_quoted_args() {
     gui.Shutdown();
     manager.Shutdown();
     std::cout << "[PASS] test_headless_gui_quoted_args" << std::endl;
+}
+
+void test_headless_gui_diag_toggle() {
+    UIManager manager;
+    manager.Init(GUIContext::Server);
+
+    HeadlessGUI gui;
+    gui.Init(&manager);
+
+    atlas::ui::DiagnosticsOverlay::SetEnabled(false);
+
+    auto result = gui.ExecuteCommand("diag.toggle");
+    assert(result.success);
+    assert(result.output == "on");
+    assert(atlas::ui::DiagnosticsOverlay::IsEnabled());
+
+    result = gui.ExecuteCommand("diag.toggle");
+    assert(result.success);
+    assert(result.output == "off");
+    assert(!atlas::ui::DiagnosticsOverlay::IsEnabled());
+
+    gui.Shutdown();
+    manager.Shutdown();
+    std::cout << "[PASS] test_headless_gui_diag_toggle" << std::endl;
+}
+
+void test_headless_gui_diag_show_hide() {
+    UIManager manager;
+    manager.Init(GUIContext::Server);
+
+    HeadlessGUI gui;
+    gui.Init(&manager);
+
+    atlas::ui::DiagnosticsOverlay::SetEnabled(false);
+
+    auto result = gui.ExecuteCommand("diag.show");
+    assert(result.success);
+    assert(result.output == "on");
+    assert(atlas::ui::DiagnosticsOverlay::IsEnabled());
+
+    result = gui.ExecuteCommand("diag.hide");
+    assert(result.success);
+    assert(result.output == "off");
+    assert(!atlas::ui::DiagnosticsOverlay::IsEnabled());
+
+    gui.Shutdown();
+    manager.Shutdown();
+    std::cout << "[PASS] test_headless_gui_diag_show_hide" << std::endl;
+}
+
+void test_headless_gui_diag_status() {
+    UIManager manager;
+    manager.Init(GUIContext::Server);
+
+    HeadlessGUI gui;
+    gui.Init(&manager);
+
+    atlas::ui::DiagnosticsOverlay::SetEnabled(false);
+    auto result = gui.ExecuteCommand("diag.status");
+    assert(result.success);
+    assert(result.output == "off");
+
+    atlas::ui::DiagnosticsOverlay::SetEnabled(true);
+    result = gui.ExecuteCommand("diag.status");
+    assert(result.success);
+    assert(result.output == "on");
+
+    atlas::ui::DiagnosticsOverlay::SetEnabled(false);
+    gui.Shutdown();
+    manager.Shutdown();
+    std::cout << "[PASS] test_headless_gui_diag_status" << std::endl;
 }

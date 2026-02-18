@@ -1,6 +1,7 @@
 #include "../engine/core/Engine.h"
 #include "../engine/ui/UIEventRouter.h"
 #include "../engine/ui/DiagnosticsOverlay.h"
+#include "../engine/platform/PlatformWindow.h"
 #include <iostream>
 #include <cassert>
 
@@ -89,4 +90,13 @@ void test_diagnostics_overlay_toggle_state() {
     ui::DiagnosticsOverlay::SetEnabled(false);
 
     std::cout << "[PASS] test_diagnostics_overlay_toggle_state" << std::endl;
+}
+
+void test_f3_key_constant_defined() {
+    // Verify the platform-independent F3 key constant is defined and usable
+    assert(platform::kKeyF3 != 0);
+    // Ensure it doesn't conflict with printable ASCII
+    assert(platform::kKeyF3 > 127);
+
+    std::cout << "[PASS] test_f3_key_constant_defined" << std::endl;
 }

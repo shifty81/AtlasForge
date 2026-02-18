@@ -42,6 +42,10 @@ private:
     GUIQueryResult CmdEnqueue(const std::vector<std::string>& args);
     GUIQueryResult CmdHelp(const std::vector<std::string>& args);
     GUIQueryResult CmdStatus(const std::vector<std::string>& args);
+    GUIQueryResult CmdDiagToggle(const std::vector<std::string>& args);
+    GUIQueryResult CmdDiagShow(const std::vector<std::string>& args);
+    GUIQueryResult CmdDiagHide(const std::vector<std::string>& args);
+    GUIQueryResult CmdDiagStatus(const std::vector<std::string>& args);
 
     void RegisterBuiltinCommands();
 };
