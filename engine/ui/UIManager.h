@@ -9,6 +9,10 @@
 #include "TabManager.h"
 #include "ScrollManager.h"
 #include "ToolbarManager.h"
+#include "FocusManager.h"
+#include "TooltipManager.h"
+#include "DockManager.h"
+#include "InputFieldManager.h"
 #include <string>
 
 namespace atlas::ui {
@@ -98,6 +102,22 @@ public:
     ToolbarManager& GetToolbarManager();
     const ToolbarManager& GetToolbarManager() const;
 
+    /// Access the focus manager for widget focus tracking.
+    FocusManager& GetFocusManager();
+    const FocusManager& GetFocusManager() const;
+
+    /// Access the tooltip manager for hover tooltip display.
+    TooltipManager& GetTooltipManager();
+    const TooltipManager& GetTooltipManager() const;
+
+    /// Access the dock manager for panel docking.
+    DockManager& GetDockManager();
+    const DockManager& GetDockManager() const;
+
+    /// Access the input field manager for text editing.
+    InputFieldManager& GetInputFieldManager();
+    const InputFieldManager& GetInputFieldManager() const;
+
 private:
     void RenderWidget(UIRenderer* renderer, uint32_t widgetId, int depth = 0);
     static constexpr int kMaxRenderDepth = 64;
@@ -112,6 +132,10 @@ private:
     TabManager m_tabManager;
     ScrollManager m_scrollManager;
     ToolbarManager m_toolbarManager;
+    FocusManager m_focusManager;
+    TooltipManager m_tooltipManager;
+    DockManager m_dockManager;
+    InputFieldManager m_inputFieldManager;
     UIRenderer* m_renderer = nullptr;
     float m_viewportWidth = 0.0f;
     float m_viewportHeight = 0.0f;
