@@ -73,6 +73,10 @@ public:
     /// Check if the current tier allows a specific editor operation
     bool IsOperationAllowed(EditorOperation op) const;
 
+    /// Validate that an operation is allowed; returns true if permitted,
+    /// false otherwise. Requires the editor to be connected.
+    bool RequestOperation(EditorOperation op) const;
+
     /// Get list of allowed operations for the current tier
     std::vector<EditorOperation> AllowedOperations() const;
 

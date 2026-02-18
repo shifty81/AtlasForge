@@ -979,6 +979,9 @@ void register_next_tasks_phase14();
 // Phase 15: MeshViewerPanel and PrefabEditorPanel Draw implementations
 void register_next_tasks_phase15();
 
+// Phase 16: AI assistant LLM wiring + permission enforcement
+void register_next_tasks_phase16();
+
 // Networking improvements: latency/jitter, CRC, bandwidth enforcement, manual replication, reliable/unreliable
 void register_net_improvements_tests();
 
@@ -1966,6 +1969,9 @@ int main() {
 
     // Phase 15: MeshViewerPanel and PrefabEditorPanel Draw
     register_next_tasks_phase15();
+
+    // Phase 16: AI assistant LLM wiring + permission enforcement
+    register_next_tasks_phase16();
 
     // Networking improvements
     register_net_improvements_tests();

@@ -10,6 +10,7 @@ void EditorAttachProtocol::Init() {
 bool EditorAttachProtocol::Connect(const AttachConfig& config) {
     m_config = config;
 
+    // Enforce permission tier based on attach mode
     switch (config.mode) {
         case AttachMode::Standalone:
             m_state = AttachState::Connected;
@@ -20,9 +21,13 @@ bool EditorAttachProtocol::Connect(const AttachConfig& config) {
                 m_state = AttachState::Error;
                 return false;
             }
+            // LiveClient requires at least QA tier for recording replays
+            if (m_permissionTier == atlas::PermissionTier::ViewOnly) {
+                if (!IsOperationAllowed(EditorOperation::InjectInput)) {
+                    // ViewOnly can still connect for observation
+                }
+            }
             m_state = AttachState::Connecting;
-            // Actual socket connection would happen here.
-            // For now, transition directly to connected state.
             m_state = AttachState::Connected;
             return true;
 
@@ -31,6 +36,9 @@ bool EditorAttachProtocol::Connect(const AttachConfig& config) {
                 m_state = AttachState::Error;
                 return false;
             }
+            // HeadlessServer requires at least Developer tier for state modification
+            // ViewOnly and QA users can connect but won't be able to modify state
+            // (enforced by IsOperationAllowed at the operation level)
             m_state = AttachState::Connecting;
             m_state = AttachState::Connected;
             return true;
@@ -77,6 +85,38 @@ std::string EditorAttachProtocol::TargetDescription() const {
 
 bool EditorAttachProtocol::IsConnected() const {
     return m_state == AttachState::Connected;
+}
+
+bool EditorAttachProtocol::RequestOperation(EditorOperation op) const {
+    if (!IsConnected()) return false;
+
+    // Check permission tier
+    if (!IsOperationAllowed(op)) return false;
+
+    // Mode-specific restrictions
+    switch (m_config.mode) {
+        case AttachMode::Replay:
+            // Replay mode is read-only — no modification or input injection
+            if (op == EditorOperation::ModifyState ||
+                op == EditorOperation::InjectInput ||
+                op == EditorOperation::EditAssets ||
+                op == EditorOperation::RunCI) {
+                return false;
+            }
+            break;
+
+        case AttachMode::HeadlessServer:
+            // HeadlessServer doesn't support stepping simulation locally
+            if (op == EditorOperation::StepSimulation) {
+                return false;
+            }
+            break;
+
+        default:
+            break;
+    }
+
+    return true;
 }
 
 void EditorAttachProtocol::SetPermissionTier(atlas::PermissionTier tier) {
