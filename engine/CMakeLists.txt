@@ -151,6 +151,8 @@ add_library(AtlasEngine STATIC
     sim/WorldStateSerializer.cpp
     sim/ReplayVersioning.cpp
     sim/TickStepDebugger.cpp
+    sim/ComponentMigration.cpp
+    sim/SimMirror.cpp
     assets/AssetCategoryRegistry.cpp
     assets/ServerAssetValidator.cpp
     ai/LLMBackend.cpp
