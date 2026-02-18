@@ -1,6 +1,7 @@
 #include "LLMBackend.h"
 #include "../core/Logger.h"
 #include <algorithm>
+#include <cstdlib>
 
 namespace atlas::ai {
 
@@ -142,9 +143,7 @@ LLMResponse HttpLLMBackend::Complete(const LLMRequest& request) {
         {"Content-Type", "application/json"}
     };
 
-    // NOTE: IHttpClient only exposes Get(); the JSON body is passed via query
-    // string as a workaround. A real deployment should add a Post() method.
-    auto httpResp = m_httpClient->Get(m_endpoint + "?" + body, headers);
+    auto httpResp = m_httpClient->Post(m_endpoint, body, headers);
 
     if (httpResp.IsError()) {
         resp.success = false;
@@ -278,6 +277,47 @@ LLMResponse HttpLLMBackend::ParseResponse(const std::string& responseBody,
     constexpr uint32_t kAvgCharsPerToken = 4;
     resp.tokensUsed = static_cast<uint32_t>(content.size() / kAvgCharsPerToken + 1);
     return resp;
+}
+
+// ============================================================
+// LLMBackendFactory
+// ============================================================
+
+std::shared_ptr<HttpLLMBackend> LLMBackendFactory::CreateFromEnv(atlas::asset::IHttpClient* httpClient) {
+    const char* endpoint = std::getenv("ATLAS_LLM_ENDPOINT");
+    const char* model = std::getenv("ATLAS_LLM_MODEL");
+    const char* apiKey = std::getenv("ATLAS_LLM_API_KEY");
+
+    if (!endpoint || !model || !apiKey) {
+        return nullptr;
+    }
+
+    uint32_t timeout = 30000;
+    const char* timeoutStr = std::getenv("ATLAS_LLM_TIMEOUT");
+    if (timeoutStr) {
+        try { timeout = static_cast<uint32_t>(std::stoul(timeoutStr)); } catch (...) {}
+    }
+
+    return Create(httpClient, endpoint, model, apiKey, timeout);
+}
+
+std::shared_ptr<HttpLLMBackend> LLMBackendFactory::Create(
+    atlas::asset::IHttpClient* httpClient,
+    const std::string& endpoint,
+    const std::string& model,
+    const std::string& apiKey,
+    uint32_t timeoutMs) {
+
+    auto backend = std::make_shared<HttpLLMBackend>(httpClient, endpoint, model);
+    backend->SetApiKey(apiKey);
+    backend->SetTimeoutMs(timeoutMs);
+    return backend;
+}
+
+bool LLMBackendFactory::HasEnvConfig() {
+    return std::getenv("ATLAS_LLM_ENDPOINT") != nullptr &&
+           std::getenv("ATLAS_LLM_MODEL") != nullptr &&
+           std::getenv("ATLAS_LLM_API_KEY") != nullptr;
 }
 
 } // namespace atlas::ai

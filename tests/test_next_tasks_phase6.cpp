@@ -436,6 +436,17 @@ public:
         return resp;
     }
 
+    atlas::asset::HttpResponse Post(
+        const std::string& url,
+        const std::string& body,
+        const std::vector<std::pair<std::string, std::string>>& headers) override {
+        atlas::asset::HttpResponse resp;
+        resp.statusCode = 200;
+        resp.body = R"({"id": "test", "name": "Test Asset"})";
+        lastGetUrl = url;
+        return resp;
+    }
+
     atlas::asset::HttpResponse DownloadFile(
         const std::string& url,
         const std::string& outputPath,

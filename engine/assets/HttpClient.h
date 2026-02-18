@@ -39,6 +39,12 @@ public:
         const std::string& url,
         const std::vector<std::pair<std::string, std::string>>& headers = {}) = 0;
     
+    /// Perform a POST request with a body and return the response
+    virtual HttpResponse Post(
+        const std::string& url,
+        const std::string& body,
+        const std::vector<std::pair<std::string, std::string>>& headers = {}) = 0;
+
     /// Download a file from a URL to a local path
     virtual HttpResponse DownloadFile(
         const std::string& url,
@@ -53,7 +59,12 @@ public:
     HttpResponse Get(
         const std::string& url,
         const std::vector<std::pair<std::string, std::string>>& headers = {}) override;
-    
+
+    HttpResponse Post(
+        const std::string& url,
+        const std::string& body,
+        const std::vector<std::pair<std::string, std::string>>& headers = {}) override;
+
     HttpResponse DownloadFile(
         const std::string& url,
         const std::string& outputPath,

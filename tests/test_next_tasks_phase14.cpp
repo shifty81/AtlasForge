@@ -235,6 +235,7 @@ void test_vk_header_version_stub() {
 class LLMMockHttpClient : public atlas::asset::IHttpClient {
 public:
     std::string lastUrl;
+    std::string lastPostBody;
     std::vector<std::pair<std::string, std::string>> lastHeaders;
     int32_t mockStatusCode = 200;
     std::string mockBody;
@@ -244,6 +245,20 @@ public:
         const std::string& url,
         const std::vector<std::pair<std::string, std::string>>& headers = {}) override {
         lastUrl = url;
+        lastHeaders = headers;
+        atlas::asset::HttpResponse resp;
+        resp.statusCode = mockStatusCode;
+        resp.body = mockBody;
+        resp.errorMessage = mockError;
+        return resp;
+    }
+
+    atlas::asset::HttpResponse Post(
+        const std::string& url,
+        const std::string& body,
+        const std::vector<std::pair<std::string, std::string>>& headers = {}) override {
+        lastUrl = url;
+        lastPostBody = body;
         lastHeaders = headers;
         atlas::asset::HttpResponse resp;
         resp.statusCode = mockStatusCode;
@@ -550,6 +565,104 @@ void test_font_init_adds_search_path() {
 }
 
 // ---------------------------------------------------------------
+// Post() method tests
+// ---------------------------------------------------------------
+
+void test_http_llm_uses_post() {
+    LLMMockHttpClient client;
+    client.mockStatusCode = 200;
+    client.mockBody = R"({"choices":[{"message":{"content":"post reply"}}]})";
+
+    HttpLLMBackend backend(&client, "https://api.example.com/v1/chat", "gpt-4");
+    backend.SetApiKey("sk-test");
+
+    LLMRequest req;
+    req.prompt = "Hello via POST";
+    LLMResponse resp = backend.Complete(req);
+
+    assert(resp.success);
+    assert(resp.text == "post reply");
+    // Verify POST body was sent (not via URL query string)
+    assert(!client.lastPostBody.empty());
+    assert(client.lastPostBody.find("\"model\":\"gpt-4\"") != std::string::npos);
+    assert(client.lastPostBody.find("Hello via POST") != std::string::npos);
+    // URL should be the endpoint itself, not appended with query
+    assert(client.lastUrl == "https://api.example.com/v1/chat");
+    std::cout << "[PASS] test_http_llm_uses_post" << std::endl;
+}
+
+void test_null_http_client_post() {
+    atlas::asset::NullHttpClient nullClient;
+    auto resp = nullClient.Post("http://example.com", "{}", {});
+    assert(resp.IsError());
+    assert(!resp.errorMessage.empty());
+    std::cout << "[PASS] test_null_http_client_post" << std::endl;
+}
+
+// ---------------------------------------------------------------
+// LLMBackendFactory tests
+// ---------------------------------------------------------------
+
+void test_llm_factory_create_explicit() {
+    LLMMockHttpClient client;
+    auto backend = LLMBackendFactory::Create(&client, "https://api.example.com", "gpt-4", "sk-key", 5000);
+    assert(backend != nullptr);
+    assert(backend->GetEndpoint() == "https://api.example.com");
+    assert(backend->GetModel() == "gpt-4");
+    assert(backend->HasApiKey());
+    assert(backend->GetTimeoutMs() == 5000);
+    assert(backend->IsAvailable());
+    std::cout << "[PASS] test_llm_factory_create_explicit" << std::endl;
+}
+
+void test_llm_factory_no_env() {
+    // When env vars are not set, CreateFromEnv returns nullptr
+    // (we cannot guarantee env state, but at least HasEnvConfig works)
+    bool hasConfig = LLMBackendFactory::HasEnvConfig();
+    LLMMockHttpClient client;
+    auto backend = LLMBackendFactory::CreateFromEnv(&client);
+    if (!hasConfig) {
+        assert(backend == nullptr);
+    }
+    std::cout << "[PASS] test_llm_factory_no_env" << std::endl;
+}
+
+void test_llm_factory_create_and_complete() {
+    LLMMockHttpClient client;
+    client.mockStatusCode = 200;
+    client.mockBody = R"({"choices":[{"message":{"content":"factory test"}}]})";
+
+    auto backend = LLMBackendFactory::Create(&client, "https://api.example.com", "gpt-4", "sk-test-key");
+    LLMRequest req;
+    req.prompt = "factory prompt";
+    LLMResponse resp = backend->Complete(req);
+    assert(resp.success);
+    assert(resp.text == "factory test");
+    std::cout << "[PASS] test_llm_factory_create_and_complete" << std::endl;
+}
+
+// ---------------------------------------------------------------
+// Font: Inter-Regular.ttf loading test
+// ---------------------------------------------------------------
+
+void test_font_init_with_inter_regular() {
+    // Use the real assets directory with Inter-Regular.ttf
+    std::string assetDir = std::string(CMAKE_SOURCE_DIR) + "/assets";
+    FontBootstrap fb;
+    bool ok = fb.Init(assetDir);
+
+    // If the font file exists, it should load successfully
+    std::string fontPath = assetDir + "/fonts/Inter-Regular.ttf";
+    if (std::filesystem::exists(fontPath)) {
+        assert(ok);
+        assert(fb.IsReady());
+        assert(fb.GetFontName() == "Inter");
+        assert(!fb.IsUsingFallback());
+    }
+    std::cout << "[PASS] test_font_init_with_inter_regular" << std::endl;
+}
+
+// ---------------------------------------------------------------
 // Registration
 // ---------------------------------------------------------------
 
@@ -594,4 +707,14 @@ void register_next_tasks_phase14() {
     test_font_load_nonexistent();
     test_font_load_empty_path();
     test_font_init_adds_search_path();
+
+    std::cout << "\n--- Phase 14: HTTP Post & LLM Factory ---" << std::endl;
+    test_http_llm_uses_post();
+    test_null_http_client_post();
+    test_llm_factory_create_explicit();
+    test_llm_factory_no_env();
+    test_llm_factory_create_and_complete();
+
+    std::cout << "\n--- Phase 14: Font Bundling ---" << std::endl;
+    test_font_init_with_inter_regular();
 }
