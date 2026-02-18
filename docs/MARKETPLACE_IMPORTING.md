@@ -159,11 +159,15 @@ Downloaded assets are cached to avoid redundant downloads:
 - ✅ itch.io integration (stub)
 - ✅ Unreal/Unity stubs for future implementation
 
-### Phase 2 (Planned)
-- [ ] Real API integration for Unreal Engine Marketplace
-- [ ] Real API integration for Unity Asset Store
-- [ ] Actual .uasset parser and converter
-- [ ] Actual .prefab parser and converter
+### Phase 2 (Complete)
+- ✅ Real API integration for Unreal Engine Marketplace
+- ✅ Real API integration for Unity Asset Store
+- ✅ .uasset binary header parser and converter
+- ✅ .prefab YAML parser and converter
+- ✅ API credential management
+- ✅ Hot-reload monitoring for marketplace assets
+- ✅ Asset validation dashboard
+- ✅ Mod asset sandboxing with budget enforcement
 
 ### Phase 3 (Future)
 - [ ] Steam Workshop integration
@@ -172,6 +176,121 @@ Downloaded assets are cached to avoid redundant downloads:
 - [ ] Batch import operations
 - [ ] Asset update notifications
 - [ ] Automatic dependency resolution
+
+## API Setup
+
+### itch.io
+itch.io public assets require no API key. For private/paid assets:
+
+1. Generate an API key at https://itch.io/user/settings/api-keys
+2. Pass the key via `MarketplaceImportOptions::apiKey`:
+
+```cpp
+MarketplaceImportOptions options;
+options.apiKey = "YOUR_ITCHIO_API_KEY";
+```
+
+### Unreal Engine Marketplace
+Requires Epic Games Store API credentials:
+
+1. Obtain an API credential through the Epic Games Developer Portal.
+2. Set the credential on the importer:
+
+```cpp
+auto unreal = std::make_unique<UnrealMarketplaceImporter>();
+unreal->SetApiCredential("YOUR_EPIC_CREDENTIAL");
+
+// Or set via the options:
+MarketplaceImportOptions options;
+options.apiKey = "YOUR_EPIC_CREDENTIAL";
+```
+
+3. The importer validates `.uasset` binary headers (magic number
+   `0xC1832A9E`) and extracts asset version and class name.
+
+### Unity Asset Store
+Requires Unity Asset Store API credentials:
+
+1. Obtain an API credential from Unity Dashboard → Settings → API keys.
+2. Set the credential on the importer:
+
+```cpp
+auto unity = std::make_unique<UnityAssetStoreImporter>();
+unity->SetApiCredential("YOUR_UNITY_CREDENTIAL");
+```
+
+3. The importer parses `.prefab` YAML files and extracts `m_Name`,
+   `m_MeshData`, and `m_Materials` keys.
+
+### HTTP Client Configuration
+
+All marketplace importers accept a pluggable HTTP client. Atlas ships
+two implementations:
+
+- **NullHttpClient** — always returns errors (for offline/test use).
+- **SocketHttpClient** — real POSIX-socket HTTP client with URL
+  parsing, timeouts, and connection reuse.
+
+```cpp
+SocketHttpClient httpClient;
+registry.SetHttpClient(&httpClient);
+```
+
+## Hot-Reload Monitoring
+
+The `MarketplaceHotReloader` watches imported assets for file changes
+and triggers re-import when modifications are detected:
+
+```cpp
+MarketplaceHotReloader reloader;
+reloader.Watch("asset123", MarketplaceType::ItchIO,
+               "/cache/asset123.png", initialHash);
+
+// In your update loop:
+size_t changed = reloader.CheckForUpdates();
+for (const auto& dirty : reloader.DirtyAssets()) {
+    // Re-import the asset
+    registry.FetchAndImport(dirty.marketplace, dirty.assetId, options);
+    reloader.ClearDirty(dirty.assetId);
+}
+```
+
+## Asset Validation Dashboard
+
+The `AssetValidationDashboard` runs a suite of checks on imported
+assets (file existence, size, extension recognition, readability):
+
+```cpp
+AssetValidationDashboard dash;
+auto report = dash.Validate("my_asset", "/path/to/asset.png");
+
+if (report.AllPassed()) {
+    std::cout << "All checks passed" << std::endl;
+} else {
+    std::cout << report.FailCount() << " failures, "
+              << report.WarnCount() << " warnings" << std::endl;
+}
+
+// Validate all assets in a directory:
+auto reports = dash.ValidateDirectory("/cache/marketplace/");
+```
+
+## Mod Asset Sandboxing
+
+The `ModAssetSandbox` enforces per-mod resource budgets and
+deterministic hash verification:
+
+```cpp
+ModAssetSandbox sandbox;
+ModSandboxBudget budget;
+budget.maxAssetCount = 100;
+budget.maxTotalBytes = 64 * 1024 * 1024; // 64 MB
+
+sandbox.RegisterMod("my_mod", budget);
+
+// Assets are hash-verified on add
+bool ok = sandbox.AddAsset("my_mod", "/path/to/asset.png", expectedHash);
+```
 
 ## Security Considerations
 
