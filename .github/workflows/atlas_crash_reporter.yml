@@ -91,24 +91,28 @@ jobs:
         missing=0
 
         # Compare hashes from both platforms
+        truncate_hash() { printf '%s' "${1:0:16}"; }
+
         for ubuntu_hash in hashes-ubuntu/replay_hash_*.txt 2>/dev/null; do
           [ -f "$ubuntu_hash" ] || continue
           base=$(basename "$ubuntu_hash")
           replay_name=$(echo "$base" | sed 's/replay_hash_//' | sed 's/\.txt$//')
           ubuntu_val=$(cat "$ubuntu_hash" 2>/dev/null || echo "N/A")
+          ubuntu_short=$(truncate_hash "$ubuntu_val")
 
           windows_hash="hashes-windows/${base}"
           if [ -f "$windows_hash" ]; then
             windows_val=$(cat "$windows_hash")
+            windows_short=$(truncate_hash "$windows_val")
             if [ "$ubuntu_val" = "$windows_val" ]; then
-              echo "| $replay_name | \`${ubuntu_val:0:16}...\` | \`${windows_val:0:16}...\` | ✅ |" >> $GITHUB_STEP_SUMMARY
+              echo "| $replay_name | \`${ubuntu_short}...\` | \`${windows_short}...\` | ✅ |" >> $GITHUB_STEP_SUMMARY
               verified=$((verified + 1))
             else
-              echo "| $replay_name | \`${ubuntu_val:0:16}...\` | \`${windows_val:0:16}...\` | ❌ |" >> $GITHUB_STEP_SUMMARY
+              echo "| $replay_name | \`${ubuntu_short}...\` | \`${windows_short}...\` | ❌ |" >> $GITHUB_STEP_SUMMARY
               mismatched=$((mismatched + 1))
             fi
           else
-            echo "| $replay_name | \`${ubuntu_val:0:16}...\` | N/A | ⚠️ |" >> $GITHUB_STEP_SUMMARY
+            echo "| $replay_name | \`${ubuntu_short}...\` | N/A | ⚠️ |" >> $GITHUB_STEP_SUMMARY
             missing=$((missing + 1))
           fi
         done
