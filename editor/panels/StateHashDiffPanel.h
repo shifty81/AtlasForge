@@ -1,5 +1,7 @@
 #pragma once
+#include "../ui/EditorPanel.h"
 #include "../../engine/sim/StateHasher.h"
+#include "../../engine/ui/UIDrawList.h"
 #include <string>
 #include <vector>
 
@@ -54,8 +56,11 @@ struct PerSystemHashBreakdown {
     std::vector<std::string> divergentSystems;
 };
 
-class StateHashDiffPanel {
+class StateHashDiffPanel : public EditorPanel {
 public:
+    const char* Name() const override { return "State Hash Diff"; }
+    void Draw() override;
+
     void SetLocalHasher(const sim::StateHasher* local);
     void SetRemoteHasher(const sim::StateHasher* remote);
     void Refresh();
@@ -92,6 +97,8 @@ public:
     };
     std::vector<HashLadderFrame> BuildHashLadder(bool local = true) const;
 
+    const atlas::ui::UIDrawList& GetDrawList() const { return m_drawList; }
+
 private:
     const sim::StateHasher* m_local = nullptr;
     const sim::StateHasher* m_remote = nullptr;
@@ -101,6 +108,7 @@ private:
     bool m_hasComponentBreakdown = false;
     PerSystemHashBreakdown m_perSystemBreakdown;
     bool m_hasPerSystemBreakdown = false;
+    atlas::ui::UIDrawList m_drawList;
 };
 
 }

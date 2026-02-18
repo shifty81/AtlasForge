@@ -1,6 +1,7 @@
 #pragma once
 #include "../ui/EditorPanel.h"
 #include "../../engine/net/NetContext.h"
+#include "../../engine/ui/UIDrawList.h"
 
 namespace atlas::editor {
 
@@ -20,9 +21,12 @@ public:
 
     const NetInspectorSnapshot& Snapshot() const { return m_snapshot; }
 
+    const atlas::ui::UIDrawList& GetDrawList() const { return m_drawList; }
+
 private:
     net::NetContext& m_net;
     NetInspectorSnapshot m_snapshot;
+    atlas::ui::UIDrawList m_drawList;
 };
 
 }

@@ -4,6 +4,80 @@
 
 namespace atlas::editor {
 
+void StateHashDiffPanel::Draw() {
+    Refresh();
+
+    m_drawList.Clear();
+
+    // Background
+    m_drawList.DrawRect({0, 0, 600, 400}, {30, 30, 30, 255});
+
+    // Title bar
+    m_drawList.DrawRect({0, 0, 600, 24}, {50, 50, 50, 255});
+    m_drawList.DrawText({4, 4, 300, 20}, "State Hash Diff", {220, 220, 220, 255});
+
+    int32_t y = 28;
+
+    if (!m_local || !m_remote) {
+        m_drawList.DrawText({4, y, 590, 16}, "No hashers attached", {160, 160, 160, 255});
+        return;
+    }
+
+    if (m_entries.empty()) {
+        m_drawList.DrawText({4, y, 590, 16}, "No hash entries", {160, 160, 160, 255});
+        return;
+    }
+
+    // Status line
+    std::string status = HasDivergence()
+        ? Summary()
+        : "No divergence";
+    atlas::ui::UIColor statusColor = HasDivergence()
+        ? atlas::ui::UIColor{255, 100, 100, 255}
+        : atlas::ui::UIColor{100, 200, 100, 255};
+    m_drawList.DrawText({4, y, 590, 16}, status, statusColor);
+    y += 20;
+
+    // Column header
+    m_drawList.DrawRect({0, y, 600, 20}, {45, 45, 45, 255});
+    m_drawList.DrawText({4, y + 2, 590, 16}, "Tick       Local Hash       Remote Hash      Status",
+                        {180, 200, 220, 255});
+    y += 22;
+
+    // Hash entries
+    char buf[192];
+    for (const auto& e : m_entries) {
+        atlas::ui::UIColor rowColor = e.matches
+            ? atlas::ui::UIColor{200, 200, 200, 255}
+            : atlas::ui::UIColor{255, 100, 100, 255};
+        std::snprintf(buf, sizeof(buf), "%-10llu 0x%012llX   0x%012llX   %s",
+                      (unsigned long long)e.tick,
+                      (unsigned long long)e.localHash,
+                      (unsigned long long)e.remoteHash,
+                      e.matches ? "Match" : "DIVERGENT");
+        m_drawList.DrawText({4, y, 590, 16}, buf, rowColor);
+        y += 20;
+    }
+
+    // Per-system breakdown if available
+    if (m_hasPerSystemBreakdown) {
+        y += 4;
+        m_drawList.DrawRect({0, y, 600, 20}, {45, 45, 45, 255});
+        m_drawList.DrawText({4, y + 2, 590, 16}, "Per-System Breakdown", {180, 200, 220, 255});
+        y += 22;
+
+        auto divSystems = DivergentSystems();
+        if (divSystems.empty()) {
+            m_drawList.DrawText({4, y, 590, 16}, "All systems match", {100, 200, 100, 255});
+        } else {
+            for (const auto& sys : divSystems) {
+                m_drawList.DrawText({8, y, 580, 16}, "Divergent: " + sys, {255, 100, 100, 255});
+                y += 20;
+            }
+        }
+    }
+}
+
 void StateHashDiffPanel::SetLocalHasher(const sim::StateHasher* local) {
     m_local = local;
 }

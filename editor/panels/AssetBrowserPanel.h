@@ -1,6 +1,7 @@
 #pragma once
 #include "../ui/EditorPanel.h"
 #include "../../engine/assets/AssetRegistry.h"
+#include "../../engine/ui/UIDrawList.h"
 #include <string>
 #include <vector>
 
@@ -42,12 +43,15 @@ public:
 
     std::string Summary() const;
 
+    const atlas::ui::UIDrawList& GetDrawList() const { return m_drawList; }
+
 private:
     asset::AssetRegistry& m_registry;
     std::vector<AssetBrowserEntry> m_entries;
     std::string m_filter;
     std::string m_selectedAsset;
     AssetSortMode m_sortMode = AssetSortMode::ByName;
+    atlas::ui::UIDrawList m_drawList;
 };
 
 }
