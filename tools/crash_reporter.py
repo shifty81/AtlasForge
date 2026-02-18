@@ -177,6 +177,16 @@ def generate_hash_ladder(manifest: CrashManifest) -> str:
     return "\n".join(lines)
 
 
+def _is_safe_path(path: pathlib.Path, directory: pathlib.Path) -> bool:
+    """Check that path is inside or a direct artifact of the given directory."""
+    try:
+        resolved = path.resolve()
+        dir_resolved = directory.resolve()
+        return resolved == dir_resolved or dir_resolved in resolved.parents
+    except (OSError, ValueError):
+        return False
+
+
 def bundle_crash_report(
     directory: pathlib.Path,
     output_path: Optional[pathlib.Path] = None,
@@ -241,9 +251,11 @@ def bundle_crash_report(
             ]:
                 if path_str:
                     path = pathlib.Path(path_str)
-                    if path.exists():
+                    if path.exists() and _is_safe_path(path, directory):
                         tar.add(str(path), arcname=path.name)
                         files_added += 1
+                    elif path.exists() and verbose:
+                        print(f"  ⚠ Skipping file outside bundle directory: {path}")
 
         # Add hash ladders
         for ladder_file in sorted(hash_ladder_dir.glob("*.txt")):

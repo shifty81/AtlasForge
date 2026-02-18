@@ -19,7 +19,8 @@ static std::string resolveTool(const std::string& relative) {
 
 // Helper: run crash_reporter.py command with path fallback
 static int runCrashReporter(const std::string& args) {
-    std::string cmd = "python3 " + resolveTool("tools/crash_reporter.py") + " " + args + " > /dev/null 2>&1";
+    std::string tool = resolveTool("tools/crash_reporter.py");
+    std::string cmd = "python3 '" + tool + "' " + args + " > /dev/null 2>&1";
     return std::system(cmd.c_str());
 }
 
@@ -43,7 +44,7 @@ void test_crash_reporter_validate_empty_dir() {
     auto tmpDir = fs::temp_directory_path() / "atlas_test_crash_empty";
     fs::create_directories(tmpDir);
 
-    int result = runCrashReporter("--dir " + tmpDir.string() + " --validate-only");
+    int result = runCrashReporter("--dir '" + tmpDir.string() + "' --validate-only");
     // Should return non-zero (no manifests found)
     assert(result != 0);
 
@@ -83,7 +84,7 @@ void test_crash_reporter_validate_manifest() {
         out << "repro=./AtlasServer --repro --save \"" << savePath.string() << "\"\n";
     }
 
-    int result = runCrashReporter("--dir " + tmpDir.string() + " --validate-only");
+    int result = runCrashReporter("--dir '" + tmpDir.string() + "' --validate-only");
     assert(result == 0);
 
     fs::remove_all(tmpDir);
@@ -121,7 +122,7 @@ void test_crash_reporter_bundle() {
     }
 
     auto outputPath = tmpDir / "test_bundle.tar.gz";
-    int result = runCrashReporter("--dir " + tmpDir.string() + " --output " + outputPath.string());
+    int result = runCrashReporter("--dir '" + tmpDir.string() + "' --output '" + outputPath.string() + "'");
     assert(result == 0);
     assert(fs::exists(outputPath));
     assert(fs::file_size(outputPath) > 0);
