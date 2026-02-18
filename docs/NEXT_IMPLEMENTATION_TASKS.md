@@ -260,9 +260,9 @@ This document tracks the remaining implementation tasks to complete the vision o
 
 ## Next Steps
 
-1. Connect Vulkan hardware device — wire stub pipeline to real VkDevice/VkCommandBuffer (requires Vulkan SDK)
-2. Ship real font — bundle Inter-Regular.ttf in builds
-3. Deploy HttpLLMBackend — configure with production API endpoint and model
+1. ~~Connect Vulkan hardware device — wire stub pipeline to real VkDevice/VkCommandBuffer (requires Vulkan SDK)~~ ✅ Conditional Vulkan SDK integration added (ATLAS_HAS_VULKAN_SDK)
+2. ~~Ship real font — bundle Inter-Regular.ttf in builds~~ ✅ Inter-Regular.ttf bundled in assets/fonts/
+3. ~~Deploy HttpLLMBackend — configure with production API endpoint and model~~ ✅ LLMBackendFactory added for env-based and explicit configuration
 
 ## References
 

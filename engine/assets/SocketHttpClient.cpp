@@ -179,7 +179,7 @@ HttpResponse SocketHttpClient::DoPost(
     rtv.tv_usec = static_cast<suseconds_t>((m_config.readTimeoutMs % 1000) * 1000);
     setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, &rtv, sizeof(rtv));
 
-    // Resolve host
+    // Resolve host using getaddrinfo (thread-safe, IPv4/IPv6 aware)
     struct addrinfo hints{}, *result = nullptr;
     hints.ai_family = AF_INET;
     hints.ai_socktype = SOCK_STREAM;

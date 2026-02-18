@@ -443,7 +443,7 @@ public:
         atlas::asset::HttpResponse resp;
         resp.statusCode = 200;
         resp.body = R"({"id": "test", "name": "Test Asset"})";
-        lastGetUrl = url;
+        lastPostUrl = url;
         return resp;
     }
 
@@ -464,6 +464,7 @@ public:
     }
 
     std::string lastGetUrl;
+    std::string lastPostUrl;
     std::string lastDownloadUrl;
     std::string lastDownloadPath;
 };
