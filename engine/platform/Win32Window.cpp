@@ -15,7 +15,7 @@ static const wchar_t* ATLAS_WINDOW_CLASS = L"AtlasWindowClass";
 
 /// Translate a Win32 virtual-key code to a platform-independent key code.
 static uint32_t TranslateVK(uint32_t vk) {
-    if (vk == 0x72 /* VK_F3 */) return kKeyF3;
+    if (vk == VK_F3) return kKeyF3;
     return vk;
 }
 
