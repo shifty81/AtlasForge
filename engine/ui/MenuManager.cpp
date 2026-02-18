@@ -123,6 +123,14 @@ void MenuManager::SelectFocusedItem() {
 
     uint32_t menuId = m_openSubmenuId ? m_openSubmenuId : (m_openMenuId ? m_openMenuId : m_contextMenuId);
 
+    // Toggle checkable items
+    if (item->isCheckable) {
+        UIWidget* mutableItem = m_screen->GetWidgetMutable(m_focusedItemId);
+        if (mutableItem) {
+            mutableItem->isChecked = !mutableItem->isChecked;
+        }
+    }
+
     if (m_menuItemCallback) {
         m_menuItemCallback(menuId, m_focusedItemId);
     }
@@ -376,6 +384,15 @@ bool MenuManager::HandleEvent(const UIEvent& event) {
                         if (widget->hasSubmenu) {
                             OpenSubmenu(i);
                             return true;
+                        }
+
+                        // Toggle checkable items
+                        const UIWidget* clickedWidget = m_screen->GetWidget(i);
+                        if (clickedWidget && clickedWidget->isCheckable) {
+                            UIWidget* mutable_widget = m_screen->GetWidgetMutable(i);
+                            if (mutable_widget) {
+                                mutable_widget->isChecked = !mutable_widget->isChecked;
+                            }
                         }
 
                         // Invoke callback

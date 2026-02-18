@@ -249,6 +249,24 @@ static void BuildEditorUI(atlas::ui::UIScreen& screen) {
                                                166, 108, 140, 24);
     screen.SetParent(toolsSettings, toolsMenu);
 
+    // Keyboard shortcuts
+    screen.SetShortcutLabel(fileNew, "Ctrl+N");
+    screen.SetShortcutLabel(fileOpen, "Ctrl+O");
+    screen.SetShortcutLabel(fileSave, "Ctrl+S");
+    screen.SetShortcutLabel(editUndo, "Ctrl+Z");
+    screen.SetShortcutLabel(editRedo, "Ctrl+Y");
+    screen.SetShortcutLabel(editCut, "Ctrl+X");
+    screen.SetShortcutLabel(editCopy, "Ctrl+C");
+    screen.SetShortcutLabel(editPaste, "Ctrl+V");
+
+    // View menu items are toggleable
+    screen.SetCheckable(viewAssets, true);
+    screen.SetChecked(viewAssets, true);
+    screen.SetCheckable(viewInspector, true);
+    screen.SetChecked(viewInspector, true);
+    screen.SetCheckable(viewConsole, true);
+    screen.SetChecked(viewConsole, true);
+
     // Left panel — Project / Asset Browser
     uint32_t leftPanel = screen.AddWidget(atlas::ui::UIWidgetType::Panel, "AssetBrowser",
                                            0, 30, 260, 690);

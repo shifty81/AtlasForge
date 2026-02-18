@@ -154,10 +154,28 @@ void UIManager::RenderWidget(UIRenderer* renderer, uint32_t widgetId, int depth)
                     UIRect shortcutRect = {rect.x + rect.w - 80, rect.y, 70, rect.h};
                     renderer->DrawText(shortcutRect, widget->shortcutLabel, textColor);
                 }
+                // Draw icon if present, grayed out
+                if (widget->iconId != 0) {
+                    UIColor iconTint = {100, 100, 100, 255};
+                    UIRect iconRect = {rect.x + (widget->isCheckable ? 18 : 2), rect.y + 2, rect.h - 4, rect.h - 4};
+                    renderer->DrawIcon(iconRect, widget->iconId, iconTint);
+                }
             } else {
                 // Normal menu item
                 UIColor bg = widget->isHovered ? UIColor{65, 115, 180, 255} : UIColor{45, 47, 50, 255};
                 renderer->DrawRect(rect, bg);
+                // Checkmark indicator
+                if (widget->isCheckable) {
+                    UIColor checkColor = widget->isChecked ? UIColor{220, 220, 220, 255} : UIColor{80, 80, 80, 255};
+                    UIRect checkRect = {rect.x + 2, rect.y, 16, rect.h};
+                    renderer->DrawText(checkRect, widget->isChecked ? "\xe2\x9c\x93" : " ", checkColor);
+                }
+                // Icon rendering
+                if (widget->iconId != 0) {
+                    UIColor iconTint = {255, 255, 255, 255};
+                    UIRect iconRect = {rect.x + (widget->isCheckable ? 18 : 2), rect.y + 2, rect.h - 4, rect.h - 4};
+                    renderer->DrawIcon(iconRect, widget->iconId, iconTint);
+                }
                 UIColor textColor = {220, 220, 220, 255};
                 renderer->DrawText(rect, widget->name, textColor);
                 // Draw shortcut label right-aligned if present
@@ -191,6 +209,42 @@ void UIManager::RenderWidget(UIRenderer* renderer, uint32_t widgetId, int depth)
             renderer->DrawRect(topLine, borderTop);
             UIColor textColor = {160, 160, 160, 255};
             renderer->DrawText(rect, widget->name, textColor);
+            break;
+        }
+        case UIWidgetType::Tooltip: {
+            UIColor bg = {60, 62, 66, 240};
+            renderer->DrawRect(rect, bg);
+            UIColor border = {100, 103, 108, 255};
+            renderer->DrawBorder(rect, 1, border);
+            UIColor textColor = {220, 220, 220, 255};
+            renderer->DrawText(rect, widget->name, textColor);
+            break;
+        }
+        case UIWidgetType::Tab: {
+            UIColor bg = widget->isHovered ? UIColor{55, 58, 62, 255} : UIColor{43, 43, 43, 255};
+            renderer->DrawRect(rect, bg);
+            if (widget->isChecked) {
+                // Active tab: highlight bottom border
+                UIColor activeBar = {65, 115, 180, 255};
+                UIRect barRect = {rect.x, rect.y + rect.h - 2, rect.w, 2};
+                renderer->DrawRect(barRect, activeBar);
+            }
+            UIColor textColor = widget->isChecked ? UIColor{220, 220, 220, 255} : UIColor{160, 160, 160, 255};
+            renderer->DrawText(rect, widget->name, textColor);
+            break;
+        }
+        case UIWidgetType::ScrollView: {
+            UIColor bg = {35, 37, 40, 255};
+            renderer->DrawRect(rect, bg);
+            UIColor border = {70, 73, 75, 255};
+            renderer->DrawBorder(rect, 1, border);
+            break;
+        }
+        case UIWidgetType::DockArea: {
+            UIColor bg = {38, 40, 43, 255};
+            renderer->DrawRect(rect, bg);
+            UIColor border = {60, 63, 67, 255};
+            renderer->DrawBorder(rect, 1, border);
             break;
         }
     }

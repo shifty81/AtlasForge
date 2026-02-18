@@ -1684,6 +1684,27 @@ void test_full_editor_menu_setup();
 void test_menu_manager_is_any_open();
 void test_close_all_menus_clears_focus();
 
+// GUI next tasks tests
+void test_checkable_default_false();
+void test_set_checkable();
+void test_set_checked();
+void test_checkable_toggle_on_click();
+void test_checkable_toggle_via_keyboard();
+void test_icon_id_default_zero();
+void test_set_icon_id();
+void test_icon_rendering_with_null_renderer();
+void test_tooltip_widget_creation();
+void test_tooltip_rendering_with_null_renderer();
+void test_tab_widget_creation();
+void test_tab_active_state();
+void test_tab_rendering_with_null_renderer();
+void test_scrollview_widget_creation();
+void test_scrollview_rendering_with_null_renderer();
+void test_dockarea_widget_creation();
+void test_dockarea_with_panels();
+void test_dockarea_rendering_with_null_renderer();
+void test_editor_checkable_view_items();
+
 int main() {
     std::cout << "=== Atlas Engine Tests ===" << std::endl;
 
@@ -3555,6 +3576,27 @@ int main() {
     test_full_editor_menu_setup();
     test_menu_manager_is_any_open();
     test_close_all_menus_clears_focus();
+
+    std::cout << "\n--- GUI Next Tasks ---" << std::endl;
+    test_checkable_default_false();
+    test_set_checkable();
+    test_set_checked();
+    test_checkable_toggle_on_click();
+    test_checkable_toggle_via_keyboard();
+    test_icon_id_default_zero();
+    test_set_icon_id();
+    test_icon_rendering_with_null_renderer();
+    test_tooltip_widget_creation();
+    test_tooltip_rendering_with_null_renderer();
+    test_tab_widget_creation();
+    test_tab_active_state();
+    test_tab_rendering_with_null_renderer();
+    test_scrollview_widget_creation();
+    test_scrollview_rendering_with_null_renderer();
+    test_dockarea_widget_creation();
+    test_dockarea_with_panels();
+    test_dockarea_rendering_with_null_renderer();
+    test_editor_checkable_view_items();
 
     std::cout << "\n=== All tests passed! ===" << std::endl;
     return 0;
