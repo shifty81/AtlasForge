@@ -12,7 +12,7 @@
 
 Atlas is a deterministic, data-driven game engine built in C++20. The
 project is **approximately 98–99% complete** across its core systems.
-All 999+ tests pass. The engine compiles and runs on Linux with
+All 1037+ tests pass. The engine compiles and runs on Linux with
 OpenGL and Vulkan rendering backends. The Vulkan renderer records
 and submits draw commands through a GPU command buffer pipeline with
 render pass, pipeline state, GPU resource management, descriptor set
@@ -86,6 +86,11 @@ Server rules support config-driven hot-reload with change tracking.
 - [x] Connection quality diagnostics (Excellent/Good/Fair/Poor/Critical)
 - [x] Bandwidth tracking and statistics
 - [x] QoS packet scheduler (priority-based ordering, congestion detection)
+- [x] Latency/jitter simulation (deterministic simulated delay for testing)
+- [x] Bandwidth enforcement on send (CanSendBytes gate, automatic drop counting)
+- [x] CRC32 packet checksum validation (compute on send, verify on receive)
+- [x] Manual replication frequency (TriggerManualReplication for on-demand sync)
+- [x] Reliable/unreliable delta split (CollectDelta for reliable, CollectUnreliableDelta for unreliable)
 
 ### Asset System (`engine/assets/`)
 - [x] Asset registry (UUID/hash-addressed)
@@ -175,7 +180,7 @@ Server rules support config-driven hot-reload with change tracking.
 - [x] Contributor rules (`ATLAS_CONTRIBUTOR_RULES.md`)
 
 ### Testing (`tests/`)
-- [x] 999+ tests across 166+ test files — all passing
+- [x] 1037+ tests across 166+ test files — all passing
 - [x] Covers ECS, networking, replay, assets, UI, editor panels, graphs, etc.
 
 ---
@@ -313,7 +318,7 @@ Core Engine        ✅ 100%   Bootstrap, logging, contracts, determinism
 ECS                ✅ 100%   Entity lifecycle, serialization, rollback
 Graph VM           ✅ 100%   14 graph types, compile/execute/serialize
 Simulation         ✅ 100%   Tick, time, state, replay, save/load
-Networking         ✅  98%   Lockstep, rollback, P2P, packet loss sim, quality diagnostics, QoS scheduling
+Networking         ✅ 100%   Lockstep, rollback, P2P, packet loss/latency/jitter sim, quality diagnostics, QoS, CRC checksums, bandwidth enforcement, reliable/unreliable split, manual replication
 Assets             ✅ 100%   Registry, import, cook, validate, hot-reload, dependency tracking, marketplace hot-reload, validation dashboard, mod sandboxing
 World Generation   ✅ 100%   Terrain, voxel, galaxy, streaming
 AI Systems         ✅ 100%   Behavior, memory, faction, strategy
@@ -324,7 +329,7 @@ Editor Rendering   ✅ 100%   All panels produce draw commands via UIDrawList
 Production         ✅ 100%   Full packager pipeline
 CI/Enforcement     ✅ 100%   Determinism gate, contract bot, crash reporter
 Documentation      ✅  95%   43 docs; minor updates needed
-Testing            ✅ 100%   999+ tests, all passing
+Testing            ✅ 100%   1037+ tests, all passing
 ```
 
 ---
@@ -337,7 +342,7 @@ Testing            ✅ 100%   999+ tests, all passing
 | AtlasServer | ✅ | ✅ | Headless, no graphics deps |
 | AtlasClient | ✅ | ✅ | Player runtime |
 | AtlasRuntime | ✅ | ✅ | Unified CLI runtime |
-| AtlasTests | ✅ | ✅ | 999+ tests passing |
+| AtlasTests | ✅ | ✅ | 1037+ tests passing |
 | TileEditor | ✅ | ✅ | Standalone tile tool |
 
 ---
@@ -348,7 +353,7 @@ Testing            ✅ 100%   999+ tests, all passing
 |------|-----------|--------|
 | Engine Core | ~50 | ✅ All pass |
 | ECS | ~40 | ✅ All pass |
-| Networking | ~75 | ✅ All pass |
+| Networking | ~98 | ✅ All pass |
 | Replay | ~37 | ✅ All pass |
 | Assets | ~57 | ✅ All pass |
 | UI System | ~80 | ✅ All pass |
@@ -359,7 +364,7 @@ Testing            ✅ 100%   999+ tests, all passing
 | World Gen | ~30 | ✅ All pass |
 | Tile Editor | ~40 | ✅ All pass |
 | CI/Tooling | ~12 | ✅ All pass |
-| **Total** | **999+** | **✅ All pass** |
+| **Total** | **1037+** | **✅ All pass** |
 
 ---
 
@@ -397,8 +402,10 @@ per-system hash breakdowns, tick-step debugging with breakpoints, and
 a full replay inspector with input frame viewer, event timeline
 visualization, and branch point markers. Standalone tools for state
 diff viewing and replay inspection are available in `tools/`. The
-networking layer includes packet loss simulation and connection quality
-diagnostics. All 999+ tests pass. The IHttpClient interface now supports
+networking layer includes packet loss simulation, latency/jitter
+simulation, CRC32 checksum validation, bandwidth enforcement on send,
+manual replication triggers, and reliable/unreliable delta splitting
+with connection quality diagnostics. All 1037+ tests pass. The IHttpClient interface now supports
 HTTP POST, and the HttpLLMBackend uses proper POST requests for API
 communication. The LLMBackendFactory enables environment-based
 configuration via ATLAS_LLM_ENDPOINT, ATLAS_LLM_MODEL, and

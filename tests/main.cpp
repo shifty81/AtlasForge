@@ -979,6 +979,9 @@ void register_next_tasks_phase14();
 // Phase 15: MeshViewerPanel and PrefabEditorPanel Draw implementations
 void register_next_tasks_phase15();
 
+// Networking improvements: latency/jitter, CRC, bandwidth enforcement, manual replication, reliable/unreliable
+void register_net_improvements_tests();
+
 // Component Category
 void test_component_category_defaults();
 void test_component_category_simulated();
@@ -1963,6 +1966,9 @@ int main() {
 
     // Phase 15: MeshViewerPanel and PrefabEditorPanel Draw
     register_next_tasks_phase15();
+
+    // Networking improvements
+    register_net_improvements_tests();
 
     // Noise
     std::cout << "\n--- Noise Generator ---" << std::endl;
