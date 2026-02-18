@@ -1,6 +1,7 @@
 #include "VulkanRenderer.h"
 #include "../core/Logger.h"
 #include <cstring>
+#include <algorithm>
 
 namespace atlas::render {
 
@@ -437,6 +438,232 @@ uint32_t VulkanRenderer::UniformCount() const {
 void VulkanRenderer::ClearUniforms() {
     m_uniforms.clear();
     m_nextUniformId = 1;
+}
+
+// --- Fence management ---
+
+uint32_t VulkanRenderer::CreateFence(const std::string& name, bool signaled) {
+    VkFenceDesc fence;
+    fence.name = name;
+    fence.signaled = signaled;
+    fence.id = m_nextFenceId++;
+    m_fences.push_back(fence);
+    Logger::Info("[VulkanRenderer] CreateFence '" + name + "' id=" + std::to_string(fence.id));
+    return fence.id;
+}
+
+bool VulkanRenderer::DestroyFence(uint32_t fenceId) {
+    for (auto it = m_fences.begin(); it != m_fences.end(); ++it) {
+        if (it->id == fenceId) {
+            Logger::Info("[VulkanRenderer] DestroyFence id=" + std::to_string(fenceId));
+            m_fences.erase(it);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool VulkanRenderer::WaitFence(uint32_t fenceId) {
+    for (auto& f : m_fences) {
+        if (f.id == fenceId) {
+            f.signaled = true;
+            Logger::Info("[VulkanRenderer] WaitFence id=" + std::to_string(fenceId));
+            return true;
+        }
+    }
+    return false;
+}
+
+bool VulkanRenderer::ResetFence(uint32_t fenceId) {
+    for (auto& f : m_fences) {
+        if (f.id == fenceId) {
+            f.signaled = false;
+            Logger::Info("[VulkanRenderer] ResetFence id=" + std::to_string(fenceId));
+            return true;
+        }
+    }
+    return false;
+}
+
+bool VulkanRenderer::IsFenceSignaled(uint32_t fenceId) const {
+    for (const auto& f : m_fences) {
+        if (f.id == fenceId) return f.signaled;
+    }
+    return false;
+}
+
+const VkFenceDesc* VulkanRenderer::GetFence(uint32_t id) const {
+    for (const auto& f : m_fences) {
+        if (f.id == id) return &f;
+    }
+    return nullptr;
+}
+
+uint32_t VulkanRenderer::FenceCount() const {
+    return static_cast<uint32_t>(m_fences.size());
+}
+
+// --- Semaphore management ---
+
+uint32_t VulkanRenderer::CreateSemaphore(const std::string& name) {
+    VkSemaphoreDesc sem;
+    sem.name = name;
+    sem.signaled = false;
+    sem.id = m_nextSemaphoreId++;
+    m_semaphores.push_back(sem);
+    Logger::Info("[VulkanRenderer] CreateSemaphore '" + name + "' id=" + std::to_string(sem.id));
+    return sem.id;
+}
+
+bool VulkanRenderer::DestroySemaphore(uint32_t semaphoreId) {
+    for (auto it = m_semaphores.begin(); it != m_semaphores.end(); ++it) {
+        if (it->id == semaphoreId) {
+            Logger::Info("[VulkanRenderer] DestroySemaphore id=" + std::to_string(semaphoreId));
+            m_semaphores.erase(it);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool VulkanRenderer::SignalSemaphore(uint32_t semaphoreId) {
+    for (auto& s : m_semaphores) {
+        if (s.id == semaphoreId) {
+            s.signaled = true;
+            Logger::Info("[VulkanRenderer] SignalSemaphore id=" + std::to_string(semaphoreId));
+            return true;
+        }
+    }
+    return false;
+}
+
+bool VulkanRenderer::WaitSemaphore(uint32_t semaphoreId) {
+    for (auto& s : m_semaphores) {
+        if (s.id == semaphoreId) {
+            if (!s.signaled) return false;
+            s.signaled = false;
+            Logger::Info("[VulkanRenderer] WaitSemaphore id=" + std::to_string(semaphoreId));
+            return true;
+        }
+    }
+    return false;
+}
+
+const VkSemaphoreDesc* VulkanRenderer::GetSemaphore(uint32_t id) const {
+    for (const auto& s : m_semaphores) {
+        if (s.id == id) return &s;
+    }
+    return nullptr;
+}
+
+uint32_t VulkanRenderer::SemaphoreCount() const {
+    return static_cast<uint32_t>(m_semaphores.size());
+}
+
+// --- Memory pool management ---
+
+uint32_t VulkanRenderer::CreateMemoryPool(const std::string& name, size_t totalSize) {
+    VkMemoryPool pool;
+    pool.name = name;
+    pool.totalSize = totalSize;
+    pool.usedSize = 0;
+    pool.allocationCount = 0;
+    pool.id = m_nextPoolId++;
+    m_memoryPools.push_back(pool);
+    Logger::Info("[VulkanRenderer] CreateMemoryPool '" + name + "' id=" + std::to_string(pool.id) +
+                 " size=" + std::to_string(totalSize));
+    return pool.id;
+}
+
+bool VulkanRenderer::DestroyMemoryPool(uint32_t poolId) {
+    for (auto it = m_memoryPools.begin(); it != m_memoryPools.end(); ++it) {
+        if (it->id == poolId) {
+            Logger::Info("[VulkanRenderer] DestroyMemoryPool id=" + std::to_string(poolId));
+            // Remove all allocations from this pool
+            m_allocations.erase(
+                std::remove_if(m_allocations.begin(), m_allocations.end(),
+                    [poolId](const VkMemoryAllocation& a) { return a.poolId == poolId; }),
+                m_allocations.end());
+            m_memoryPools.erase(it);
+            return true;
+        }
+    }
+    return false;
+}
+
+uint32_t VulkanRenderer::AllocateFromPool(uint32_t poolId, size_t size) {
+    for (auto& pool : m_memoryPools) {
+        if (pool.id == poolId) {
+            if (pool.usedSize + size > pool.totalSize) {
+                Logger::Info("[VulkanRenderer] AllocateFromPool failed: not enough space in pool " +
+                             std::to_string(poolId));
+                return 0;
+            }
+            VkMemoryAllocation alloc;
+            alloc.poolId = poolId;
+            alloc.offset = pool.usedSize;
+            alloc.size = size;
+            alloc.id = m_nextAllocationId++;
+            pool.usedSize += size;
+            pool.allocationCount++;
+            m_allocations.push_back(alloc);
+            Logger::Info("[VulkanRenderer] AllocateFromPool pool=" + std::to_string(poolId) +
+                         " id=" + std::to_string(alloc.id) + " size=" + std::to_string(size));
+            return alloc.id;
+        }
+    }
+    return 0;
+}
+
+bool VulkanRenderer::FreeAllocation(uint32_t allocationId) {
+    for (auto it = m_allocations.begin(); it != m_allocations.end(); ++it) {
+        if (it->id == allocationId) {
+            // Return size to pool
+            for (auto& pool : m_memoryPools) {
+                if (pool.id == it->poolId) {
+                    pool.usedSize -= it->size;
+                    pool.allocationCount--;
+                    break;
+                }
+            }
+            Logger::Info("[VulkanRenderer] FreeAllocation id=" + std::to_string(allocationId));
+            m_allocations.erase(it);
+            return true;
+        }
+    }
+    return false;
+}
+
+const VkMemoryPool* VulkanRenderer::GetMemoryPool(uint32_t id) const {
+    for (const auto& p : m_memoryPools) {
+        if (p.id == id) return &p;
+    }
+    return nullptr;
+}
+
+const VkMemoryAllocation* VulkanRenderer::GetAllocation(uint32_t id) const {
+    for (const auto& a : m_allocations) {
+        if (a.id == id) return &a;
+    }
+    return nullptr;
+}
+
+uint32_t VulkanRenderer::MemoryPoolCount() const {
+    return static_cast<uint32_t>(m_memoryPools.size());
+}
+
+size_t VulkanRenderer::PoolUsedSize(uint32_t poolId) const {
+    for (const auto& p : m_memoryPools) {
+        if (p.id == poolId) return p.usedSize;
+    }
+    return 0;
+}
+
+size_t VulkanRenderer::PoolFreeSize(uint32_t poolId) const {
+    for (const auto& p : m_memoryPools) {
+        if (p.id == poolId) return p.totalSize - p.usedSize;
+    }
+    return 0;
 }
 
 } // namespace atlas::render

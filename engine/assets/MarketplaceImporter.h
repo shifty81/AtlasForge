@@ -110,12 +110,19 @@ public:
         const MarketplaceImportOptions& options) override;
     bool IsAvailable() const override;
     void SetHttpClient(IHttpClient* client) override;
-    
+
+    void SetApiCredential(const std::string& cred);
+    bool HasApiCredential() const;
+
+    /// Parse .uasset binary header and extract asset metadata
+    bool ParseUAssetHeader(const std::string& inputPath, MarketplaceAssetMetadata& outMeta) const;
+
 private:
     /// Convert Unreal .uasset to intermediate format
     bool ConvertUAsset(const std::string& inputPath, 
                        const std::string& outputPath) const;
     IHttpClient* m_httpClient = nullptr;
+    std::string m_apiCredential;
 };
 
 /// Unity Asset Store importer
@@ -131,12 +138,19 @@ public:
         const MarketplaceImportOptions& options) override;
     bool IsAvailable() const override;
     void SetHttpClient(IHttpClient* client) override;
-    
+
+    void SetApiCredential(const std::string& cred);
+    bool HasApiCredential() const;
+
+    /// Parse Unity .prefab YAML header and extract asset metadata
+    bool ParsePrefabHeader(const std::string& inputPath, MarketplaceAssetMetadata& outMeta) const;
+
 private:
     /// Convert Unity .prefab to intermediate format
     bool ConvertUnityPrefab(const std::string& inputPath,
                             const std::string& outputPath) const;
     IHttpClient* m_httpClient = nullptr;
+    std::string m_apiCredential;
 };
 
 /// Central registry for marketplace importers

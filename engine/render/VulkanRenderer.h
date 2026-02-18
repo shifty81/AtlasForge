@@ -97,6 +97,36 @@ struct VkShaderUniform {
     uint32_t id = 0;
 };
 
+/// GPU fence for CPU-GPU synchronization
+struct VkFenceDesc {
+    std::string name;
+    bool signaled = false;
+    uint32_t id = 0;
+};
+
+/// GPU semaphore for GPU-GPU synchronization between queue submissions
+struct VkSemaphoreDesc {
+    std::string name;
+    bool signaled = false;
+    uint32_t id = 0;
+};
+
+/// Memory pool for GPU allocations
+struct VkMemoryPool {
+    std::string name;
+    size_t totalSize = 0;
+    size_t usedSize = 0;
+    uint32_t allocationCount = 0;
+    uint32_t id = 0;
+};
+
+struct VkMemoryAllocation {
+    uint32_t poolId = 0;
+    size_t offset = 0;
+    size_t size = 0;
+    uint32_t id = 0;
+};
+
 class VulkanRenderer : public ui::UIRenderer {
 public:
     void BeginFrame() override;
@@ -177,6 +207,34 @@ public:
     uint32_t UniformCount() const;
     void ClearUniforms();
 
+    // Fence management
+    uint32_t CreateFence(const std::string& name, bool signaled = false);
+    bool DestroyFence(uint32_t fenceId);
+    bool WaitFence(uint32_t fenceId);
+    bool ResetFence(uint32_t fenceId);
+    bool IsFenceSignaled(uint32_t fenceId) const;
+    const VkFenceDesc* GetFence(uint32_t id) const;
+    uint32_t FenceCount() const;
+
+    // Semaphore management
+    uint32_t CreateSemaphore(const std::string& name);
+    bool DestroySemaphore(uint32_t semaphoreId);
+    bool SignalSemaphore(uint32_t semaphoreId);
+    bool WaitSemaphore(uint32_t semaphoreId);
+    const VkSemaphoreDesc* GetSemaphore(uint32_t id) const;
+    uint32_t SemaphoreCount() const;
+
+    // Memory pool management
+    uint32_t CreateMemoryPool(const std::string& name, size_t totalSize);
+    bool DestroyMemoryPool(uint32_t poolId);
+    uint32_t AllocateFromPool(uint32_t poolId, size_t size);
+    bool FreeAllocation(uint32_t allocationId);
+    const VkMemoryPool* GetMemoryPool(uint32_t id) const;
+    const VkMemoryAllocation* GetAllocation(uint32_t id) const;
+    uint32_t MemoryPoolCount() const;
+    size_t PoolUsedSize(uint32_t poolId) const;
+    size_t PoolFreeSize(uint32_t poolId) const;
+
     static constexpr uint32_t MAX_BUFFERED_FRAMES = 3;
 
 private:
@@ -216,6 +274,18 @@ private:
 
     std::vector<VkShaderUniform> m_uniforms;
     uint32_t m_nextUniformId = 1;
+
+    std::vector<VkFenceDesc> m_fences;
+    uint32_t m_nextFenceId = 1;
+
+    std::vector<VkSemaphoreDesc> m_semaphores;
+    uint32_t m_nextSemaphoreId = 1;
+
+    std::vector<VkMemoryPool> m_memoryPools;
+    uint32_t m_nextPoolId = 1;
+
+    std::vector<VkMemoryAllocation> m_allocations;
+    uint32_t m_nextAllocationId = 1;
 
     static const std::vector<uint8_t> s_emptyPushData;
 };
