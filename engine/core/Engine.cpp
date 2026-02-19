@@ -237,11 +237,13 @@ void Engine::ProcessWindowEvents() {
                 uiEvent.modifiers = event.modifiers;
                 m_uiManager.DispatchEvent(uiEvent);
                 m_eventRouter.Dispatch(uiEvent);
-                // Synthesize a TextInput event for printable characters.
+                // Synthesize a TextInput event for printable ASCII characters.
                 // X11 only produces KeyPress (no separate TextInput), so
                 // this ensures InputFieldManager receives character data.
                 // Win32's KeyDown does not set textChar (WM_CHAR handles
                 // that separately), so this is effectively a no-op there.
+                // Non-ASCII characters (> 0x7F) are not handled here; full
+                // Unicode/IME support would require XIM integration.
                 // 0x20 = space (first printable ASCII), 0x7F = DEL control char.
                 if (event.textChar >= 0x20 && event.textChar != 0x7F) {
                     ui::UIEvent textEvent;

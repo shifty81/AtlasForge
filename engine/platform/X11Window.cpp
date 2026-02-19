@@ -19,6 +19,7 @@ static uint32_t TranslateKeySym(unsigned long sym) {
 
 /// Translate X11 1-based button index to 0-based platform button.
 /// X11: 1=Left, 2=Middle, 3=Right.  Platform: 0=Left, 1=Middle, 2=Right.
+/// Buttons outside 1-3 (e.g. high-number buttons) pass through unchanged.
 static uint8_t TranslateButton(unsigned int xButton) {
     if (xButton >= 1 && xButton <= 3)
         return static_cast<uint8_t>(xButton - 1);
@@ -178,8 +179,8 @@ bool X11Window::PollEvent(WindowEvent& event) {
             }
             case ButtonPress: {
                 unsigned int btn = xev.xbutton.button;
-                // X11 buttons 4/5 are scroll wheel: 4=up, 5=down.
-                // Positive scrollDelta = scroll down (matches PlatformWindow.h).
+                // X11 buttons 4/5 are scroll wheel:
+                // 4 = up (negative delta), 5 = down (positive delta).
                 if (btn == 4 || btn == 5) {
                     event.type = WindowEvent::Type::ScrollWheel;
                     event.mouseX = xev.xbutton.x;

@@ -14,7 +14,7 @@ using namespace atlas::ui;
 static std::string create_temp_asset_dir() {
     auto dir = std::filesystem::temp_directory_path() / ("atlas_panel_draw_test_" + std::to_string(time(nullptr)));
     std::filesystem::create_directories(dir);
-    // AssetRegistry::Scan() only recognises .atlas and .atlasb extensions.
+    // AssetRegistry::Scan() only recognizes .atlas and .atlasb extensions.
     std::ofstream(dir / "ship.atlas") << "mesh";
     std::ofstream(dir / "hull.atlas") << "texture";
     return dir.string();
