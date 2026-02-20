@@ -87,6 +87,9 @@ public:
     bool Running() const;
     void Shutdown();
 
+    /// Request the engine to exit at the end of the current frame.
+    void RequestExit();
+
     bool Can(Capability cap) const;
 
     const EngineConfig& Config() const { return m_config; }

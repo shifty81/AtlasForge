@@ -599,6 +599,10 @@ bool Engine::Running() const {
     return m_running;
 }
 
+void Engine::RequestExit() {
+    m_running = false;
+}
+
 void Engine::Shutdown() {
     if (m_running) {
         Logger::Info("Engine shutting down");

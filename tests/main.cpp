@@ -1747,6 +1747,12 @@ void test_menu_overlay_not_rendered_when_closed();
 void test_logger_sink_callback();
 void test_system_tab_creation();
 
+// Menu action wiring tests
+void test_engine_request_exit();
+void test_menu_toggle_panel_visibility();
+void test_menu_action_item_dispatch();
+void test_status_bar_update();
+
 // GUI next tasks tests
 void test_checkable_default_false();
 void test_set_checkable();
@@ -3848,6 +3854,12 @@ int main() {
     test_menu_overlay_not_rendered_when_closed();
     test_logger_sink_callback();
     test_system_tab_creation();
+
+    std::cout << "\n--- Menu Action Wiring ---" << std::endl;
+    test_engine_request_exit();
+    test_menu_toggle_panel_visibility();
+    test_menu_action_item_dispatch();
+    test_status_bar_update();
 
     std::cout << "\n--- GUI Next Tasks ---" << std::endl;
     test_checkable_default_false();
