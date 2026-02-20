@@ -1405,6 +1405,22 @@ void test_tile_editor_paint_no_tile_selected();
 void test_tile_editor_active_layer();
 void test_tile_editor_unregister();
 void test_tile_editor_grid_coord_hash();
+void test_tile_editor_brush_paint_single();
+void test_tile_editor_brush_paint_square_3x3();
+void test_tile_editor_brush_paint_circle();
+void test_tile_editor_brush_erase();
+void test_tile_editor_paint_rect();
+void test_tile_editor_paint_rect_reversed_corners();
+void test_tile_editor_erase_rect();
+void test_tile_editor_flood_fill_empty_region();
+void test_tile_editor_flood_fill_replace_tile();
+void test_tile_editor_flood_fill_same_tile_noop();
+void test_tile_editor_on_tile_painted_callback();
+void test_tile_editor_on_tile_erased_callback();
+void test_tile_editor_brush_paint_fires_callback();
+void test_tile_editor_rect_paint_fires_callback();
+void test_tile_editor_get_brush_shape();
+void test_tile_editor_get_brush_size();
 
 // Text Renderer tests
 void test_null_text_renderer();
@@ -3455,6 +3471,22 @@ int main() {
     test_tile_editor_active_layer();
     test_tile_editor_unregister();
     test_tile_editor_grid_coord_hash();
+    test_tile_editor_brush_paint_single();
+    test_tile_editor_brush_paint_square_3x3();
+    test_tile_editor_brush_paint_circle();
+    test_tile_editor_brush_erase();
+    test_tile_editor_paint_rect();
+    test_tile_editor_paint_rect_reversed_corners();
+    test_tile_editor_erase_rect();
+    test_tile_editor_flood_fill_empty_region();
+    test_tile_editor_flood_fill_replace_tile();
+    test_tile_editor_flood_fill_same_tile_noop();
+    test_tile_editor_on_tile_painted_callback();
+    test_tile_editor_on_tile_erased_callback();
+    test_tile_editor_brush_paint_fires_callback();
+    test_tile_editor_rect_paint_fires_callback();
+    test_tile_editor_get_brush_shape();
+    test_tile_editor_get_brush_size();
 
     // Text Renderer
     std::cout << "\n--- Text Renderer ---" << std::endl;
