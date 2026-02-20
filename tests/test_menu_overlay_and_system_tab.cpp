@@ -82,9 +82,9 @@ void test_menu_overlay_renders_on_top() {
     // and last draw call that contains the text "Play" (toolbar button)
     int lastMenuItemIdx = -1;
     int lastToolbarBtnIdx = -1;
-    for (int i = 0; i < (int)renderer.calls.size(); ++i) {
-        if (renderer.calls[i].text == "New") lastMenuItemIdx = i;
-        if (renderer.calls[i].text == "Play") lastToolbarBtnIdx = i;
+    for (size_t i = 0; i < renderer.calls.size(); ++i) {
+        if (renderer.calls[i].text == "New") lastMenuItemIdx = static_cast<int>(i);
+        if (renderer.calls[i].text == "Play") lastToolbarBtnIdx = static_cast<int>(i);
     }
 
     assert(lastMenuItemIdx > 0 && "Menu item 'New' should have been rendered");

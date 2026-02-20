@@ -67,13 +67,19 @@ void Logger::SetSink(SinkCallback sink) {
 }
 
 void Logger::Write(const std::string& line, std::ostream& console) {
-    std::lock_guard<std::mutex> lock(s_mutex);
-    console << line << std::endl;
-    if (s_logFile.is_open()) {
-        s_logFile << line << std::endl;
+    SinkCallback sinkCopy;
+    {
+        std::lock_guard<std::mutex> lock(s_mutex);
+        console << line << std::endl;
+        if (s_logFile.is_open()) {
+            s_logFile << line << std::endl;
+        }
+        sinkCopy = s_sink;
     }
-    if (s_sink) {
-        s_sink(line);
+    // Invoke the sink outside the lock to avoid deadlocks if the callback
+    // tries to call Logger methods.
+    if (sinkCopy) {
+        sinkCopy(line);
     }
 }
 

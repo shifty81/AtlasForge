@@ -96,12 +96,8 @@ void UIManager::RenderMenuOverlays(UIRenderer* renderer) {
     for (uint32_t i = 1; i < kMaxWidgetId; ++i) {
         const UIWidget* widget = m_screen.GetWidget(i);
         if (!widget || !widget->visible) continue;
-        if (widget->type != UIWidgetType::Menu && widget->type != UIWidgetType::Panel) continue;
-
-        // Only menus that are currently open
-        if (widget->type == UIWidgetType::Menu && !widget->isMenuOpen) continue;
-        // Context-menu panels are handled via isMenuOpen on Menu widgets
-        if (widget->type == UIWidgetType::Panel) continue;
+        if (widget->type != UIWidgetType::Menu) continue;
+        if (!widget->isMenuOpen) continue;
 
         auto children = m_screen.GetChildren(i);
         if (children.empty()) continue;

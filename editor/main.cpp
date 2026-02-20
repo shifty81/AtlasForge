@@ -520,25 +520,24 @@ int main() {
     }
 
     // --- Logger sink: feed log lines into the System tab scroll area ---
-    // We add Text widgets as children of systemScroll so they appear in the
-    // System debug panel.  Capture the screen reference and scroll widget ID.
+    // NOTE: In the current architecture Logger is only called from the main
+    // thread (event callbacks, toolbar/menu handlers, etc.), so direct UI
+    // modification is safe.  If Logger is ever called from worker threads,
+    // a queuing mechanism should be added.
     {
-        auto& screen = engine.GetUIManager().GetScreen();
+        atlas::ui::UIScreen* screenPtr = &engine.GetUIManager().GetScreen();
         uint32_t sysScrollId = ids.systemScroll;
-        atlas::Logger::SetSink([&screen, sysScrollId](const std::string& line) {
-            // Find the current bottom-y of existing children in systemScroll
-            auto children = screen.GetChildren(sysScrollId);
-            const atlas::ui::UIWidget* scrollW = screen.GetWidget(sysScrollId);
+        atlas::Logger::SetSink([screenPtr, sysScrollId](const std::string& line) {
+            const atlas::ui::UIWidget* scrollW = screenPtr->GetWidget(sysScrollId);
             if (!scrollW) return;
+            auto children = screenPtr->GetChildren(sysScrollId);
             float baseY = scrollW->y + 2.0f;
             float lineY = baseY + static_cast<float>(children.size()) * 16.0f;
-            // Determine text color based on log level
-            // Lines are added but rendering uses the existing Text widget path
-            uint32_t textId = const_cast<atlas::ui::UIScreen&>(screen).AddWidget(
+            uint32_t textId = screenPtr->AddWidget(
                 atlas::ui::UIWidgetType::Text, line,
                 scrollW->x + 4.0f, lineY,
                 scrollW->width - 8.0f, 14.0f);
-            const_cast<atlas::ui::UIScreen&>(screen).SetParent(textId, sysScrollId);
+            screenPtr->SetParent(textId, sysScrollId);
         });
     }
 
