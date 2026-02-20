@@ -24,9 +24,9 @@ All core engine systems are implemented and tested.
 - [x] Formal world state model (state categorization, snapshotting, rollback)
 - [x] Save/load system (versioned binary format with hash integrity verification)
 
-## Phase 2 — Editor 🔧
+## Phase 2 — Editor ✅
 
-The editor framework is in place with docking and functional panels. Draw() methods are no-ops awaiting full integration with the Atlas custom UI rendering backend.
+The editor framework is complete. All panels have functional Draw() implementations using UIDrawList. The GL rendering backend provides bitmap font text rendering and a scene viewport framebuffer. The editor UI is self-hosted via the Atlas GUI DSL. Layout resize propagation is wired end-to-end.
 
 - [x] UI framework (EditorPanel base class, visibility control)
 - [x] Panel docking system (recursive dock nodes, horizontal/vertical splits)
@@ -158,9 +158,9 @@ All polish systems are implemented.
 - [x] Replay recorder (input frame recording, binary save/load, tick-based lookup)
 - [x] Crash analysis tools (breadcrumb trail, crash report generation, file output, callbacks)
 
-## Phase 8 — GUI System & Editor Hardening 🔧
+## Phase 8 — GUI System & Editor Hardening ✅
 
-Advanced GUI architecture, editor refinements, and determinism enforcement. Self-hosting is partial; Unreal-grade aesthetics are pending.
+Advanced GUI architecture, editor refinements, and determinism enforcement are complete. The editor self-hosts its own layout via the Atlas GUI DSL. The dark professional theme (UIStyle) provides Unreal-grade aesthetics with dark backgrounds, accent colours, and professional typography.
 
 - [x] Custom GUI widget system (layout solver, DSL compiler, deterministic rendering)
 - [x] GUI DSL (declarative layout language with docking, splits, tabs)
@@ -205,7 +205,7 @@ Blueprint-like visual scripting and Blender-like procedural modeling.
 
 ## Phase 11 — AtlasAI & Game GUI Authoring ✅
 
-AI-assisted authoring and unified game UI system. Framework and intent routing exist; no LLM backend is wired.
+AI-assisted authoring and unified game UI system. The HttpLLMBackend provides OpenAI-compatible LLM integration with env-based configuration (ATLAS_LLM_ENDPOINT, ATLAS_LLM_MODEL, ATLAS_LLM_API_KEY). The EditorAssistant and AssetGraphAssistant are both wired to the LLMBackendRegistry.
 
 - [x] AtlasAI core (structured I/O, permission-gated intents)
 - [x] Atlas Assistant panel (context-aware prompts, diff preview)
@@ -245,13 +245,13 @@ Production-grade CI, build experience, and template repository support.
 | Gameplay | ✅ Complete | Camera, input, physics, audio, mechanics |
 | Interaction/Voice | ✅ Complete | Unified intent pipeline |
 | Project/Plugin | ✅ Complete | Multi-project, schema validation, plugins, game modules |
-| Editor Framework | 🔧 Functional | All panel logic works, layout persistence added, PIE implemented, Draw() methods implemented for all panels including MeshViewer and PrefabEditor |
+| Editor Framework | ✅ Complete | All panels have functional Draw() implementations with UIDrawList; GL bitmap font rendering; viewport framebuffer; self-hosted editor DSL layout |
 | Networking | ✅ Complete | API, lockstep/rollback, replication, production hardening (timeouts, reconnect, bandwidth, heartbeat) |
 | Production Tools | ✅ Complete | Game packager pipeline (Validate → Cook → Bundle → Emit), asset cooker, build profiles, platform targeting |
 | Polish | ✅ Complete | Undo/redo, visual diff, profiler, replay recorder, crash analysis |
 | Game Module System | ✅ Complete | IGameModule interface, ModuleLoader, AtlasGameplay library, EveOffline (shipped in-repo), SDK export |
-| GUI System & Editor Hardening | 🔧 Functional | DSL and layout solver work, self-hosting partial, Unreal-grade aesthetics pending |
+| GUI System & Editor Hardening | ✅ Complete | DSL and layout solver complete; editor self-hosted via DSL; Unreal-grade dark theme (UIStyle); all interaction managers wired |
 | Replay & Formal Verification | ✅ Complete | TLA+ specs, TLC CI, proof viewer, replay→proof export, ShaderIR |
 | Flow Graph & Procedural Content | ✅ Complete | Flow Graph IR/VM/debugger, procedural mesh/material/LOD, deterministic animation, collaborative editing |
-| AtlasAI & Game GUI Authoring | 🔧 Functional | Framework and routing exist, no LLM backend wired |
+| AtlasAI & Game GUI Authoring | ✅ Complete | HttpLLMBackend wired to EditorAssistant and AssetGraphAssistant; Game GUI DSL, bindings, and authoring panels complete |
 | CI, Build & Template System | 🔧 Functional | CI gates and build scripts work, certified build pipeline scaffolded |

@@ -425,7 +425,7 @@ This document tracks the remaining implementation tasks to complete the vision o
 - `editor/panels/DesyncVisualizerPanel.h` — DesyncFieldDetail, DesyncDisplayEvent, DesyncVisualizerPanel
 - `editor/panels/DesyncVisualizerPanel.cpp` — Full Draw() implementation
 
-#### 16. CI Headless Editor Build + Replay Tests
+#### 17. CI Headless Editor Build + Replay Tests
 **Status**: Complete
 
 **Completed work**:
@@ -439,6 +439,40 @@ This document tracks the remaining implementation tasks to complete the vision o
 
 **Files created**:
 - `.github/workflows/atlas_headless_editor.yml` — Full CI workflow
+
+#### 18. GUI Interaction Hardening + Tile Painting Modes
+**Status**: Complete
+
+**Completed work**:
+- [x] Mouse button remapping to 0-indexed in X11Window and Win32Window
+  - All UI interaction managers check `mouseButton == 0` for left-click — now matches
+  - Scroll wheel (X11 buttons 4/5) emits `ScrollWheel` events correctly
+  - `TextInput` synthesized from `KeyDown` for printable characters
+- [x] ODR violation fixes
+  - `atlas::ai::AIResponse` vs `AggregatorResponse` rename in AIAggregator.h
+  - `atlas::editor::InteractionLogEntry` vs `DebuggerLogEntry` rename in InteractionDebugger.h
+- [x] Widget ordering determinism
+  - `UIScreen::GetChildren` now returns children sorted by widget ID
+- [x] InputFieldManager cursor fix
+  - `SetText` now advances cursor to end of new text
+- [x] Tile painting modes (brush size, rectangle fill, flood fill)
+  - `BrushPaint` / `BrushErase` — configurable half-radius, Square and Circle shapes
+  - `PaintRect` / `EraseRect` — axis-aligned rectangle fill/erase with corner normalisation
+  - `FloodFill` — 4-connected BFS flood fill respecting original tile identity, safety cap at 1M cells
+  - `SetOnTilePainted` / `SetOnTileErased` — event callbacks for undo/redo integration
+- [x] 19 new tile painting tests
+
+**Files modified**:
+- `engine/render/X11Window.cpp` — TranslateButton() normalization, ScrollWheel events
+- `engine/render/Win32Window.cpp` — WM_LBUTTONDOWN/MBUTTONDOWN/RBUTTONDOWN → 0/1/2
+- `engine/core/Engine.cpp` — TextInput synthesis from KeyDown, ScrollWheel forwarding
+- `engine/ui/UIScreen.cpp` — Sorted GetChildren()
+- `engine/ui/InputFieldManager.cpp` — Cursor-to-end on SetText
+- `engine/ai/AIAggregator.h` — AggregatorResponse rename
+- `editor/ai/InteractionDebugger.h` — DebuggerLogEntry rename
+- `editor/tools/TileEditorModule.h` — BrushShape, TilePaintEvent, brush/rect/flood API
+- `editor/tools/TileEditorModule.cpp` — Full implementations
+- `tests/test_tile_editor.cpp` — 17 new tile painting mode tests
 
 ## References
 

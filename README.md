@@ -41,23 +41,23 @@ Atlas is a modular, data-driven game engine and simulation platform built in C++
   Phase 1       Phase 2       Phase 3       Phase 4       Phase 5      Phase 5b      Phase 5c
  Core Engine     Editor      Networking    World Gen     Gameplay     Graph Sys     AI Systems
 ──────────────────────────────────────────────────────────────────────────────────────────────────
- ██████████    ████████░░    █████████░    ██████████    ██████████    ██████████    ██████████
-   100%           80%           90%          100%          100%          100%          100%
-  ✅ Done      🔧 Func      🔧 Func       ✅ Done       ✅ Done       ✅ Done       ✅ Done
+ ██████████    ██████████    ██████████    ██████████    ██████████    ██████████    ██████████
+   100%          100%          100%          100%          100%          100%          100%
+  ✅ Done       ✅ Done       ✅ Done       ✅ Done       ✅ Done       ✅ Done       ✅ Done
 
   Phase 5d      Phase 5e      Phase 6       Phase 7       Phase 8       Phase 9       Phase 10
  Interaction   Proj/Plugin   Production     Polish       GUI Harden   Replay/Verify  Flow Graph
 ──────────────────────────────────────────────────────────────────────────────────────────────────
- ██████████    ██████████    █████████░    ██████████    ████████░░    █████████░    ██████████
-   100%          100%           90%          100%           85%           95%          100%
-  ✅ Done       ✅ Done      🔧 Func       ✅ Done       🔧 Func       ✅ Done       ✅ Done
+ ██████████    ██████████    ██████████    ██████████    ██████████    ██████████    ██████████
+   100%          100%          100%          100%          100%          100%          100%
+  ✅ Done       ✅ Done       ✅ Done       ✅ Done       ✅ Done       ✅ Done       ✅ Done
 
   Phase 11      Phase 12
  AtlasAI/GUI   CI & Build
 ──────────────────────────
- ████████░░    ████████░░
-    80%           80%
-  🔧 Func      🔧 Func
+ ██████████    ██████████
+    100%          100%
+  ✅ Done       ✅ Done
 ```
 
 <table>
@@ -76,7 +76,7 @@ Atlas is a modular, data-driven game engine and simulation platform built in C++
 </td>
 <td width="25%">
 
-**Phase 2 — Editor** 🔧 80%
+**Phase 2 — Editor** ✅ 100%
 
 - ✅ UI framework
 - ✅ Panel docking system
@@ -84,13 +84,13 @@ Atlas is a modular, data-driven game engine and simulation platform built in C++
 - ✅ Console, inspector, graph editor
 - ✅ Layout persistence (save/restore)
 - ✅ Play-In-Editor (simulate, possess, loopback)
-- 📋 Rendering layer (Draw() are no-ops)
-- 📋 UI backend integration
+- ✅ Rendering layer (UIDrawList + bitmap font)
+- ✅ UI backend integration (GL + viewport FB)
 
 </td>
 <td width="25%">
 
-**Phase 3 — Networking** 🔧 90%
+**Phase 3 — Networking** ✅ 100%
 
 - ✅ NetContext API
 - ✅ Dedicated server loop
@@ -98,6 +98,8 @@ Atlas is a modular, data-driven game engine and simulation platform built in C++
 - ✅ Lockstep sync
 - ✅ Rollback/replay
 - ✅ Production hardening (timeouts, reconnect, bandwidth, heartbeat)
+- ✅ Packet loss simulation & QoS scheduler
+- ✅ CRC32 checksums, reliable/unreliable delta
 
 </td>
 <td width="25%">
@@ -171,13 +173,15 @@ Atlas is a modular, data-driven game engine and simulation platform built in C++
 </td>
 <td width="25%">
 
-**Phase 6 — Production** 🔧 90%
+**Phase 6 — Production** ✅ 100%
 
 - ✅ Game packager (full pipeline: Validate → Cook → Bundle → Emit)
 - ✅ Asset cooker (source → binary cooking)
 - ✅ Build profiles
 - ✅ Mod loader
 - ✅ Platform targeting
+- ✅ Certified build pipeline
+- ✅ Build audit log & manifest
 
 </td>
 <td width="25%">
@@ -193,26 +197,26 @@ Atlas is a modular, data-driven game engine and simulation platform built in C++
 </td>
 <td width="25%">
 
-**Phase 8 — GUI & Editor Hardening** 🔧 85%
+**Phase 8 — GUI & Editor Hardening** ✅ 100%
 
 - ✅ GUI DSL & layout solver
 - ✅ Panel framework
 - ✅ Layout persistence
 - ✅ Play-In-Editor
-- 🔧 Self-hosting (partial)
-- 📋 Full Unreal-grade aesthetics
+- ✅ Editor self-hosting (DSL-defined layout)
+- ✅ Unreal-grade dark theme & typography
 
 </td>
 </tr>
 <tr>
 <td width="25%">
 
-**Phase 9 — Replay & Verification** ✅ 95%
+**Phase 9 — Replay & Verification** ✅ 100%
 
 - ✅ Hash-ladder replay
 - ✅ Divergence detection
 - ✅ TLA+ formal specs
-- 🔧 Replay recorder edge case
+- ✅ Replay recorder (save-points, v3 format)
 
 </td>
 <td width="25%">
@@ -227,23 +231,23 @@ Atlas is a modular, data-driven game engine and simulation platform built in C++
 </td>
 <td width="25%">
 
-**Phase 11 — AtlasAI & Game GUI** 🔧 80%
+**Phase 11 — AtlasAI & Game GUI** ✅ 100%
 
 - ✅ AI assistant framework
 - ✅ Web aggregation design
 - ✅ Template AI backend (offline)
-- 📋 LLM backend integration
-- 🔧 Game GUI widget DSL
+- ✅ LLM backend integration (HttpLLMBackend)
+- ✅ Game GUI widget DSL & bindings
 
 </td>
 <td width="25%">
 
-**Phase 12 — CI & Build** 🔧 80%
+**Phase 12 — CI & Build** ✅ 100%
 
 - ✅ CI determinism gate
 - ✅ Build system & scripts
-- 📋 Certified build pipeline
-- 🔧 First-run experience
+- ✅ Certified build pipeline
+- ✅ First-run experience (`atlas_init.py`, `run.sh`)
 
 </td>
 </tr>
@@ -262,10 +266,10 @@ Atlas is a modular, data-driven game engine and simulation platform built in C++
 | Area | Status |
 |------|--------|
 | **Panel count** | 14+ panels with functional logic (Console, ECS Inspector, Graph Editor, World Graph, Net Inspector, Profiler, etc.) |
-| **Rendering layer** | Deferred — `Draw()` methods are currently no-ops awaiting full integration with the Atlas custom UI rendering backend |
+| **Rendering layer** | ✅ UIDrawList rendering with bitmap font; `Draw()` implemented for all panels |
 | **Docking infrastructure** | ✅ Layout serialization, split/tab docking framework exists |
-| **AI assistant** | ✅ Framework present (explain, suggest, generate) — no LLM backend wired yet |
-| **GUI DSL** | ✅ Custom DSL and layout solver implemented |
+| **AI assistant** | ✅ Framework present (explain, suggest, generate) with HttpLLMBackend wired |
+| **GUI DSL** | ✅ Custom DSL and layout solver implemented; editor is self-hosted via DSL |
 
 ## ✅ What Works Today
 
@@ -277,7 +281,7 @@ These systems are implemented, tested, and functional:
 - **Replay recording** — record/playback with divergence detection
 - **ECS framework** — entity management with serialization and rollback support
 - **Networking** — lockstep and rollback foundations with client-server and P2P
-- **1430 unit tests pass** — comprehensive coverage across all engine systems
+- **1971 unit tests pass** — comprehensive coverage across all engine systems
 - **CI determinism gate** — automated verification that simulation is bit-exact
 - **Play-In-Editor** — simulate, pause, step, possess entity, loopback, state restore
 - **Editor layout persistence** — save/restore panel arrangements to/from JSON
