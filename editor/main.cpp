@@ -566,7 +566,7 @@ int main() {
     }
 
     // --- Set up Play-In-Editor controller ---
-    atlas::editor::PlayInEditor pie;
+    atlas::editor::PlayInEditor playInEditor;
 
     // Helper: update status bar text
     auto updateStatus = [&engine, &ids](const std::string& text) {
@@ -579,26 +579,26 @@ int main() {
     // --- Set up Toolbar Manager ---
     auto& toolbarMgr = engine.GetUIManager().GetToolbarManager();
     toolbarMgr.SetButtonCallback(
-        [&engine, &ids, &pie, &updateStatus](uint32_t /*toolbarId*/, uint32_t buttonId) {
+        [&engine, &ids, &playInEditor, &updateStatus](uint32_t /*toolbarId*/, uint32_t buttonId) {
             if (buttonId == ids.tbPlay) {
-                if (pie.Mode() == atlas::editor::PIEMode::Paused) {
-                    pie.Resume();
+                if (playInEditor.Mode() == atlas::editor::PIEMode::Paused) {
+                    playInEditor.Resume();
                     atlas::Logger::Info("Simulation resumed");
                     updateStatus("Simulating...");
-                } else if (pie.Mode() == atlas::editor::PIEMode::Stopped) {
-                    pie.StartSimulation(engine);
+                } else if (playInEditor.Mode() == atlas::editor::PIEMode::Stopped) {
+                    playInEditor.StartSimulation(engine);
                     atlas::Logger::Info("Simulation started");
                     updateStatus("Simulating...");
                 }
             } else if (buttonId == ids.tbPause) {
-                if (pie.Mode() == atlas::editor::PIEMode::Simulating) {
-                    pie.Pause();
+                if (playInEditor.Mode() == atlas::editor::PIEMode::Simulating) {
+                    playInEditor.Pause();
                     atlas::Logger::Info("Simulation paused");
                     updateStatus("Paused");
                 }
             } else if (buttonId == ids.tbStop) {
-                if (pie.Mode() != atlas::editor::PIEMode::Stopped) {
-                    pie.StopSimulation(engine);
+                if (playInEditor.Mode() != atlas::editor::PIEMode::Stopped) {
+                    playInEditor.StopSimulation(engine);
                     atlas::Logger::Info("Simulation stopped");
                     updateStatus("Ready");
                 }
@@ -611,7 +611,7 @@ int main() {
 
     // --- Set up Menu Item Callback ---
     engine.GetUIManager().GetMenuManager().SetMenuItemCallback(
-        [&engine, &ids, &pie, &updateStatus](uint32_t /*menuId*/, uint32_t itemId) {
+        [&engine, &ids, &playInEditor, &updateStatus](uint32_t /*menuId*/, uint32_t itemId) {
             auto& screen = engine.GetUIManager().GetScreen();
 
             // --- File menu ---
@@ -713,41 +713,41 @@ int main() {
     if (ids.consoleInput != 0) {
         inputMgr.RegisterField(ids.consoleInput, "command...");
         inputMgr.SetTextSubmitCallback(
-            [&engine, &pie, &updateStatus](uint32_t /*fieldId*/, const std::string& text) {
+            [&engine, &playInEditor, &updateStatus](uint32_t /*fieldId*/, const std::string& text) {
                 if (text == "help") {
-                    atlas::Logger::Info("Available commands: help, clear, status, exit, play, pause, stop");
+                    atlas::Logger::Info("Available commands: help, clear, status, exit/quit, play, pause, stop");
                 } else if (text == "exit" || text == "quit") {
                     atlas::Logger::Info("Exit requested via console");
                     engine.RequestExit();
                 } else if (text == "status") {
                     std::string mode;
-                    switch (pie.Mode()) {
+                    switch (playInEditor.Mode()) {
                         case atlas::editor::PIEMode::Stopped:    mode = "Stopped"; break;
                         case atlas::editor::PIEMode::Simulating: mode = "Simulating"; break;
                         case atlas::editor::PIEMode::Paused:     mode = "Paused"; break;
                         case atlas::editor::PIEMode::Possessed:  mode = "Possessed"; break;
                     }
                     atlas::Logger::Info("Status: PIE=" + mode
-                                       + " Ticks=" + std::to_string(pie.TicksSimulated()));
+                                       + " Ticks=" + std::to_string(playInEditor.TicksSimulated()));
                 } else if (text == "play") {
-                    if (pie.Mode() == atlas::editor::PIEMode::Stopped) {
-                        pie.StartSimulation(engine);
+                    if (playInEditor.Mode() == atlas::editor::PIEMode::Stopped) {
+                        playInEditor.StartSimulation(engine);
                         atlas::Logger::Info("Simulation started via console");
                         updateStatus("Simulating...");
-                    } else if (pie.Mode() == atlas::editor::PIEMode::Paused) {
-                        pie.Resume();
+                    } else if (playInEditor.Mode() == atlas::editor::PIEMode::Paused) {
+                        playInEditor.Resume();
                         atlas::Logger::Info("Simulation resumed via console");
                         updateStatus("Simulating...");
                     }
                 } else if (text == "pause") {
-                    if (pie.Mode() == atlas::editor::PIEMode::Simulating) {
-                        pie.Pause();
+                    if (playInEditor.Mode() == atlas::editor::PIEMode::Simulating) {
+                        playInEditor.Pause();
                         atlas::Logger::Info("Simulation paused via console");
                         updateStatus("Paused");
                     }
                 } else if (text == "stop") {
-                    if (pie.Mode() != atlas::editor::PIEMode::Stopped) {
-                        pie.StopSimulation(engine);
+                    if (playInEditor.Mode() != atlas::editor::PIEMode::Stopped) {
+                        playInEditor.StopSimulation(engine);
                         atlas::Logger::Info("Simulation stopped via console");
                         updateStatus("Ready");
                     }
