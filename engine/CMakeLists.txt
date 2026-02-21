@@ -110,6 +110,7 @@ add_library(AtlasEngine STATIC
     ai/WebAggregationKB.cpp
     ai/ProjectContext.cpp
     ai/AIAssetDecisionFramework.cpp
+    ai/ProceduralGenerator.cpp
     asset_graph/AssetGraphExecutor.cpp
     audio/AudioEngine.cpp
     camera/Camera.cpp
