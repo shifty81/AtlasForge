@@ -991,6 +991,9 @@ void register_next_tasks_phase17();
 // Networking improvements: latency/jitter, CRC, bandwidth enforcement, manual replication, reliable/unreliable
 void register_net_improvements_tests();
 
+// Phase 19: ProceduralGenerator, AIDebuggerPanel, HotReloadConfig
+void register_next_tasks_phase19();
+
 // Panel Draw() implementations
 void register_panel_draw_impl_tests();
 
@@ -2087,6 +2090,9 @@ int main() {
 
     // Networking improvements
     register_net_improvements_tests();
+
+    // Phase 19: ProceduralGenerator, AIDebuggerPanel, HotReloadConfig
+    register_next_tasks_phase19();
 
     // Engine Input Routing (moved before panel draw tests to avoid pre-existing crash)
     std::cout << "\n--- Engine Input Routing ---" << std::endl;
