@@ -194,6 +194,7 @@ add_executable(AtlasTests
     test_gui_interaction_managers.cpp
     test_menu_overlay_and_system_tab.cpp
     test_menu_actions.cpp
+    test_renderer_backend.cpp
     ${CMAKE_SOURCE_DIR}/editor/panels/ConsolePanel.cpp
     ${CMAKE_SOURCE_DIR}/editor/panels/InteractionDebugger.cpp
     ${CMAKE_SOURCE_DIR}/editor/panels/ECSInspectorPanel.cpp

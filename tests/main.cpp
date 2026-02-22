@@ -1937,6 +1937,9 @@ void test_ui_manager_treenode_integration();
 void test_ui_manager_splitter_integration();
 void test_ui_manager_colorpicker_integration();
 
+// Renderer backend tests
+void run_renderer_backend_tests();
+
 int main() {
     std::cout << "=== Atlas Engine Tests ===" << std::endl;
 
@@ -4102,6 +4105,9 @@ int main() {
     test_ui_manager_treenode_integration();
     test_ui_manager_splitter_integration();
     test_ui_manager_colorpicker_integration();
+
+    // Renderer backend tests
+    run_renderer_backend_tests();
 
     std::cout << "\n=== All tests passed! ===" << std::endl;
     return 0;

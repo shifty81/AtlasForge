@@ -19,8 +19,8 @@ void test_render_api_enum() {
     RenderAPI gl = RenderAPI::OpenGL;
     RenderAPI vk = RenderAPI::Vulkan;
     assert(gl != vk);
-    assert(static_cast<uint8_t>(gl) == 0);
-    assert(static_cast<uint8_t>(vk) == 1);
+    assert(static_cast<uint8_t>(gl) == 1);
+    assert(static_cast<uint8_t>(vk) == 2);
     std::cout << "[PASS] test_render_api_enum" << std::endl;
 }
 
