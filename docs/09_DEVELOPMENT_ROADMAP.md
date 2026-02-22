@@ -232,6 +232,22 @@ Production-grade CI, build experience, and template repository support.
 - [x] CI dashboard panel (in-editor CI results visualization)
 - [x] Certified build mode (audit-grade verification artifacts)
 
+## Phase 18 — Determinism Debug Tooling ✅
+
+Tick-step debugging, simulation state auditing, and cross-platform FP drift detection are fully tested.
+
+- [x] TickStepDebugger (step forward/backward, tick breakpoints, hash-mismatch breakpoints, callbacks)
+- [x] SimulationStateAuditor (system registration, state block declaration, hidden-state audit)
+- [x] FPDriftDetector (cross-platform hash comparison, per-system drift analysis, report formatting/export)
+
+## Phase 20 — Desync Reproduction & Network QoS ✅
+
+One-command desync reproduction, priority-based packet scheduling, and server-side asset validation are fully tested.
+
+- [x] DesyncReproducer (capture desync state, generate save/replay/report artifacts, crash report bundles)
+- [x] QoSScheduler (priority-based packet ordering, bandwidth budgets, congestion detection, queue overflow)
+- [x] ServerAssetValidator (manifest-based hash validation, server-side asset gating)
+
 ---
 
 ## Implementation Summary
@@ -255,3 +271,5 @@ Production-grade CI, build experience, and template repository support.
 | Flow Graph & Procedural Content | ✅ Complete | Flow Graph IR/VM/debugger, procedural mesh/material/LOD, deterministic animation, collaborative editing |
 | AtlasAI & Game GUI Authoring | ✅ Complete | HttpLLMBackend wired to EditorAssistant and AssetGraphAssistant; Game GUI DSL, bindings, and authoring panels complete |
 | CI, Build & Template System | 🔧 Functional | CI gates and build scripts work, certified build pipeline scaffolded |
+| Determinism Debug Tooling | ✅ Complete | TickStepDebugger, SimulationStateAuditor, FPDriftDetector — all tested |
+| Desync Reproduction & Network QoS | ✅ Complete | DesyncReproducer, QoSScheduler, ServerAssetValidator — all tested |

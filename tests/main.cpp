@@ -1007,6 +1007,12 @@ void register_net_improvements_tests();
 // Phase 19: ProceduralGenerator, AIDebuggerPanel, HotReloadConfig
 void register_next_tasks_phase19();
 
+// Phase 18: TickStepDebugger, SimulationStateAuditor, FPDriftDetector
+void register_next_tasks_phase18();
+
+// Phase 20: DesyncReproducer, QoSScheduler, ServerAssetValidator
+void register_next_tasks_phase20();
+
 // Panel Draw() implementations
 void register_panel_draw_impl_tests();
 
@@ -2101,11 +2107,17 @@ int main() {
     // Phase 17: Component migration, SimMirror, DesyncVisualizerPanel
     register_next_tasks_phase17();
 
+    // Phase 18: TickStepDebugger, SimulationStateAuditor, FPDriftDetector
+    register_next_tasks_phase18();
+
     // Networking improvements
     register_net_improvements_tests();
 
     // Phase 19: ProceduralGenerator, AIDebuggerPanel, HotReloadConfig
     register_next_tasks_phase19();
+
+    // Phase 20: DesyncReproducer, QoSScheduler, ServerAssetValidator
+    register_next_tasks_phase20();
 
     // Engine Input Routing (moved before panel draw tests to avoid pre-existing crash)
     std::cout << "\n--- Engine Input Routing ---" << std::endl;
