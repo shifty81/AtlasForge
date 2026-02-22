@@ -261,9 +261,12 @@ MaterialData GenerateProceduralTexture(uint32_t width, uint32_t height, uint64_t
             float amplitude = 1.0f;
             float totalAmp = 0.0f;
             float f = freq;
+            // Well-known pseudo-random hash constants (Dave Hoskins)
+            constexpr float kNoiseHashX = 12.9898f;
+            constexpr float kNoiseHashY = 78.233f;
+            constexpr float kNoiseHashMultiplier = 43758.5453f;
             for (int o = 0; o < oct; ++o) {
-                // Simple deterministic noise using sin-based hash
-                float n = std::sin(wx * f * 12.9898f + wy * f * 78.233f + static_cast<float>(seed & 0xFFFF)) * 43758.5453f;
+                float n = std::sin(wx * f * kNoiseHashX + wy * f * kNoiseHashY + static_cast<float>(seed & 0xFFFF)) * kNoiseHashMultiplier;
                 n = n - std::floor(n); // fract
                 value += n * amplitude;
                 totalAmp += amplitude;

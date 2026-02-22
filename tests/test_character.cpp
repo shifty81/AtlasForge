@@ -137,7 +137,8 @@ void test_charactergraph_facial_features() {
     // All facial features should be in valid normalized ranges
     assert(output->data[0] >= 0.3f && output->data[0] <= 0.7f);  // noseWidth
     assert(output->data[1] >= 0.4f && output->data[1] <= 0.7f);  // eyeSpacing
-    assert(output->data[2] >= 0.5f);                              // jawWidth
+    assert(output->data[2] >= 0.5f && output->data[2] <= 1.0f);  // jawWidth (age may add up to 0.05)
+    assert(output->data[3] >= 0.2f && output->data[3] <= 0.7f);  // browHeight (age may subtract up to 0.03)
     assert(output->data[4] >= 0.2f && output->data[4] <= 0.8f);  // lipFullness
     std::cout << "[PASS] test_charactergraph_facial_features" << std::endl;
 }

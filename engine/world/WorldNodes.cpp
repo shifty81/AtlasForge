@@ -263,7 +263,8 @@ void ErosionNode::Evaluate(const WorldGenContext& /*ctx*/, const std::vector<Val
             }
 
             // Erode and carry sediment
-            float erode = std::min(diff * 0.5f, erosionRate * water);
+            constexpr float kErosionDiffFactor = 0.5f;
+            float erode = std::min(diff * kErosionDiffFactor, erosionRate * water);
             outputs[0].data[idx] -= erode;
             sediment += erode;
 

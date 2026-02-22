@@ -116,7 +116,8 @@ void GroupTacticsNode::Evaluate(const AIContext& ctx, const std::vector<Behavior
     }
 
     // Compute tactical scores
-    float numericAdvantage = (enemies > 0.0f) ? allies / enemies : 2.0f;
+    constexpr float kDefaultAdvantageWhenNoEnemies = 2.0f;
+    float numericAdvantage = (enemies > 0.0f) ? allies / enemies : kDefaultAdvantageWhenNoEnemies;
 
     // Tactic 0=Charge, 1=Flank, 2=Hold, 3=Retreat
     float flankScore = numericAdvantage * flankWeight * ctx.morale;
