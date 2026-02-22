@@ -1,4 +1,5 @@
 #include "GLRenderer.h"
+#include "../ui/UIConstants.h"
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -252,9 +253,9 @@ void GLRenderer::DrawText(const ui::UIRect& rect, const std::string& text, const
     // at the default scale.  The scale factor controls pixel size.
     glSetColor(color);
 
-    const int glyphW = 5;
-    const int glyphH = 7;
-    const int scale  = 2;
+    const int glyphW = atlas::ui::kFontGlyphWidth;
+    const int glyphH = atlas::ui::kFontGlyphHeight;
+    const int scale  = atlas::ui::kFontScale;
     const int charW  = (glyphW + 1) * scale;  // 12px advance per char
     const int charH  = (glyphH + 2) * scale;  // 18px line height
     int cx = rect.x + 2;

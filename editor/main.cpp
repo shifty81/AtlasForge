@@ -2,6 +2,7 @@
 #include "core/EnginePhase.h"
 #include "core/Logger.h"
 #include "ui/UIScreenGraph.h"
+#include "ui/UIConstants.h"
 #include "ui/GUIDSLParser.h"
 #include "ui/DefaultEditorLayout.h"
 #include "ui/EditorAttachProtocol.h"
@@ -590,11 +591,11 @@ int main() {
             if (scrollW) {
                 auto children = screenPtr->GetChildren(sysScrollId);
                 float baseY = scrollW->y + 2.0f;
-                float lineY = baseY + static_cast<float>(children.size()) * 20.0f;
+                float lineY = baseY + static_cast<float>(children.size()) * atlas::ui::kLogLineSpacing;
                 uint32_t textId = screenPtr->AddWidget(
                     atlas::ui::UIWidgetType::Text, line,
                     scrollW->x + 4.0f, lineY,
-                    scrollW->width - 8.0f, 18.0f);
+                    scrollW->width - 8.0f, atlas::ui::kLogEntryHeight);
                 screenPtr->SetParent(textId, sysScrollId);
             }
             // Feed Console scroll area
@@ -602,11 +603,11 @@ int main() {
             if (consW) {
                 auto children = screenPtr->GetChildren(consScrollId);
                 float baseY = consW->y + 2.0f;
-                float lineY = baseY + static_cast<float>(children.size()) * 20.0f;
+                float lineY = baseY + static_cast<float>(children.size()) * atlas::ui::kLogLineSpacing;
                 uint32_t textId = screenPtr->AddWidget(
                     atlas::ui::UIWidgetType::Text, line,
                     consW->x + 4.0f, lineY,
-                    consW->width - 8.0f, 18.0f);
+                    consW->width - 8.0f, atlas::ui::kLogEntryHeight);
                 screenPtr->SetParent(textId, consScrollId);
             }
         });

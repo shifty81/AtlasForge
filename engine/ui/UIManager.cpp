@@ -203,7 +203,7 @@ void UIManager::RenderWidget(UIRenderer* renderer, uint32_t widgetId, int depth)
             // Draw cursor when focused
             if (focused) {
                 size_t cursorPos = m_inputFieldManager.GetCursorPos(widgetId);
-                int32_t cursorX = rect.x + 2 + static_cast<int32_t>(cursorPos) * 12; // 12px per char at scale 2
+                int32_t cursorX = rect.x + 2 + static_cast<int32_t>(cursorPos) * kFontCharAdvance;
                 UIColor cursorColor = {220, 220, 220, 255};
                 UIRect cursorRect = {cursorX, rect.y + 2, 2, rect.h - 4};
                 renderer->DrawRect(cursorRect, cursorColor);
