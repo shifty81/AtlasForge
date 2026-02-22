@@ -21,6 +21,10 @@ This document tracks the remaining implementation tasks to complete the vision o
 - [x] Replay timeline panel
 - [x] ECS inspector
 - [x] Network inspector
+- [x] Project scaffolder (tools/create_atlas_project.py)
+- [x] Determinism lint rules (tools/determinism_rules.yaml)
+- [x] Public SDK documentation (docs/ATLAS_SDK.md)
+- [x] CI failure playbook (docs/CI_FAILURE_PLAYBOOK.md)
 
 ### 🚧 In Progress (Medium Priority)
 
@@ -548,6 +552,36 @@ This document tracks the remaining implementation tasks to complete the vision o
 **Files modified**:
 - `engine/render/RenderAPI.h` — Added None, DX11, Null enum values
 - `engine/CMakeLists.txt` — Added new source files
+
+#### 21. Project Scaffolder + SDK Docs + CI Playbook + Determinism Rules
+**Status**: Complete
+
+**Completed work**:
+- [x] `tools/create_atlas_project.py` — Constitution-compliant project scaffolder
+  - Creates `.atlas` manifest with `determinism_profile` and `binary_abi`
+  - Generates stub system with `ATLAS_SYSTEM_TRAITS` declaration
+  - Generates stub component with `SchemaVersion`
+  - Creates `replays/`, `migrations/`, `scripts/`, `assets/`, `config/` directories
+  - Rejects existing directories
+- [x] `tools/determinism_rules.yaml` — Machine-readable determinism lint rules
+  - 8 rule categories (containers, time, RNG, floating-point, threading, IO, SIMD, UI libs)
+  - Simulation directory scope and exemption lists
+  - Consumable by `contract_scan.py` and CI
+- [x] `docs/ATLAS_SDK.md` — Public SDK documentation
+  - Project creation workflows (scaffolder + atlas_init)
+  - System rules, determinism rules, scripting, replays, ABI, CI, distribution
+  - Tool reference table
+- [x] `docs/CI_FAILURE_PLAYBOOK.md` — CI failure troubleshooting guide
+  - Fix procedures for: determinism lint, replay hash mismatch, contract violations,
+    ABI failures, cross-platform divergence, build failures, test failures, crash reports
+  - Tool references and general debugging workflow
+
+**Files created**:
+- `tools/create_atlas_project.py` — Project scaffolder
+- `tools/determinism_rules.yaml` — Lint rule definitions
+- `docs/ATLAS_SDK.md` — SDK documentation
+- `docs/CI_FAILURE_PLAYBOOK.md` — CI failure playbook
+- `tests/test_create_atlas_project.py` — 7 tests for scaffolder and rules
 
 ## References
 
