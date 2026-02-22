@@ -508,6 +508,47 @@ This document tracks the remaining implementation tasks to complete the vision o
 - `engine/sim/HotReloadConfig.cpp` — Config implementation
 - `tests/test_next_tasks_phase19.cpp` — 35 new tests
 
+#### 20. Renderer Backend Abstraction & Capabilities
+**Status**: Complete
+
+**Completed work**:
+- [x] Extended RenderAPI enum with None, DX11, and Null variants
+- [x] RendererCapabilities struct for centralized GPU capability reporting
+  - Bindless textures, compute shaders, ray tracing flags
+  - Max MSAA samples, HDR swapchain, max texture size, max uniform buffers
+  - Device name and driver version strings
+- [x] RendererBackend abstract base class
+  - Init/Shutdown lifecycle
+  - BeginFrame/EndFrame cycle
+  - SetViewport
+  - GetAPI() and GetCapabilities() accessors
+- [x] NullRendererBackend for headless/CI operation
+  - Zero-capability initialization
+  - Frame counting and viewport tracking
+  - Silent operation with no GPU resources
+- [x] RendererFactory for API-driven backend instantiation
+  - Creates NullRendererBackend for RenderAPI::Null
+  - Returns nullptr for GPU backends when platform libraries unavailable
+  - Returns nullptr for RenderAPI::None
+- [x] UIBackend interface for rendering-backend-agnostic UI drawing
+  - BeginFrame/Draw/EndFrame lifecycle
+  - NullUIBackend with frame and draw call counting
+- [x] 16 new tests covering all components
+
+**Files created**:
+- `engine/render/RendererCapabilities.h` — GPU capability struct
+- `engine/render/RendererBackend.h` — Abstract backend base class
+- `engine/render/NullRendererBackend.h` — Null backend header
+- `engine/render/NullRendererBackend.cpp` — Null backend implementation
+- `engine/render/RendererFactory.h` — Factory header
+- `engine/render/RendererFactory.cpp` — Factory implementation
+- `engine/ui/UIBackend.h` — UI backend interface + NullUIBackend
+- `tests/test_renderer_backend.cpp` — 16 new tests
+
+**Files modified**:
+- `engine/render/RenderAPI.h` — Added None, DX11, Null enum values
+- `engine/CMakeLists.txt` — Added new source files
+
 ## References
 
 - Original gaps analysis: `gaps.txt`

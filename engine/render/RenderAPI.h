@@ -4,8 +4,11 @@
 namespace atlas::render {
 
 enum class RenderAPI : uint8_t {
+    None = 0,
     OpenGL,
-    Vulkan
+    Vulkan,
+    DX11,
+    Null
 };
 
 } // namespace atlas::render
