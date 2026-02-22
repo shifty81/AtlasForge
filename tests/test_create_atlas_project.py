@@ -70,8 +70,7 @@ def test_creates_stub_system():
         content = system_path.read_text()
         assert "ATLAS_SYSTEM_TRAITS" in content, "Missing ATLAS_SYSTEM_TRAITS"
         assert "ExampleSystem" in content, "Missing ExampleSystem class"
-        assert "deterministic" in content.lower() or "deterministic" in content, \
-            "Missing deterministic trait"
+        assert "deterministic" in content.lower(), "Missing deterministic trait"
         print("  ✓ Stub system is valid")
 
 
