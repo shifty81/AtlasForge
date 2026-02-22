@@ -12,4 +12,8 @@ MaterialData GenerateNoiseTexture(uint32_t width, uint32_t height, uint64_t seed
 MaterialData BlendMaterials(const MaterialData& a, const MaterialData& b, float factor);
 MaterialData ComputeNormalMap(const MaterialData& src, float strength);
 
+// Procedural non-repeating texture generation using domain warping
+MaterialData GenerateProceduralTexture(uint32_t width, uint32_t height, uint64_t seed,
+                                       float baseFrequency, int octaves, float warpStrength);
+
 }

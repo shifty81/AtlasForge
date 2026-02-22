@@ -162,6 +162,9 @@ void test_worldgraph_compile_single_node();
 void test_worldgraph_compile_chain();
 void test_worldgraph_deterministic();
 void test_worldgraph_clamp_node();
+void test_worldgraph_biome_node();
+void test_worldgraph_erosion_node();
+void test_worldgraph_erosion_deterministic();
 
 // Voice Command tests
 void test_voice_register_command();
@@ -321,6 +324,9 @@ void test_charactergraph_compile_single_node();
 void test_charactergraph_compile_chain();
 void test_charactergraph_execute();
 void test_charactergraph_deterministic();
+void test_charactergraph_facial_features();
+void test_charactergraph_hair_style();
+void test_charactergraph_facial_deterministic();
 
 // Animation Graph tests
 void test_animationgraph_add_nodes();
@@ -365,6 +371,9 @@ void test_material_graph_execute_solid();
 void test_material_graph_blend_pipeline();
 void test_material_graph_node_count();
 void test_material_graph_remove_node();
+void test_procedural_texture_generation();
+void test_procedural_texture_deterministic();
+void test_procedural_texture_non_repeating();
 
 // LOD Baking Graph tests
 void test_lod_decimate_mesh();
@@ -408,6 +417,10 @@ void test_behaviorgraph_compile_single_node();
 void test_behaviorgraph_compile_chain();
 void test_behaviorgraph_execute();
 void test_behaviorgraph_deterministic();
+void test_behaviorgraph_group_tactics();
+void test_behaviorgraph_group_tactics_charge();
+void test_behaviorgraph_adaptive_behavior();
+void test_behaviorgraph_adaptive_difficulty_scaling();
 
 // UI Screen tests
 void test_ui_add_widget();
@@ -2222,6 +2235,9 @@ int main() {
     test_worldgraph_compile_chain();
     test_worldgraph_deterministic();
     test_worldgraph_clamp_node();
+    test_worldgraph_biome_node();
+    test_worldgraph_erosion_node();
+    test_worldgraph_erosion_deterministic();
 
     // Voice Commands
     std::cout << "\n--- Voice Commands ---" << std::endl;
@@ -2401,6 +2417,9 @@ int main() {
     test_charactergraph_compile_chain();
     test_charactergraph_execute();
     test_charactergraph_deterministic();
+    test_charactergraph_facial_features();
+    test_charactergraph_hair_style();
+    test_charactergraph_facial_deterministic();
 
     // Animation Graph
     std::cout << "\n--- Animation Graph ---" << std::endl;
@@ -2449,6 +2468,9 @@ int main() {
     test_material_graph_blend_pipeline();
     test_material_graph_node_count();
     test_material_graph_remove_node();
+    test_procedural_texture_generation();
+    test_procedural_texture_deterministic();
+    test_procedural_texture_non_repeating();
 
     // LOD Baking Graph
     std::cout << "\n--- LOD Baking Graph ---" << std::endl;
@@ -2496,6 +2518,10 @@ int main() {
     test_behaviorgraph_compile_chain();
     test_behaviorgraph_execute();
     test_behaviorgraph_deterministic();
+    test_behaviorgraph_group_tactics();
+    test_behaviorgraph_group_tactics_charge();
+    test_behaviorgraph_adaptive_behavior();
+    test_behaviorgraph_adaptive_difficulty_scaling();
 
     // UI Screen
     std::cout << "\n--- UI Screen ---" << std::endl;

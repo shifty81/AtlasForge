@@ -148,3 +148,70 @@ and version control.
 | `engine/tile/`       | Tile and tileset generation      |
 | `engine/weapon/`     | Weapon procedural generation     |
 | `engine/animation/`  | Animation graph system           |
+| `engine/world/`      | World and terrain generation     |
+| `engine/ai/`         | AI behavior and NPC systems      |
+| `engine/procedural/` | Procedural mesh, material, LOD   |
+
+## Procedural Generation (ProcGen) Capabilities
+
+Atlas supports AI-assisted procedural generation across the full content
+pipeline. All ProcGen systems are deterministic, seed-based, and graph-driven.
+
+### World & Environment Generation
+
+| Node           | Category   | Description                                          |
+|----------------|------------|------------------------------------------------------|
+| `SeedNode`     | Input      | Provides the world seed from context                 |
+| `NoiseNode`    | Generator  | FBM noise generation for heightfields                |
+| `BiomeNode`    | Generator  | Classifies terrain into biome types by elevation and moisture (Ocean, Beach, Plains, Forest, Mountain, Snow) |
+| `ErosionNode`  | Filter     | Hydraulic erosion simulation for realistic terrain   |
+| `BlendNode`    | Filter     | Blends two heightfields with a factor                |
+| `ClampNode`    | Filter     | Clamps heightfield values to a range                 |
+| `ConstantNode` | Input      | Constant float value output                          |
+
+Biome and erosion nodes enable dynamic, varied world generation from a single
+seed, producing environments that range from ocean floors to snow-capped peaks
+with naturally eroded terrain features.
+
+### Character & NPC Generation
+
+| Node                | Category   | Description                                         |
+|---------------------|------------|-----------------------------------------------------|
+| `BaseBodyNode`      | Generator  | Body proportions (height, mass, limb ratios) from seed |
+| `FacialFeatureNode` | Generator  | Procedural facial features (nose, eyes, jaw, brow, lips) |
+| `HairStyleNode`     | Appearance | Hair style, length, density, and natural color with age-based greying |
+| `MaterialNode`      | Appearance | Skin tone, hair color, eye color with faction tinting |
+| `SkeletonNode`      | Rigging    | Skeleton bone lengths from height                   |
+| `EquipmentNode`     | Attachment | Equipment attachment to character mesh               |
+
+These nodes enable automated generation of unique, non-repeating characters with
+custom features using minimal input — just a seed and faction context.
+
+### AI Behavior & NPC Intelligence
+
+| Node                   | Category        | Description                                         |
+|------------------------|-----------------|-----------------------------------------------------|
+| `ThreatAssessmentNode` | Perception      | Reads threat level from context                     |
+| `UtilityScoreNode`     | Utility         | Weighted utility scoring for decision making        |
+| `ActionSelectorNode`   | Action          | Selects highest-utility action                      |
+| `EmotionUpdateNode`    | Emotion         | Computes fear, confidence, anger from context       |
+| `GroupTacticsNode`     | Tactics         | Group behavior: charge, flank, hold, retreat        |
+| `AdaptiveBehaviorNode` | Personalization | Adjusts NPC difficulty based on player performance  |
+
+The `Personality` struct provides seven traits (aggression, honor, paranoia,
+curiosity, loyalty, creativity, sociability) for richer NPC characterization.
+
+### Procedural Texturing
+
+| Function                      | Description                                          |
+|-------------------------------|------------------------------------------------------|
+| `GenerateSolidColor`          | Uniform color texture                                |
+| `GenerateCheckerboard`        | Tiled checkerboard pattern                           |
+| `GenerateNoiseTexture`        | Deterministic noise-based texture                    |
+| `GenerateProceduralTexture`   | Domain-warped, multi-octave non-repeating textures   |
+| `BlendMaterials`              | Blend two PBR materials                              |
+| `ComputeNormalMap`            | Sobel-based normal map from heightmap                |
+
+The `GenerateProceduralTexture` function uses domain warping to produce unique,
+non-repeating textures across large environments, supporting configurable
+frequency, octave count, and warp strength parameters.

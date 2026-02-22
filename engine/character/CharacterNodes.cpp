@@ -138,4 +138,75 @@ void EquipmentNode::Evaluate(const CharacterContext& /*ctx*/, const std::vector<
     }
 }
 
+// --- FacialFeatureNode ---
+
+std::vector<CharacterPort> FacialFeatureNode::Inputs() const {
+    return {{"Seed", CharacterPinType::Seed}};
+}
+
+std::vector<CharacterPort> FacialFeatureNode::Outputs() const {
+    return {{"Features", CharacterPinType::Mesh}};
+}
+
+void FacialFeatureNode::Evaluate(const CharacterContext& ctx, const std::vector<CharacterValue>& inputs, std::vector<CharacterValue>& outputs) const {
+    uint64_t seed = ctx.seed;
+    if (!inputs.empty() && !inputs[0].data.empty()) {
+        seed = static_cast<uint64_t>(inputs[0].data[0]);
+    }
+
+    // Generate unique facial features using deterministic hash
+    float noseWidth    = 0.3f + CharHash(seed, 20) * 0.4f;  // 0.3 - 0.7
+    float eyeSpacing   = 0.4f + CharHash(seed, 21) * 0.3f;  // 0.4 - 0.7
+    float jawWidth     = 0.5f + CharHash(seed, 22) * 0.4f;  // 0.5 - 0.9
+    float browHeight   = 0.3f + CharHash(seed, 23) * 0.4f;  // 0.3 - 0.7
+    float lipFullness  = 0.2f + CharHash(seed, 24) * 0.6f;  // 0.2 - 0.8
+
+    // Apply age modifier: older characters get slightly different features
+    float ageFactor = ctx.age / 100.0f;
+    jawWidth += ageFactor * 0.05f;
+    browHeight -= ageFactor * 0.03f;
+
+    outputs.resize(1);
+    outputs[0].type = CharacterPinType::Mesh;
+    outputs[0].data = {noseWidth, eyeSpacing, jawWidth, browHeight, lipFullness};
+}
+
+// --- HairStyleNode ---
+
+std::vector<CharacterPort> HairStyleNode::Inputs() const {
+    return {{"Seed", CharacterPinType::Seed}};
+}
+
+std::vector<CharacterPort> HairStyleNode::Outputs() const {
+    return {{"Hair", CharacterPinType::Material}};
+}
+
+void HairStyleNode::Evaluate(const CharacterContext& ctx, const std::vector<CharacterValue>& inputs, std::vector<CharacterValue>& outputs) const {
+    uint64_t seed = ctx.seed;
+    if (!inputs.empty() && !inputs[0].data.empty()) {
+        seed = static_cast<uint64_t>(inputs[0].data[0]);
+    }
+
+    // Generate hair style parameters
+    float styleIndex = CharHash(seed, 30) * 8.0f;  // 8 base hair styles
+    float length     = 0.1f + CharHash(seed, 31) * 0.9f;  // 0.1 - 1.0
+    float density    = 0.3f + CharHash(seed, 32) * 0.7f;  // 0.3 - 1.0
+
+    // Generate natural hair color
+    float hairR = CharHash(seed, 33);
+    float hairG = CharHash(seed, 34) * 0.8f;  // less green for natural look
+    float hairB = CharHash(seed, 35) * 0.5f;  // less blue for natural look
+
+    // Age affects hair: greying
+    float ageFactor = ctx.age / 100.0f;
+    float greyBlend = ageFactor * ageFactor; // quadratic greying
+    hairR = hairR * (1.0f - greyBlend) + 0.7f * greyBlend;
+    hairG = hairG * (1.0f - greyBlend) + 0.7f * greyBlend;
+    hairB = hairB * (1.0f - greyBlend) + 0.7f * greyBlend;
+
+    outputs.resize(1);
+    outputs[0].type = CharacterPinType::Material;
+    outputs[0].data = {styleIndex, length, density, hairR, hairG, hairB};
+}
+
 }

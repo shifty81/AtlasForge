@@ -46,4 +46,31 @@ public:
     void Evaluate(const AIContext& ctx, const std::vector<BehaviorValue>& inputs, std::vector<BehaviorValue>& outputs) const override;
 };
 
+// Evaluates group tactical behavior: flanking, retreating, regrouping
+// Outputs a group tactic index and effectiveness score
+class GroupTacticsNode : public BehaviorNode {
+public:
+    float flankWeight = 1.0f;
+    float retreatWeight = 1.0f;
+
+    const char* GetName() const override { return "GroupTactics"; }
+    const char* GetCategory() const override { return "Tactics"; }
+    std::vector<BehaviorPort> Inputs() const override;
+    std::vector<BehaviorPort> Outputs() const override;
+    void Evaluate(const AIContext& ctx, const std::vector<BehaviorValue>& inputs, std::vector<BehaviorValue>& outputs) const override;
+};
+
+// Adapts NPC behavior difficulty based on player performance metrics
+// Outputs an adjusted difficulty multiplier
+class AdaptiveBehaviorNode : public BehaviorNode {
+public:
+    float adaptationRate = 0.1f;
+
+    const char* GetName() const override { return "AdaptiveBehavior"; }
+    const char* GetCategory() const override { return "Personalization"; }
+    std::vector<BehaviorPort> Inputs() const override;
+    std::vector<BehaviorPort> Outputs() const override;
+    void Evaluate(const AIContext& ctx, const std::vector<BehaviorValue>& inputs, std::vector<BehaviorValue>& outputs) const override;
+};
+
 }

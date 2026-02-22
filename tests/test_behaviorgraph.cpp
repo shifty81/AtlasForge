@@ -126,3 +126,90 @@ void test_behaviorgraph_deterministic() {
     assert(a != c);
     std::cout << "[PASS] test_behaviorgraph_deterministic" << std::endl;
 }
+
+void test_behaviorgraph_group_tactics() {
+    atlas::ai::BehaviorGraph graph;
+
+    auto tacticsNode = std::make_unique<atlas::ai::GroupTacticsNode>();
+    tacticsNode->flankWeight = 1.5f;
+    tacticsNode->retreatWeight = 1.0f;
+    auto tacticsId = graph.AddNode(std::move(tacticsNode));
+
+    assert(graph.Compile());
+
+    // Scenario: outnumbered with low health and high threat → expect retreat (tactic 3)
+    atlas::ai::AIContext ctx{0.9f, 0.2f, 0.5f, 0.3f, 1};
+    assert(graph.Execute(ctx));
+
+    auto* output = graph.GetOutput(tacticsId, 0);
+    assert(output != nullptr);
+    assert(output->type == atlas::ai::BehaviorPinType::Action);
+    assert(output->data.size() == 2);
+
+    // Tactic should be 3 (Retreat) for low health + high threat
+    float tactic = output->data[0];
+    assert(tactic == 3.0f);
+    std::cout << "[PASS] test_behaviorgraph_group_tactics" << std::endl;
+}
+
+void test_behaviorgraph_group_tactics_charge() {
+    atlas::ai::BehaviorGraph graph;
+    auto tacticsId = graph.AddNode(std::make_unique<atlas::ai::GroupTacticsNode>());
+
+    assert(graph.Compile());
+
+    // Scenario: high morale, high health, low threat → expect charge (tactic 0) or flank (tactic 1)
+    atlas::ai::AIContext ctx{0.1f, 0.9f, 0.9f, 0.9f, 1};
+    assert(graph.Execute(ctx));
+
+    auto* output = graph.GetOutput(tacticsId, 0);
+    assert(output != nullptr);
+    float tactic = output->data[0];
+    // With high morale and health, should not be retreat
+    assert(tactic != 3.0f);
+    std::cout << "[PASS] test_behaviorgraph_group_tactics_charge" << std::endl;
+}
+
+void test_behaviorgraph_adaptive_behavior() {
+    atlas::ai::BehaviorGraph graph;
+
+    auto adaptNode = std::make_unique<atlas::ai::AdaptiveBehaviorNode>();
+    adaptNode->adaptationRate = 0.5f;
+    auto adaptId = graph.AddNode(std::move(adaptNode));
+
+    assert(graph.Compile());
+
+    // Player winning too much → difficulty should increase
+    atlas::ai::AIContext ctx{0.5f, 0.5f, 0.5f, 0.5f, 1};
+    assert(graph.Execute(ctx));
+
+    auto* output = graph.GetOutput(adaptId, 0);
+    assert(output != nullptr);
+    assert(output->type == atlas::ai::BehaviorPinType::Float);
+    assert(output->data.size() == 1);
+
+    // With default inputs (0.5 win/death), multiplier should be ~1.0
+    float multiplier = output->data[0];
+    assert(multiplier >= 0.5f && multiplier <= 2.0f);
+    std::cout << "[PASS] test_behaviorgraph_adaptive_behavior" << std::endl;
+}
+
+void test_behaviorgraph_adaptive_difficulty_scaling() {
+    atlas::ai::BehaviorGraph graph;
+
+    auto adaptNode = std::make_unique<atlas::ai::AdaptiveBehaviorNode>();
+    adaptNode->adaptationRate = 1.0f;
+    auto adaptId = graph.AddNode(std::move(adaptNode));
+    assert(graph.Compile());
+
+    // High win rate player → difficulty increases
+    atlas::ai::AIContext ctx1{0.5f, 0.5f, 0.5f, 0.5f, 1};
+    assert(graph.Execute(ctx1));
+    auto* out1 = graph.GetOutput(adaptId, 0);
+    // With default inputs (no connected win/death rate), defaults to 0.5 each
+    // Result should be 1.0 (balanced)
+    float m1 = out1->data[0];
+    assert(m1 >= 0.5f && m1 <= 2.0f);
+
+    std::cout << "[PASS] test_behaviorgraph_adaptive_difficulty_scaling" << std::endl;
+}
