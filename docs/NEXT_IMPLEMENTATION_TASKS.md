@@ -474,6 +474,40 @@ This document tracks the remaining implementation tasks to complete the vision o
 - `editor/tools/TileEditorModule.cpp` — Full implementations
 - `tests/test_tile_editor.cpp` — 17 new tile painting mode tests
 
+#### 19. AI Procedural Content Generator + AI Debugger Panel + Hot Reload Config
+**Status**: Complete
+
+**Completed work**:
+- [x] ProceduralGenerator framework (engine/ai/ProceduralGenerator.h/.cpp)
+  - Culture-aware name generation (NPC, place, item) for 6 cultures (Generic, Nordic, Eastern, Latin, SciFi, Fantasy)
+  - Biome asset list generation for 9 biome types (Forest, Desert, Mountain, Ocean, Tundra, Swamp, Plains, Volcanic, Urban)
+  - Quest template generation for 6 quest types (Fetch, Combat, Exploration, Escort, Puzzle, Delivery) with difficulty scaling
+  - Shader suggestions per biome/environment type
+  - Deterministic xorshift64 RNG with optional LLM backend for richer output
+- [x] AIDebuggerPanel (editor/panels/AIDebuggerPanel.h/.cpp)
+  - Live AI diagnostic display with severity filtering (Info, Warning, Error, Critical)
+  - Fix application tracking with callback support
+  - LLM backend connection status
+  - Auto-diagnose capability via LLM or template fallback
+  - UIDrawList rendering with color-coded severity indicators
+- [x] HotReloadConfig (engine/sim/HotReloadConfig.h/.cpp)
+  - Typed config parameters (int32, uint32, float, double, bool, string)
+  - Tick-gated changes (no mid-tick mutation)
+  - Parameter locking
+  - Version tracking (per-param and global)
+  - Change callbacks with old/new value reporting
+  - Reset-to-default support
+- [x] 35 new tests covering all three systems
+
+**Files created**:
+- `engine/ai/ProceduralGenerator.h` — Framework header
+- `engine/ai/ProceduralGenerator.cpp` — Full implementation
+- `editor/panels/AIDebuggerPanel.h` — Panel header
+- `editor/panels/AIDebuggerPanel.cpp` — Panel implementation
+- `engine/sim/HotReloadConfig.h` — Config header
+- `engine/sim/HotReloadConfig.cpp` — Config implementation
+- `tests/test_next_tasks_phase19.cpp` — 35 new tests
+
 ## References
 
 - Original gaps analysis: `gaps.txt`

@@ -26,6 +26,7 @@ add_executable(AtlasEditor
     tools/PlayInEditor.cpp
     panels/QuestEditorPanel.cpp
     panels/InventoryEditorPanel.cpp
+    panels/AIDebuggerPanel.cpp
     ai/AIAggregator.cpp
 )
 

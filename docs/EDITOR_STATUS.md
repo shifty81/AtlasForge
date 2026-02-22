@@ -42,6 +42,7 @@ UI rendering backend.
 | **Mesh Viewer** | Mesh loading, view modes, vertex selection, bounds | ✅ Full |
 | **Material Editor** | Material parameters, preview mode, dirty tracking | ✅ Full |
 | **Prefab Editor** | Entity hierarchy, components, drag-and-drop composition | ✅ Full |
+| **AI Debugger** | AI diagnostics, severity filtering, fix application, LLM integration | ✅ Full |
 
 ### Infrastructure
 
@@ -122,7 +123,7 @@ The `editor/main.cpp` entry point:
 | **Inventory Editor** | ✅ Implemented — Items, filtering, sorting, export/import | Done |
 | **Permission Enforcement** | ✅ Implemented — RequestOperation validates tier + mode restrictions | Done |
 | **Layout Persistence** | ✅ Implemented — Save/restore panel arrangement to/from JSON | Done |
-| **Live Edit Rules** | Config hot-reload gating, schema rebuild | Low |
+| **Live Edit Rules** | ✅ Implemented — HotReloadConfig with tick-gated changes, locking, versioning | Done |
 
 ---
 
