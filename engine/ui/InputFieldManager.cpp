@@ -108,6 +108,14 @@ bool InputFieldManager::HandleEvent(const UIEvent& event, uint32_t focusedWidget
                 if (m_textSubmitCallback) {
                     m_textSubmitCallback(focusedWidgetId, state.text);
                 }
+                // Clear the field after submission so the user can type again
+                state.text.clear();
+                state.cursorPos = 0;
+                if (m_screen) {
+                    if (UIWidget* w = m_screen->GetWidgetMutable(focusedWidgetId)) {
+                        w->name.clear();
+                    }
+                }
                 return true;
 
             default:
