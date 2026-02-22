@@ -189,10 +189,25 @@ void UIManager::RenderWidget(UIRenderer* renderer, uint32_t widgetId, int depth)
         case UIWidgetType::InputField: {
             UIColor bg = {35, 37, 40, 255};
             renderer->DrawRect(rect, bg);
-            UIColor border = {70, 100, 150, 255};
-            renderer->DrawBorder(rect, 1, border);
-            UIColor textColor = {160, 160, 160, 255};
-            renderer->DrawText(rect, widget->name, textColor);
+            bool focused = (m_focusManager.GetFocusedWidgetId() == widgetId);
+            UIColor border = focused ? UIColor{90, 140, 210, 255} : UIColor{70, 100, 150, 255};
+            renderer->DrawBorder(rect, focused ? 2 : 1, border);
+            UIColor textColor = widget->name.empty() ? UIColor{100, 100, 100, 255} : UIColor{200, 200, 200, 255};
+            std::string displayText = widget->name;
+            // Show placeholder when empty and not focused
+            if (displayText.empty() && !focused) {
+                displayText = m_inputFieldManager.GetPlaceholder(widgetId);
+                textColor = {100, 100, 100, 255};
+            }
+            renderer->DrawText(rect, displayText, textColor);
+            // Draw cursor when focused
+            if (focused) {
+                size_t cursorPos = m_inputFieldManager.GetCursorPos(widgetId);
+                int32_t cursorX = rect.x + 2 + static_cast<int32_t>(cursorPos) * 12; // 12px per char at scale 2
+                UIColor cursorColor = {220, 220, 220, 255};
+                UIRect cursorRect = {cursorX, rect.y + 2, 2, rect.h - 4};
+                renderer->DrawRect(cursorRect, cursorColor);
+            }
             break;
         }
         case UIWidgetType::Menu: {

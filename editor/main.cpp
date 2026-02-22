@@ -520,6 +520,38 @@ int main() {
 
     auto ids = BuildEditorUI(engine.GetUIManager().GetScreen());
 
+    // --- Populate Asset Browser with project files ---
+    {
+        auto& screen = engine.GetUIManager().GetScreen();
+        const atlas::ui::UIWidget* scrollW = screen.GetWidget(ids.assetScroll);
+        if (scrollW && !projectsDir.empty()) {
+            std::error_code ec;
+            float entryY = scrollW->y + 4.0f;
+            // List project directories
+            for (auto& proj : launcher.Projects()) {
+                uint32_t entry = screen.AddWidget(atlas::ui::UIWidgetType::Text,
+                    "[Project] " + proj.name,
+                    scrollW->x + 8.0f, entryY,
+                    scrollW->width - 16.0f, 20.0f);
+                screen.SetParent(entry, ids.assetScroll);
+                entryY += 22.0f;
+            }
+            // List asset files from asset root
+            if (std::filesystem::is_directory(assetRoot, ec)) {
+                for (auto& entry : std::filesystem::directory_iterator(assetRoot, ec)) {
+                    std::string name = entry.path().filename().string();
+                    std::string prefix = entry.is_directory(ec) ? "[Dir] " : "[File] ";
+                    uint32_t wid = screen.AddWidget(atlas::ui::UIWidgetType::Text,
+                        prefix + name,
+                        scrollW->x + 8.0f, entryY,
+                        scrollW->width - 16.0f, 20.0f);
+                    screen.SetParent(wid, ids.assetScroll);
+                    entryY += 22.0f;
+                }
+            }
+        }
+    }
+
     // --- Set up Tab Manager ---
     auto& tabMgr = engine.GetUIManager().GetTabManager();
     if (ids.tabScene != 0) {
@@ -543,7 +575,7 @@ int main() {
         scrollMgr.RegisterScrollView(ids.systemScroll, 2000.0f);
     }
 
-    // --- Logger sink: feed log lines into the System tab scroll area ---
+    // --- Logger sink: feed log lines into both Console and System scroll areas ---
     // NOTE: In the current architecture Logger is only called from the main
     // thread (event callbacks, toolbar/menu handlers, etc.), so direct UI
     // modification is safe.  If Logger is ever called from worker threads,
@@ -551,17 +583,32 @@ int main() {
     {
         atlas::ui::UIScreen* screenPtr = &engine.GetUIManager().GetScreen();
         uint32_t sysScrollId = ids.systemScroll;
-        atlas::Logger::SetSink([screenPtr, sysScrollId](const std::string& line) {
+        uint32_t consScrollId = ids.consoleScroll;
+        atlas::Logger::SetSink([screenPtr, sysScrollId, consScrollId](const std::string& line) {
+            // Feed System tab
             const atlas::ui::UIWidget* scrollW = screenPtr->GetWidget(sysScrollId);
-            if (!scrollW) return;
-            auto children = screenPtr->GetChildren(sysScrollId);
-            float baseY = scrollW->y + 2.0f;
-            float lineY = baseY + static_cast<float>(children.size()) * 16.0f;
-            uint32_t textId = screenPtr->AddWidget(
-                atlas::ui::UIWidgetType::Text, line,
-                scrollW->x + 4.0f, lineY,
-                scrollW->width - 8.0f, 14.0f);
-            screenPtr->SetParent(textId, sysScrollId);
+            if (scrollW) {
+                auto children = screenPtr->GetChildren(sysScrollId);
+                float baseY = scrollW->y + 2.0f;
+                float lineY = baseY + static_cast<float>(children.size()) * 20.0f;
+                uint32_t textId = screenPtr->AddWidget(
+                    atlas::ui::UIWidgetType::Text, line,
+                    scrollW->x + 4.0f, lineY,
+                    scrollW->width - 8.0f, 18.0f);
+                screenPtr->SetParent(textId, sysScrollId);
+            }
+            // Feed Console scroll area
+            const atlas::ui::UIWidget* consW = screenPtr->GetWidget(consScrollId);
+            if (consW) {
+                auto children = screenPtr->GetChildren(consScrollId);
+                float baseY = consW->y + 2.0f;
+                float lineY = baseY + static_cast<float>(children.size()) * 20.0f;
+                uint32_t textId = screenPtr->AddWidget(
+                    atlas::ui::UIWidgetType::Text, line,
+                    consW->x + 4.0f, lineY,
+                    consW->width - 8.0f, 18.0f);
+                screenPtr->SetParent(textId, consScrollId);
+            }
         });
     }
 
@@ -611,7 +658,7 @@ int main() {
 
     // --- Set up Menu Item Callback ---
     engine.GetUIManager().GetMenuManager().SetMenuItemCallback(
-        [&engine, &ids, &playInEditor, &updateStatus](uint32_t /*menuId*/, uint32_t itemId) {
+        [&engine, &ids, &playInEditor, &updateStatus, &launcher, &projectsDir](uint32_t /*menuId*/, uint32_t itemId) {
             auto& screen = engine.GetUIManager().GetScreen();
 
             // --- File menu ---
@@ -619,8 +666,23 @@ int main() {
                 atlas::Logger::Info("File > New Project");
                 updateStatus("New project created");
             } else if (itemId == ids.fileOpen) {
-                atlas::Logger::Info("File > Open Project");
-                updateStatus("Open project...");
+                atlas::Logger::Info("File > Open Project — scanning " + projectsDir);
+                launcher.ScanProjects(projectsDir);
+                if (launcher.Projects().empty()) {
+                    atlas::Logger::Warn("No projects found in " + projectsDir);
+                } else {
+                    for (size_t i = 0; i < launcher.Projects().size(); ++i) {
+                        atlas::Logger::Info("  [" + std::to_string(i) + "] " + launcher.Projects()[i].name
+                                            + " (" + launcher.Projects()[i].path + ")");
+                    }
+                    // Select the first project found
+                    launcher.SelectProject(0);
+                    launcher.ConfirmSelection();
+                    if (auto* proj = launcher.SelectedProject()) {
+                        atlas::Logger::Info("Opened project: " + proj->name);
+                        updateStatus("Project: " + proj->name);
+                    }
+                }
             } else if (itemId == ids.fileSave) {
                 atlas::Logger::Info("File > Save Project");
                 updateStatus("Project saved");

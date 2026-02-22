@@ -254,9 +254,9 @@ void GLRenderer::DrawText(const ui::UIRect& rect, const std::string& text, const
 
     const int glyphW = 5;
     const int glyphH = 7;
-    const int scale  = 1;
-    const int charW  = (glyphW + 1) * scale;  // 6px advance per char
-    const int charH  = (glyphH + 2) * scale;  // 9px line height
+    const int scale  = 2;
+    const int charW  = (glyphW + 1) * scale;  // 12px advance per char
+    const int charH  = (glyphH + 2) * scale;  // 18px line height
     int cx = rect.x + 2;
     int cy = rect.y + 2;
 

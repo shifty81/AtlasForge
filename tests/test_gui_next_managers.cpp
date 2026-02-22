@@ -614,6 +614,11 @@ void test_input_field_manager_enter_submits() {
 
     assert(submitId == field);
     assert(submitText == "run command");
+    // Field should be cleared after submit
+    assert(mgr.GetText(field).empty());
+    assert(mgr.GetCursorPos(field) == 0);
+    const atlas::ui::UIWidget* w = screen.GetWidget(field);
+    assert(w && w->name.empty());
 
     std::cout << "[PASS] test_input_field_manager_enter_submits" << std::endl;
 }
