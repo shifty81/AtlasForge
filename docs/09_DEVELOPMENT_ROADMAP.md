@@ -232,7 +232,7 @@ Production-grade CI, build experience, and template repository support.
 - [x] CI dashboard panel (in-editor CI results visualization)
 - [x] Certified build mode (audit-grade verification artifacts)
 
-## Phase 13 — Determinism Debug Tooling ✅
+## Phase 18 — Determinism Debug Tooling ✅
 
 Tick-step debugging, simulation state auditing, and cross-platform FP drift detection are fully tested.
 
@@ -240,7 +240,7 @@ Tick-step debugging, simulation state auditing, and cross-platform FP drift dete
 - [x] SimulationStateAuditor (system registration, state block declaration, hidden-state audit)
 - [x] FPDriftDetector (cross-platform hash comparison, per-system drift analysis, report formatting/export)
 
-## Phase 14 — Desync Reproduction & Network QoS ✅
+## Phase 20 — Desync Reproduction & Network QoS ✅
 
 One-command desync reproduction, priority-based packet scheduling, and server-side asset validation are fully tested.
 
