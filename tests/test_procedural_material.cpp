@@ -185,3 +185,42 @@ void test_material_graph_remove_node() {
     assert(graph.Compile());
     std::cout << "[PASS] test_material_graph_remove_node" << std::endl;
 }
+
+void test_procedural_texture_generation() {
+    auto mat = atlas::procedural::GenerateProceduralTexture(16, 16, 42, 0.05f, 4, 0.3f);
+    assert(mat.IsValid());
+    assert(mat.PixelCount() == 256);
+    assert(mat.albedo.size() == 256 * 4);
+    assert(mat.roughness.size() == 256);
+
+    // All color values should be in [0, 1]
+    for (size_t i = 0; i < mat.albedo.size(); ++i) {
+        assert(mat.albedo[i] >= 0.0f && mat.albedo[i] <= 1.0f);
+    }
+    std::cout << "[PASS] test_procedural_texture_generation" << std::endl;
+}
+
+void test_procedural_texture_deterministic() {
+    auto mat1 = atlas::procedural::GenerateProceduralTexture(8, 8, 42, 0.05f, 4, 0.3f);
+    auto mat2 = atlas::procedural::GenerateProceduralTexture(8, 8, 42, 0.05f, 4, 0.3f);
+    assert(mat1.IsValid());
+    assert(mat2.IsValid());
+    // Same seed should produce same results
+    assert(mat1.albedo == mat2.albedo);
+    assert(mat1.roughness == mat2.roughness);
+
+    // Different seed should produce different results
+    auto mat3 = atlas::procedural::GenerateProceduralTexture(8, 8, 99, 0.05f, 4, 0.3f);
+    assert(mat1.albedo != mat3.albedo);
+    std::cout << "[PASS] test_procedural_texture_deterministic" << std::endl;
+}
+
+void test_procedural_texture_non_repeating() {
+    auto mat1 = atlas::procedural::GenerateProceduralTexture(16, 16, 100, 0.05f, 4, 0.5f);
+    auto mat2 = atlas::procedural::GenerateProceduralTexture(16, 16, 200, 0.05f, 4, 0.5f);
+    assert(mat1.IsValid());
+    assert(mat2.IsValid());
+    // Different seeds should produce visually different textures
+    assert(mat1.albedo != mat2.albedo);
+    std::cout << "[PASS] test_procedural_texture_non_repeating" << std::endl;
+}

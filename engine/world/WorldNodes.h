@@ -55,4 +55,27 @@ public:
     void Evaluate(const WorldGenContext& ctx, const std::vector<Value>& inputs, std::vector<Value>& outputs) const override;
 };
 
+// Classifies heightfield cells into biome types based on elevation and moisture
+// Biome IDs: 0=Ocean, 1=Beach, 2=Plains, 3=Forest, 4=Mountain, 5=Snow
+class BiomeNode : public WorldNode {
+public:
+    const char* GetName() const override { return "Biome"; }
+    const char* GetCategory() const override { return "Generator"; }
+    std::vector<NodePort> Inputs() const override;
+    std::vector<NodePort> Outputs() const override;
+    void Evaluate(const WorldGenContext& ctx, const std::vector<Value>& inputs, std::vector<Value>& outputs) const override;
+};
+
+// Applies hydraulic erosion simulation to a heightfield
+class ErosionNode : public WorldNode {
+public:
+    int iterations = 50;
+
+    const char* GetName() const override { return "Erosion"; }
+    const char* GetCategory() const override { return "Filter"; }
+    std::vector<NodePort> Inputs() const override;
+    std::vector<NodePort> Outputs() const override;
+    void Evaluate(const WorldGenContext& ctx, const std::vector<Value>& inputs, std::vector<Value>& outputs) const override;
+};
+
 }

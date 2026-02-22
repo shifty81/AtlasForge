@@ -43,4 +43,24 @@ public:
     void Evaluate(const CharacterContext& ctx, const std::vector<CharacterValue>& inputs, std::vector<CharacterValue>& outputs) const override;
 };
 
+// Generates procedural facial features from seed (nose width, eye spacing, jaw width, brow height, lip fullness)
+class FacialFeatureNode : public CharacterNode {
+public:
+    const char* GetName() const override { return "FacialFeature"; }
+    const char* GetCategory() const override { return "Generator"; }
+    std::vector<CharacterPort> Inputs() const override;
+    std::vector<CharacterPort> Outputs() const override;
+    void Evaluate(const CharacterContext& ctx, const std::vector<CharacterValue>& inputs, std::vector<CharacterValue>& outputs) const override;
+};
+
+// Generates procedural hair style and color from seed (style index, length, density, R, G, B)
+class HairStyleNode : public CharacterNode {
+public:
+    const char* GetName() const override { return "HairStyle"; }
+    const char* GetCategory() const override { return "Appearance"; }
+    std::vector<CharacterPort> Inputs() const override;
+    std::vector<CharacterPort> Outputs() const override;
+    void Evaluate(const CharacterContext& ctx, const std::vector<CharacterValue>& inputs, std::vector<CharacterValue>& outputs) const override;
+};
+
 }

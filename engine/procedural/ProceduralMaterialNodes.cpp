@@ -214,4 +214,84 @@ MaterialData ComputeNormalMap(const MaterialData& src, float strength) {
     return mat;
 }
 
+MaterialData GenerateProceduralTexture(uint32_t width, uint32_t height, uint64_t seed,
+                                       float baseFrequency, int octaves, float warpStrength) {
+    MaterialData mat;
+    mat.width = width;
+    mat.height = height;
+    size_t pc = mat.PixelCount();
+
+    mat.albedo.resize(pc * 4);
+    mat.normal.resize(pc * 3);
+    mat.roughness.resize(pc);
+    mat.metallic.resize(pc);
+
+    // Deterministic xorshift64 for domain warping offsets
+    uint64_t state = seed ^ 0xA5A5A5A5A5A5A5A5ULL;
+    if (state == 0) state = 1;
+    auto xorshift = [&]() -> float {
+        state ^= state << 13;
+        state ^= state >> 7;
+        state ^= state << 17;
+        return static_cast<float>(state & 0xFFFFu) / 65535.0f;
+    };
+
+    // Generate domain warp offsets for non-repeating patterns
+    float warpOffsetX = xorshift() * 100.0f;
+    float warpOffsetY = xorshift() * 100.0f;
+    float colorShiftR = xorshift();
+    float colorShiftG = xorshift();
+    float colorShiftB = xorshift();
+
+    int oct = octaves > 0 ? octaves : 4;
+    float freq = baseFrequency > 0.0f ? baseFrequency : 0.05f;
+
+    for (uint32_t y = 0; y < height; ++y) {
+        for (uint32_t x = 0; x < width; ++x) {
+            size_t i = static_cast<size_t>(y) * width + x;
+            float fx = static_cast<float>(x) / static_cast<float>(width);
+            float fy = static_cast<float>(y) / static_cast<float>(height);
+
+            // Domain warping: warp coordinates using noise-like function
+            float wx = fx + warpStrength * std::sin(fy * 6.2832f + warpOffsetX);
+            float wy = fy + warpStrength * std::cos(fx * 6.2832f + warpOffsetY);
+
+            // Multi-octave value noise approximation
+            float value = 0.0f;
+            float amplitude = 1.0f;
+            float totalAmp = 0.0f;
+            float f = freq;
+            for (int o = 0; o < oct; ++o) {
+                // Simple deterministic noise using sin-based hash
+                float n = std::sin(wx * f * 12.9898f + wy * f * 78.233f + static_cast<float>(seed & 0xFFFF)) * 43758.5453f;
+                n = n - std::floor(n); // fract
+                value += n * amplitude;
+                totalAmp += amplitude;
+                amplitude *= 0.5f;
+                f *= 2.0f;
+            }
+            value /= totalAmp;
+
+            // Generate color variation per channel for non-repeating appearance
+            float r = value * (0.5f + colorShiftR * 0.5f);
+            float g = value * (0.5f + colorShiftG * 0.5f);
+            float b = value * (0.5f + colorShiftB * 0.5f);
+
+            mat.albedo[i * 4 + 0] = std::max(0.0f, std::min(1.0f, r));
+            mat.albedo[i * 4 + 1] = std::max(0.0f, std::min(1.0f, g));
+            mat.albedo[i * 4 + 2] = std::max(0.0f, std::min(1.0f, b));
+            mat.albedo[i * 4 + 3] = 1.0f;
+
+            mat.normal[i * 3 + 0] = 0.0f;
+            mat.normal[i * 3 + 1] = 0.0f;
+            mat.normal[i * 3 + 2] = 1.0f;
+
+            mat.roughness[i] = value;
+            mat.metallic[i] = 0.0f;
+        }
+    }
+
+    return mat;
+}
+
 }
