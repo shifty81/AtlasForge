@@ -8,7 +8,14 @@ directory with a `.atlas` manifest file that defines its structure.
 | Project | Description |
 |---------|-------------|
 | `eveoffline/` | PVE space simulator — the reference implementation |
+| `arena2d/` | 2D tile-based arena game — scalability proof |
 | `atlas-sample/` | Minimal sample project for learning |
+
+## Supporting Tools & Documentation
+
+| Document | Description |
+|----------|-------------|
+| [`docs/BLENDER_ADDON_DESIGN.md`](../docs/BLENDER_ADDON_DESIGN.md) | Blender addon design spec for procedural asset generation (meshes, textures, animation, export) |
 
 ## Creating a New Project
 
