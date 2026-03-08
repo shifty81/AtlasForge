@@ -228,14 +228,14 @@
 ### Phase C: Editor Tool Layer Infrastructure
 **Effort: Medium | Risk: Medium | Timeline: 2-3 weeks**
 
-- [ ] Implement ITool interface in engine/tools/
-- [ ] Implement EditorCommandBus and UndoableCommandBus
-- [ ] Implement EditorEventBus (publish/subscribe)
-- [ ] Implement SceneBookmarkManager
-- [ ] Implement LayerTagSystem
-- [ ] Add `ATLAS_EDITOR_TOOLS` compile flag for in-client overlay
-- [ ] Port key editor tools (start with 10 highest-value tools)
-- [ ] Import editor tool test suite
+- [x] Implement ITool interface in engine/tools/
+- [x] Implement EditorCommandBus and UndoableCommandBus
+- [x] Implement EditorEventBus (publish/subscribe)
+- [x] Implement SceneBookmarkManager
+- [x] Implement LayerTagSystem
+- [x] Add `ATLAS_EDITOR_TOOLS` compile flag for in-client overlay
+- [x] Port key editor tools (start with 10 highest-value tools)
+- [x] Import editor tool test suite
 
 ### Phase D: PCG Framework
 **Effort: Medium | Risk: Medium | Timeline: 2-3 weeks**
