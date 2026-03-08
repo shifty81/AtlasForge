@@ -1,5 +1,6 @@
 #include "DockManager.h"
 #include "UIConstants.h"
+#include <algorithm>
 
 namespace atlas::ui {
 

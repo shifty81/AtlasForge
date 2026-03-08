@@ -1,4 +1,5 @@
 #include "AssetRegistry.h"
+#include <algorithm>
 #include <deque>
 
 namespace atlas::asset {

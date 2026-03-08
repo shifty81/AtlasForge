@@ -234,8 +234,8 @@
 - [x] Implement SceneBookmarkManager
 - [x] Implement LayerTagSystem
 - [x] Add `ATLAS_EDITOR_TOOLS` compile flag for in-client overlay
-- [ ] Port key editor tools (start with 10 highest-value tools)
-- [ ] Import editor tool test suite
+- [x] Port key editor tools (start with 10 highest-value tools)
+- [x] Import editor tool test suite
 
 ### Phase D: PCG Framework
 **Effort: Medium | Risk: Medium | Timeline: 2-3 weeks**

@@ -173,6 +173,17 @@ add_library(AtlasEngine STATIC
     tools/EditorEventBus.cpp
     tools/SceneBookmarkManager.cpp
     tools/LayerTagSystem.cpp
+    tools/EditorToolRegistry.cpp
+    tools/SimulationStepTool.cpp
+    tools/EnvironmentControlTool.cpp
+    tools/BatchTransformTool.cpp
+    tools/NPCSpawnerTool.cpp
+    tools/LiveEditTool.cpp
+    tools/MaterialOverrideTool.cpp
+    tools/PCGSnapshotTool.cpp
+    tools/EntityInspectorTool.cpp
+    tools/PrefabPlacementTool.cpp
+    tools/AnimationPreviewTool.cpp
     script/ScriptVM.cpp
     script/ScriptSystem.cpp
     script/ScriptSandbox.cpp

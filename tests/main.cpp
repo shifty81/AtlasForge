@@ -1061,6 +1061,67 @@ void test_layer_tag_remove_entity();
 void test_layer_tag_clear();
 void test_layer_auto_create();
 
+// Editor Tools (Phase C — 10 in-client overlay tools + registry)
+void test_registry_empty();
+void test_registry_register_and_find();
+void test_registry_activate_deactivate();
+void test_registry_activate_nonexistent();
+void test_registry_update_active();
+void test_registry_clear();
+void test_registry_get_by_index();
+void test_sim_step_initial();
+void test_sim_step_activate_update();
+void test_sim_step_pause_resume();
+void test_sim_step_request_step();
+void test_sim_step_speed_multiplier();
+void test_sim_step_deactivate_resets();
+void test_env_control_defaults();
+void test_env_control_gravity();
+void test_env_control_wind();
+void test_env_control_atmosphere();
+void test_env_control_time_of_day();
+void test_env_control_elapsed();
+void test_batch_select_deselect();
+void test_batch_no_duplicates();
+void test_batch_apply_translate();
+void test_batch_ops_require_selection();
+void test_batch_clear_selection();
+void test_batch_deactivate_clears();
+void test_npc_spawner_default_template();
+void test_npc_spawner_set_template();
+void test_npc_spawner_spawn();
+void test_npc_spawner_undo();
+void test_npc_spawner_unique_ids();
+void test_live_edit_apply();
+void test_live_edit_undo();
+void test_live_edit_clear();
+void test_live_edit_elapsed();
+void test_material_override_target();
+void test_material_override_params();
+void test_material_override_reset();
+void test_material_override_target_change_clears();
+void test_material_override_unknown_param();
+void test_pcg_snapshot_take();
+void test_pcg_snapshot_restore();
+void test_pcg_snapshot_clear();
+void test_pcg_snapshot_multiple();
+void test_entity_inspector_inspect();
+void test_entity_inspector_clear();
+void test_entity_inspector_reinspect();
+void test_entity_inspector_deactivate_clears();
+void test_prefab_catalogue();
+void test_prefab_select_and_place();
+void test_prefab_undo_placement();
+void test_prefab_unique_instance_ids();
+void test_anim_preview_initial();
+void test_anim_preview_playback();
+void test_anim_preview_speed();
+void test_anim_preview_scrub();
+void test_anim_preview_blend_weight();
+void test_anim_preview_reset();
+void test_anim_preview_not_playing_no_advance();
+void test_registry_all_10_tools();
+
 // Component Category
 void test_component_category_defaults();
 void test_component_category_simulated();
@@ -4256,6 +4317,90 @@ int main() {
     test_layer_tag_remove_entity();
     test_layer_tag_clear();
     test_layer_auto_create();
+
+    // Editor Tools (Phase C — 10 tools + registry)
+    std::cout << "\n--- EditorToolRegistry ---" << std::endl;
+    test_registry_empty();
+    test_registry_register_and_find();
+    test_registry_activate_deactivate();
+    test_registry_activate_nonexistent();
+    test_registry_update_active();
+    test_registry_clear();
+    test_registry_get_by_index();
+
+    std::cout << "\n--- SimulationStepTool ---" << std::endl;
+    test_sim_step_initial();
+    test_sim_step_activate_update();
+    test_sim_step_pause_resume();
+    test_sim_step_request_step();
+    test_sim_step_speed_multiplier();
+    test_sim_step_deactivate_resets();
+
+    std::cout << "\n--- EnvironmentControlTool ---" << std::endl;
+    test_env_control_defaults();
+    test_env_control_gravity();
+    test_env_control_wind();
+    test_env_control_atmosphere();
+    test_env_control_time_of_day();
+    test_env_control_elapsed();
+
+    std::cout << "\n--- BatchTransformTool ---" << std::endl;
+    test_batch_select_deselect();
+    test_batch_no_duplicates();
+    test_batch_apply_translate();
+    test_batch_ops_require_selection();
+    test_batch_clear_selection();
+    test_batch_deactivate_clears();
+
+    std::cout << "\n--- NPCSpawnerTool ---" << std::endl;
+    test_npc_spawner_default_template();
+    test_npc_spawner_set_template();
+    test_npc_spawner_spawn();
+    test_npc_spawner_undo();
+    test_npc_spawner_unique_ids();
+
+    std::cout << "\n--- LiveEditTool ---" << std::endl;
+    test_live_edit_apply();
+    test_live_edit_undo();
+    test_live_edit_clear();
+    test_live_edit_elapsed();
+
+    std::cout << "\n--- MaterialOverrideTool ---" << std::endl;
+    test_material_override_target();
+    test_material_override_params();
+    test_material_override_reset();
+    test_material_override_target_change_clears();
+    test_material_override_unknown_param();
+
+    std::cout << "\n--- PCGSnapshotTool ---" << std::endl;
+    test_pcg_snapshot_take();
+    test_pcg_snapshot_restore();
+    test_pcg_snapshot_clear();
+    test_pcg_snapshot_multiple();
+
+    std::cout << "\n--- EntityInspectorTool ---" << std::endl;
+    test_entity_inspector_inspect();
+    test_entity_inspector_clear();
+    test_entity_inspector_reinspect();
+    test_entity_inspector_deactivate_clears();
+
+    std::cout << "\n--- PrefabPlacementTool ---" << std::endl;
+    test_prefab_catalogue();
+    test_prefab_select_and_place();
+    test_prefab_undo_placement();
+    test_prefab_unique_instance_ids();
+
+    std::cout << "\n--- AnimationPreviewTool ---" << std::endl;
+    test_anim_preview_initial();
+    test_anim_preview_playback();
+    test_anim_preview_speed();
+    test_anim_preview_scrub();
+    test_anim_preview_blend_weight();
+    test_anim_preview_reset();
+    test_anim_preview_not_playing_no_advance();
+
+    std::cout << "\n--- Full Registry Integration ---" << std::endl;
+    test_registry_all_10_tools();
 
     std::cout << "\n=== All tests passed! ===" << std::endl;
     return 0;
