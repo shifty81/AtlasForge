@@ -815,6 +815,72 @@ align the project structure for long-term maintainability.
 - `engine/procedural/ConstraintSolver.cpp` — GA solver implementation
 - `tests/test_pcg_framework.cpp` — 38 tests
 
+#### 29. Phase E: Rendering Pipeline Upgrade
+**Status**: Complete
+
+**Completed work**:
+- [x] Created `engine/render/GBuffer.h` — G-Buffer for deferred rendering with configurable attachments, DefaultPBRConfig factory
+- [x] Created `engine/render/GBuffer.cpp` — G-Buffer implementation with Init/Shutdown/Bind/Unbind/Resize
+- [x] Created `engine/render/PBRMaterial.h` — PBR material system with texture slots (Albedo, Normal, Metallic, Roughness, AO, Emissive, Height)
+- [x] Created `engine/render/PBRMaterial.cpp` — PBR material with texture bindings, validation, unique IDs
+- [x] Created `engine/render/ShadowMap.h` — Cascaded shadow mapping with practical split scheme
+- [x] Created `engine/render/ShadowMap.cpp` — Shadow map with ortho projection, look-at matrices, cascade splits
+- [x] Created `engine/render/PostProcess.h` — Post-processing pipeline (Bloom, ToneMapping, FXAA, Vignette, ChromaticAberration, FilmGrain)
+- [x] Created `engine/render/PostProcess.cpp` — PostProcessPipeline with effect toggling and execution
+- [x] Created `engine/render/InstancedRenderer.h` — Instanced rendering with batch management
+- [x] Created `engine/render/InstancedRenderer.cpp` — InstancedRenderer with batch creation, instance management, draw call tracking
+- [x] Created `engine/render/SpatialHash.h` — Spatial hash grid for proximity queries
+- [x] Created `engine/render/SpatialHash.cpp` — SpatialHash with radius, AABB, and KNN queries
+- [x] Registered all sources in `engine/CMakeLists.txt`
+- [x] 31 new tests covering all rendering pipeline components
+
+**Files created**:
+- `engine/render/GBuffer.h` — GBufferAttachment, GBufferConfig, GBuffer class
+- `engine/render/GBuffer.cpp` — G-Buffer implementation
+- `engine/render/PBRMaterial.h` — PBRTextureSlot, PBRMaterialParams, PBRMaterial class
+- `engine/render/PBRMaterial.cpp` — PBR material implementation
+- `engine/render/ShadowMap.h` — ShadowCascade, ShadowMapConfig, ShadowMap class
+- `engine/render/ShadowMap.cpp` — Shadow map implementation
+- `engine/render/PostProcess.h` — PostProcessEffect, BloomSettings, ToneMappingSettings, PostProcessPipeline
+- `engine/render/PostProcess.cpp` — Post-processing implementation
+- `engine/render/InstancedRenderer.h` — InstanceData, InstanceBatch, InstancedRenderer class
+- `engine/render/InstancedRenderer.cpp` — Instanced renderer implementation
+- `engine/render/SpatialHash.h` — SpatialEntity, SpatialHash class
+- `engine/render/SpatialHash.cpp` — Spatial hash implementation
+- `tests/test_rendering_pipeline.cpp` — 31 tests
+
+#### 30. Phase F: Procedural Generation Pipeline
+**Status**: Complete
+
+**Completed work**:
+- [x] Created `engine/procedural/InteriorNode.h` — Interior node system with 16 module types, 5 sizes, slot-based placement
+- [x] Created `engine/procedural/InteriorNode.cpp` — Module placement validation, slot search, power check
+- [x] Created `engine/procedural/HullMeshGenerator.h` — Hull mesh generator with convex hull, gap fill, stretch wrap, subdivision, smoothing
+- [x] Created `engine/procedural/HullMeshGenerator.cpp` — Incremental convex hull, Loop subdivision, Laplacian smoothing
+- [x] Created `engine/procedural/ModuleTier.h` — Module tier system (1-5) with bonuses, visuals, upgrade requirements
+- [x] Created `engine/procedural/ModuleTier.cpp` — Tier data, upgrade validation, bonus application
+- [x] Created `engine/procedural/BuildQueue.h` — Build/upgrade queue with tick-based progression
+- [x] Created `engine/procedural/BuildQueue.cpp` — Order management, pause/resume, priority sort
+- [x] Created `engine/procedural/PlanetaryBase.h` — Planetary base generation with zone management
+- [x] Created `engine/procedural/PlanetaryBase.cpp` — Zone placement validation, procedural generation using DeterministicRNG
+- [x] Created `engine/procedural/ModuleScaling.h` — Header-only module size scaling constants and utilities
+- [x] Registered all sources in `engine/CMakeLists.txt`
+- [x] 40 new tests covering all procedural pipeline components
+
+**Files created**:
+- `engine/procedural/InteriorNode.h` — ModuleType (16), ModuleSize (5), ModuleSlot, InteriorModule, InteriorNode class
+- `engine/procedural/InteriorNode.cpp` — Interior node implementation
+- `engine/procedural/HullMeshGenerator.h` — HullVertex, HullTriangle, HullMesh, HullMeshGenerator class
+- `engine/procedural/HullMeshGenerator.cpp` — Hull mesh generation implementation
+- `engine/procedural/ModuleTier.h` — TierLevel, TierBonus, TierVisual, TierRequirement, ModuleTierSystem class
+- `engine/procedural/ModuleTier.cpp` — Module tier system implementation
+- `engine/procedural/BuildQueue.h` — BuildOrderType, BuildOrder, BuildQueue class
+- `engine/procedural/BuildQueue.cpp` — Build queue implementation
+- `engine/procedural/PlanetaryBase.h` — BaseZoneType, BaseZone, PlanetaryBaseConfig, PlanetaryBase class
+- `engine/procedural/PlanetaryBase.cpp` — Planetary base implementation
+- `engine/procedural/ModuleScaling.h` — ModuleScaling struct with constexpr utilities
+- `tests/test_procedural_pipeline.cpp` — 40 tests
+
 ## References
 
 - Original gaps analysis: `legacy/gaps.txt`
