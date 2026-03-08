@@ -7,6 +7,46 @@
     },
     "configurePresets": [
         {
+            "name": "linux-base",
+            "hidden": true,
+            "generator": "Unix Makefiles",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
+            },
+            "cacheVariables": {
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+            }
+        },
+        {
+            "name": "macos-base",
+            "hidden": true,
+            "generator": "Unix Makefiles",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Darwin"
+            },
+            "cacheVariables": {
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+            }
+        },
+        {
+            "name": "windows-base",
+            "hidden": true,
+            "generator": "Visual Studio 17 2022",
+            "architecture": "x64",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
+            },
+            "cacheVariables": {
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+            }
+        },
+        {
             "name": "debug",
             "displayName": "Debug",
             "description": "Debug build with full determinism assertions",
@@ -54,6 +94,56 @@
                 "ATLAS_DETERMINISM_STRICT": "ON",
                 "ATLAS_SIMULATION_BUILD": "ON"
             }
+        },
+        {
+            "name": "linux-debug",
+            "displayName": "Linux Debug",
+            "description": "Linux debug build with determinism assertions",
+            "inherits": ["linux-base", "debug"],
+            "binaryDir": "${sourceDir}/build/linux-debug"
+        },
+        {
+            "name": "linux-release",
+            "displayName": "Linux Release",
+            "description": "Linux optimized release build",
+            "inherits": ["linux-base", "release"],
+            "binaryDir": "${sourceDir}/build/linux-release"
+        },
+        {
+            "name": "macos-debug",
+            "displayName": "macOS Debug",
+            "description": "macOS debug build with determinism assertions",
+            "inherits": ["macos-base", "debug"],
+            "binaryDir": "${sourceDir}/build/macos-debug"
+        },
+        {
+            "name": "macos-release",
+            "displayName": "macOS Release",
+            "description": "macOS optimized release build",
+            "inherits": ["macos-base", "release"],
+            "binaryDir": "${sourceDir}/build/macos-release"
+        },
+        {
+            "name": "windows-debug",
+            "displayName": "Windows Debug",
+            "description": "Windows debug build (Visual Studio)",
+            "inherits": "windows-base",
+            "binaryDir": "${sourceDir}/build/windows-debug",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "ATLAS_DETERMINISM_STRICT": "ON",
+                "ATLAS_SIMULATION_BUILD": "ON"
+            }
+        },
+        {
+            "name": "windows-release",
+            "displayName": "Windows Release",
+            "description": "Windows optimized release build (Visual Studio)",
+            "inherits": "windows-base",
+            "binaryDir": "${sourceDir}/build/windows-release",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
         }
     ],
     "buildPresets": [
@@ -82,6 +172,30 @@
             "name": "tests-ci",
             "configurePreset": "ci",
             "targets": ["AtlasTests"]
+        },
+        {
+            "name": "linux-debug",
+            "configurePreset": "linux-debug"
+        },
+        {
+            "name": "linux-release",
+            "configurePreset": "linux-release"
+        },
+        {
+            "name": "macos-debug",
+            "configurePreset": "macos-debug"
+        },
+        {
+            "name": "macos-release",
+            "configurePreset": "macos-release"
+        },
+        {
+            "name": "windows-debug",
+            "configurePreset": "windows-debug"
+        },
+        {
+            "name": "windows-release",
+            "configurePreset": "windows-release"
         }
     ],
     "testPresets": [

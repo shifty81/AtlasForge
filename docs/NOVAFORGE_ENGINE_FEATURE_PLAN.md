@@ -210,11 +210,11 @@
 ### Phase A: Low-Risk Documentation & Build Tooling
 **Effort: Low | Risk: None | Timeline: Immediate**
 
-- [ ] Integrate Makefile convenience targets (build, test, etc.)
-- [ ] Add CMakePresets.json for multi-platform build standardization
-- [ ] Add Dockerfile for headless server deployment
-- [ ] Import TLA+ specifications to `specs/` directory
-- [ ] Import BlenderSpaceshipGenerator tool to `tools/blender-addon/`
+- [x] Integrate Makefile convenience targets (build, test, etc.)
+- [x] Add CMakePresets.json for multi-platform build standardization
+- [x] Add Dockerfile for headless server deployment
+- [x] Import TLA+ specifications to `specs/` directory
+- [x] Import BlenderSpaceshipGenerator tool to `tools/blender-addon/`
 
 ### Phase B: Atlas UI Framework
 **Effort: Medium | Risk: Low | Timeline: 1-2 weeks**
