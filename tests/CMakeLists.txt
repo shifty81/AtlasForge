@@ -201,6 +201,8 @@ add_executable(AtlasTests
     test_editor_panel_registry.cpp
     test_editor_tool_layer.cpp
     test_editor_tools.cpp
+    test_atlas_ui.cpp
+    test_pcg_framework.cpp
     ${CMAKE_SOURCE_DIR}/editor/panels/ConsolePanel.cpp
     ${CMAKE_SOURCE_DIR}/editor/panels/InteractionDebugger.cpp
     ${CMAKE_SOURCE_DIR}/editor/panels/ECSInspectorPanel.cpp

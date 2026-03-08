@@ -219,11 +219,11 @@
 ### Phase B: Atlas UI Framework
 **Effort: Medium | Risk: Low | Timeline: 1-2 weeks**
 
-- [ ] Copy Atlas UI files (4 headers + 3 cpp) into engine/ui/atlas/
-- [ ] Integrate with existing engine/ui module
-- [ ] Validate widget rendering with OpenGL 3.3
-- [ ] Add theming support configuration
-- [ ] Port widget test coverage
+- [x] Copy Atlas UI files (4 headers + 3 cpp) into engine/ui/atlas/
+- [x] Integrate with existing engine/ui module
+- [x] Validate widget rendering with OpenGL 3.3
+- [x] Add theming support configuration
+- [x] Port widget test coverage
 
 ### Phase C: Editor Tool Layer Infrastructure
 **Effort: Medium | Risk: Medium | Timeline: 2-3 weeks**
@@ -240,13 +240,13 @@
 ### Phase D: PCG Framework
 **Effort: Medium | Risk: Medium | Timeline: 2-3 weeks**
 
-- [ ] Implement deterministic RNG (xorshift64*) in engine/procedural/
-- [ ] Implement seed hierarchy (Universe→Galaxy→System→Sector→Object)
-- [ ] Implement PCG domain isolation (16 domains)
-- [ ] Implement PCGManager (central seed authority)
-- [ ] Implement PCG verification (server-authoritative)
-- [ ] Implement constraint solver for fitting validation
-- [ ] Port PCG test coverage
+- [x] Implement deterministic RNG (xorshift64*) in engine/procedural/
+- [x] Implement seed hierarchy (Universe→Galaxy→System→Sector→Object)
+- [x] Implement PCG domain isolation (16 domains)
+- [x] Implement PCGManager (central seed authority)
+- [x] Implement PCG verification (server-authoritative)
+- [x] Implement constraint solver for fitting validation
+- [x] Port PCG test coverage
 
 ### Phase E: Rendering Pipeline Upgrade
 **Effort: High | Risk: High | Timeline: 4-6 weeks**
