@@ -135,6 +135,13 @@ add_library(AtlasEngine STATIC
     procedural/ProceduralMaterialNodes.cpp
     procedural/LODBakingGraph.cpp
     procedural/LODBakingNodes.cpp
+    procedural/DeterministicRNG.cpp
+    procedural/PCGManager.cpp
+    procedural/PCGVerify.cpp
+    procedural/ConstraintSolver.cpp
+    ui/atlas/AtlasUI.cpp
+    ui/atlas/AtlasUIWidgets.cpp
+    ui/atlas/AtlasUIPanels.cpp
     sim/ReplayProofExporter.cpp
     sim/ReplayRecorder.cpp
     sim/StateHasher.cpp

@@ -2069,6 +2069,72 @@ void run_renderer_backend_tests();
 // Script VM and ABI capsule tests
 void run_script_and_abi_tests();
 
+// Atlas UI Framework tests (Phase B)
+void test_atlas_ui_context_creation();
+void test_atlas_ui_begin_end_frame();
+void test_atlas_ui_filled_rect();
+void test_atlas_ui_border_rect();
+void test_atlas_ui_id_system();
+void test_atlas_ui_hot_active_widgets();
+void test_atlas_ui_cursor();
+void test_atlas_ui_frame_resets_buffers();
+void test_atlas_theme_teal();
+void test_atlas_theme_amber();
+void test_atlas_theme_colorblind();
+void test_atlas_theme_switch();
+void test_atlas_label();
+void test_atlas_button_no_click();
+void test_atlas_checkbox_toggle();
+void test_atlas_slider_drag();
+void test_atlas_text_input();
+void test_atlas_combobox_cycle();
+void test_atlas_separator();
+void test_atlas_spacing();
+void test_atlas_status_arc();
+void test_atlas_capacitor_ring();
+void test_atlas_status_indicator();
+void test_atlas_panel_create();
+void test_atlas_panel_close_open();
+void test_atlas_panel_toggle();
+void test_atlas_panel_position();
+void test_atlas_panel_multiple();
+void test_atlas_panel_closed_returns_false();
+
+// PCG Framework tests (Phase D)
+void test_rng_deterministic();
+void test_rng_different_seeds();
+void test_rng_zero_seed_remapped();
+void test_rng_float_range();
+void test_rng_float_range_custom();
+void test_rng_int_range();
+void test_rng_u32_range();
+void test_rng_bool_distribution();
+void test_rng_fork_independent();
+void test_rng_reseed();
+void test_pcg_domain_names();
+void test_pcg_domain_count();
+void test_pcg_context_child();
+void test_pcg_context_hierarchy_depth();
+void test_pcg_manager_creation();
+void test_pcg_manager_domain_isolation();
+void test_pcg_manager_deterministic();
+void test_pcg_manager_reseed();
+void test_pcg_manager_create_context();
+void test_pcg_manager_version();
+void test_pcg_verify_match();
+void test_pcg_verify_mismatch();
+void test_pcg_verify_missing_submission();
+void test_pcg_verify_multiple();
+void test_pcg_verify_clear();
+void test_pcg_verify_hash_data();
+void test_constraint_solver_empty();
+void test_constraint_solver_single_item();
+void test_constraint_solver_capacity_limit();
+void test_constraint_solver_deterministic();
+void test_constraint_solver_item_count_limit();
+void test_constraint_solver_is_feasible();
+void test_constraint_solver_clear_items();
+
 int main() {
     std::cout << "=== Atlas Engine Tests ===" << std::endl;
 
@@ -4401,6 +4467,92 @@ int main() {
 
     std::cout << "\n--- Full Registry Integration ---" << std::endl;
     test_registry_all_10_tools();
+
+    // ============================================================
+    // Phase B: Atlas UI Framework
+    // ============================================================
+    std::cout << "\n--- Atlas UI Context ---" << std::endl;
+    test_atlas_ui_context_creation();
+    test_atlas_ui_begin_end_frame();
+    test_atlas_ui_filled_rect();
+    test_atlas_ui_border_rect();
+    test_atlas_ui_id_system();
+    test_atlas_ui_hot_active_widgets();
+    test_atlas_ui_cursor();
+    test_atlas_ui_frame_resets_buffers();
+
+    std::cout << "\n--- Atlas UI Theme ---" << std::endl;
+    test_atlas_theme_teal();
+    test_atlas_theme_amber();
+    test_atlas_theme_colorblind();
+    test_atlas_theme_switch();
+
+    std::cout << "\n--- Atlas UI Widgets ---" << std::endl;
+    test_atlas_label();
+    test_atlas_button_no_click();
+    test_atlas_checkbox_toggle();
+    test_atlas_slider_drag();
+    test_atlas_text_input();
+    test_atlas_combobox_cycle();
+    test_atlas_separator();
+    test_atlas_spacing();
+    test_atlas_status_arc();
+    test_atlas_capacitor_ring();
+    test_atlas_status_indicator();
+
+    std::cout << "\n--- Atlas UI Panels ---" << std::endl;
+    test_atlas_panel_create();
+    test_atlas_panel_close_open();
+    test_atlas_panel_toggle();
+    test_atlas_panel_position();
+    test_atlas_panel_multiple();
+    test_atlas_panel_closed_returns_false();
+
+    // ============================================================
+    // Phase D: PCG Framework
+    // ============================================================
+    std::cout << "\n--- DeterministicRNG ---" << std::endl;
+    test_rng_deterministic();
+    test_rng_different_seeds();
+    test_rng_zero_seed_remapped();
+    test_rng_float_range();
+    test_rng_float_range_custom();
+    test_rng_int_range();
+    test_rng_u32_range();
+    test_rng_bool_distribution();
+    test_rng_fork_independent();
+    test_rng_reseed();
+
+    std::cout << "\n--- PCG Domains ---" << std::endl;
+    test_pcg_domain_names();
+    test_pcg_domain_count();
+    test_pcg_context_child();
+    test_pcg_context_hierarchy_depth();
+
+    std::cout << "\n--- PCGManager ---" << std::endl;
+    test_pcg_manager_creation();
+    test_pcg_manager_domain_isolation();
+    test_pcg_manager_deterministic();
+    test_pcg_manager_reseed();
+    test_pcg_manager_create_context();
+    test_pcg_manager_version();
+
+    std::cout << "\n--- PCG Verification ---" << std::endl;
+    test_pcg_verify_match();
+    test_pcg_verify_mismatch();
+    test_pcg_verify_missing_submission();
+    test_pcg_verify_multiple();
+    test_pcg_verify_clear();
+    test_pcg_verify_hash_data();
+
+    std::cout << "\n--- Constraint Solver ---" << std::endl;
+    test_constraint_solver_empty();
+    test_constraint_solver_single_item();
+    test_constraint_solver_capacity_limit();
+    test_constraint_solver_deterministic();
+    test_constraint_solver_item_count_limit();
+    test_constraint_solver_is_feasible();
+    test_constraint_solver_clear_items();
 
     std::cout << "\n=== All tests passed! ===" << std::endl;
     return 0;

@@ -763,6 +763,58 @@ align the project structure for long-term maintainability.
 - `tests/test_engine_full_integration.cpp` — 6 new tests
 - `tests/main.cpp` — Registered new tests
 
+#### 27. Phase B: Atlas UI Framework
+**Status**: Complete
+
+**Completed work**:
+- [x] Created `engine/ui/atlas/AtlasUI.h` — Core immediate-mode UI context with vertex batching, input state, layout cursor, and FNV-1a widget ID system
+- [x] Created `engine/ui/atlas/AtlasUI.cpp` — Frame lifecycle, filled/border rect primitives, text placeholder rendering
+- [x] Created `engine/ui/atlas/AtlasUITheme.h` — `AtlasTheme` struct with 3 built-in presets: Teal (sci-fi default), Amber, and ColorblindSafe
+- [x] Created `engine/ui/atlas/AtlasUIWidgets.h` — Widget API declarations (Label, Button, Checkbox, Slider, TextInput, ComboBox, Separator, Spacing, StatusArc, CapacitorRing, StatusIndicator)
+- [x] Created `engine/ui/atlas/AtlasUIWidgets.cpp` — Full widget implementations with immediate-mode interaction, hit-testing, and themed rendering
+- [x] Created `engine/ui/atlas/AtlasUIPanels.h` — `AtlasPanelManager` with drag-to-move panels, Z-ordering, open/close/toggle
+- [x] Created `engine/ui/atlas/AtlasUIPanels.cpp` — Panel lifecycle, title bar rendering, drag handling, content cursor placement
+- [x] Registered all Atlas UI sources in `engine/CMakeLists.txt`
+- [x] 29 new tests covering context, themes, all widgets, and panels
+
+**Files created**:
+- `engine/ui/atlas/AtlasUI.h` — Core context (AtlasUIContext, AtlasRect, AtlasVertex, AtlasDrawCmd, AtlasInputState)
+- `engine/ui/atlas/AtlasUI.cpp` — Context implementation
+- `engine/ui/atlas/AtlasUITheme.h` — AtlasTheme with Teal/Amber/ColorblindSafe presets
+- `engine/ui/atlas/AtlasUIWidgets.h` — Widget declarations
+- `engine/ui/atlas/AtlasUIWidgets.cpp` — Widget implementations
+- `engine/ui/atlas/AtlasUIPanels.h` — PanelState, AtlasPanelManager
+- `engine/ui/atlas/AtlasUIPanels.cpp` — Panel manager implementation
+- `tests/test_atlas_ui.cpp` — 29 tests
+
+#### 28. Phase D: PCG Framework
+**Status**: Complete
+
+**Completed work**:
+- [x] Created `engine/procedural/DeterministicRNG.h` — xorshift64* deterministic RNG with Fork(), NextFloat(), NextIntRange(), NextBool()
+- [x] Created `engine/procedural/DeterministicRNG.cpp` — Full implementation; seed 0 remapped to 1, upper-24-bit float generation
+- [x] Created `engine/procedural/PCGDomain.h` — 16 PCG domain enum, SeedLevel hierarchy (Universe→Galaxy→System→Sector→Object), PCGContext with Child() for hierarchical scoping
+- [x] Created `engine/procedural/PCGManager.h` — Central seed authority with per-domain seed derivation and versioning
+- [x] Created `engine/procedural/PCGManager.cpp` — Domain seed derivation via Fork(), scoped context creation with hierarchy walk
+- [x] Created `engine/procedural/PCGVerify.h` — Server-authoritative PCG verifier with expected/submitted hash comparison
+- [x] Created `engine/procedural/PCGVerify.cpp` — Verification logic, FNV-1a HashData utility
+- [x] Created `engine/procedural/ConstraintSolver.h` — Genetic-algorithm constraint solver for fitting problems
+- [x] Created `engine/procedural/ConstraintSolver.cpp` — Full GA implementation (tournament selection, crossover, mutation, feasibility checking)
+- [x] Registered all PCG sources in `engine/CMakeLists.txt`
+- [x] 38 new tests covering RNG, domains, manager, verification, and constraint solver
+
+**Files created**:
+- `engine/procedural/DeterministicRNG.h` — DeterministicRNG class
+- `engine/procedural/DeterministicRNG.cpp` — xorshift64* implementation
+- `engine/procedural/PCGDomain.h` — PCGDomain enum (16 domains), SeedLevel, PCGContext
+- `engine/procedural/PCGManager.h` — PCGManager class
+- `engine/procedural/PCGManager.cpp` — Manager implementation
+- `engine/procedural/PCGVerify.h` — PCGVerifier, PCGVerifyRecord, PCGVerifyResult
+- `engine/procedural/PCGVerify.cpp` — Verification implementation
+- `engine/procedural/ConstraintSolver.h` — ConstraintSolver, FitItem, ConstraintConfig, ConstraintResult
+- `engine/procedural/ConstraintSolver.cpp` — GA solver implementation
+- `tests/test_pcg_framework.cpp` — 38 tests
+
 ## References
 
 - Original gaps analysis: `legacy/gaps.txt`
