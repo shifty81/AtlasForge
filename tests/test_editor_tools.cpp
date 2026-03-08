@@ -133,7 +133,7 @@ void test_sim_step_activate_update() {
     tool.Update(0.016f);
     tool.Update(0.016f);
     assert(tool.StepCount() == 2);
-    assert(tool.AccumulatedTime() > 0.03f);
+    assert(tool.AccumulatedTime() > 0.031f && tool.AccumulatedTime() < 0.033f);
     std::cout << "[PASS] test_sim_step_activate_update" << std::endl;
 }
 
@@ -174,7 +174,7 @@ void test_sim_step_speed_multiplier() {
     assert(tool.SpeedMultiplier() == 2.0f);
 
     tool.Update(1.0f);
-    assert(tool.AccumulatedTime() > 1.9f);  // 1.0 * 2.0 = 2.0
+    assert(tool.AccumulatedTime() > 1.99f && tool.AccumulatedTime() < 2.01f);
     std::cout << "[PASS] test_sim_step_speed_multiplier" << std::endl;
 }
 
@@ -254,7 +254,7 @@ void test_env_control_elapsed() {
     tool.Activate();
     tool.Update(0.5f);
     tool.Update(0.5f);
-    assert(tool.ElapsedTime() > 0.9f);
+    assert(tool.ElapsedTime() > 0.99f && tool.ElapsedTime() < 1.01f);
     std::cout << "[PASS] test_env_control_elapsed" << std::endl;
 }
 
@@ -446,7 +446,7 @@ void test_live_edit_elapsed() {
     tool.Activate();
     tool.Update(0.5f);
     tool.Update(0.3f);
-    assert(tool.ElapsedTime() > 0.7f);
+    assert(tool.ElapsedTime() > 0.79f && tool.ElapsedTime() < 0.81f);
     std::cout << "[PASS] test_live_edit_elapsed" << std::endl;
 }
 
@@ -713,10 +713,10 @@ void test_anim_preview_playback() {
     tool.SetPlaying(true);
 
     tool.Update(0.5f);
-    assert(tool.CurrentTime() > 0.4f);
+    assert(tool.CurrentTime() > 0.49f && tool.CurrentTime() < 0.51f);
 
     tool.Update(0.5f);
-    assert(tool.CurrentTime() > 0.9f);
+    assert(tool.CurrentTime() > 0.99f && tool.CurrentTime() < 1.01f);
     std::cout << "[PASS] test_anim_preview_playback" << std::endl;
 }
 
@@ -728,7 +728,7 @@ void test_anim_preview_speed() {
     tool.SetPlaying(true);
 
     tool.Update(1.0f);
-    assert(tool.CurrentTime() > 1.9f);  // 1.0 * 2.0 = 2.0
+    assert(tool.CurrentTime() > 1.99f && tool.CurrentTime() < 2.01f);
     std::cout << "[PASS] test_anim_preview_speed" << std::endl;
 }
 
