@@ -20,8 +20,11 @@ void EditorEventBus::Unsubscribe(SubscriptionId id) {
 }
 
 void EditorEventBus::Publish(const EditorEvent& event) {
-    // Snapshot handlers under lock, then call outside lock to avoid
-    // deadlocks if a handler modifies subscriptions.
+    // Snapshot matching handlers under lock, then invoke outside the lock
+    // to avoid deadlocks if a handler modifies subscriptions.
+    // Note: copying std::function objects is intentional here — the editor
+    // event bus is not a hot-path, and correctness (no deadlock) is more
+    // important than avoiding the copy overhead.
     std::vector<EditorEventHandler> matching;
     {
         std::lock_guard<std::mutex> lock(m_mutex);

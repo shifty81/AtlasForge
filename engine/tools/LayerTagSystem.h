@@ -33,7 +33,8 @@ public:
     /// Set layer visibility.
     void SetLayerVisible(const std::string& name, bool visible);
 
-    /// Query visibility.
+    /// Query visibility.  Returns true for non-existent layers (unknown
+    /// layers are treated as visible by default).
     bool IsLayerVisible(const std::string& name) const;
 
     /// Set layer locked state.
