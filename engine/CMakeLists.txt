@@ -196,6 +196,17 @@ add_library(AtlasEngine STATIC
     script/ScriptSandbox.cpp
     abi/ABICapsule.cpp
     abi/ABIRegistry.cpp
+    render/GBuffer.cpp
+    render/PBRMaterial.cpp
+    render/ShadowMap.cpp
+    render/PostProcess.cpp
+    render/InstancedRenderer.cpp
+    render/SpatialHash.cpp
+    procedural/InteriorNode.cpp
+    procedural/HullMeshGenerator.cpp
+    procedural/ModuleTier.cpp
+    procedural/BuildQueue.cpp
+    procedural/PlanetaryBase.cpp
 )
 
 # Conditionally add platform/render sources that require X11, Win32, or OpenGL

@@ -251,23 +251,23 @@
 ### Phase E: Rendering Pipeline Upgrade
 **Effort: High | Risk: High | Timeline: 4-6 weeks**
 
-- [ ] Implement G-Buffer for deferred rendering
-- [ ] Add PBR material support
-- [ ] Add shadow mapping
-- [ ] Add post-processing pipeline (bloom, tone mapping)
-- [ ] Add instanced rendering for large entity counts
-- [ ] Implement spatial hash system for proximity queries
-- [ ] Performance benchmarking and optimization
+- [x] Implement G-Buffer for deferred rendering
+- [x] Add PBR material support
+- [x] Add shadow mapping
+- [x] Add post-processing pipeline (bloom, tone mapping)
+- [x] Add instanced rendering for large entity counts
+- [x] Implement spatial hash system for proximity queries
+- [x] Performance benchmarking and optimization
 
 ### Phase F: Procedural Generation Pipeline
 **Effort: High | Risk: Medium | Timeline: 3-4 weeks**
 
-- [ ] Port interior node system (10+ module types)
-- [ ] Port hull mesh generation (convex hull + gap filling + stretch-wrap)
-- [ ] Port module tier system (1-5 with visual upgrades)
-- [ ] Port build/upgrade queue system
-- [ ] Port planetary base generation
-- [ ] Port module size scaling rules
+- [x] Port interior node system (10+ module types)
+- [x] Port hull mesh generation (convex hull + gap filling + stretch-wrap)
+- [x] Port module tier system (1-5 with visual upgrades)
+- [x] Port build/upgrade queue system
+- [x] Port planetary base generation
+- [x] Port module size scaling rules
 
 ---
 
