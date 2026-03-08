@@ -44,7 +44,7 @@ class DeterministicRNG:
         return ((s * 0x2545F4914F6CDD1D) & self.MASK) >> 32
 
     def next_float(self):
-        return (self._next() & 0xFFFFFF) / float(0xFFFFFF)
+        return (self._next() & 0xFFFFFF) / float(0x1000000)
 
     def next_float_range(self, lo, hi):
         return lo + self.next_float() * (hi - lo)
@@ -255,11 +255,15 @@ class ATLAS_OT_export_ship(bpy.types.Operator):
         meta_path = base_path + ".atlas_meta"
 
         # Export OBJ
-        bpy.ops.wm.obj_export(
-            filepath=obj_path,
-            export_selected_objects=True,
-            export_materials=False,
-        )
+        try:
+            bpy.ops.wm.obj_export(
+                filepath=obj_path,
+                export_selected_objects=True,
+                export_materials=False,
+            )
+        except Exception as e:
+            self.report({"ERROR"}, f"OBJ export failed: {e}")
+            return {"CANCELLED"}
 
         # Export metadata
         seed = obj["atlas_seed"]

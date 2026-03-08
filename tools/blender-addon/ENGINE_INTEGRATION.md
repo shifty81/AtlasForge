@@ -37,21 +37,17 @@ Click **Export for Atlas** in the sidebar panel. This writes:
       "name": "slot_weapon_0",
       "type": "weapon",
       "position": [1.2, 0.0, 3.4],
-      "size": "M",
-      "allowed_modules": ["Turret", "MissileLauncher", "BeamArray"]
+      "size": "M"
     },
     {
       "name": "slot_engine_0",
       "type": "engine",
       "position": [-4.0, 0.0, 0.0],
-      "size": "L",
-      "allowed_modules": ["ThrustEngine", "WarpDrive"]
+      "size": "L"
     }
   ],
   "materials": {
     "hull": {
-      "albedo": "textures/hull_cruiser_albedo.png",
-      "normal": "textures/hull_cruiser_normal.png",
       "metallic": 0.8,
       "roughness": 0.35
     }
@@ -80,14 +76,11 @@ for (const auto& slot : meta["slots"]) {
     atlas::procedural::ModuleSlot ms;
     ms.size = ParseModuleSize(slot["size"]);
     ms.position = ParseVec3(slot["position"]);
-    // ... populate allowed types from slot["allowed_modules"]
     interior.AddSlot(ms);
 }
 
 // Apply PBR material from metadata
 atlas::render::PBRMaterial mat;
-mat.SetAlbedoPath(meta["materials"]["hull"]["albedo"]);
-mat.SetNormalPath(meta["materials"]["hull"]["normal"]);
 mat.SetMetallic(meta["materials"]["hull"]["metallic"]);
 mat.SetRoughness(meta["materials"]["hull"]["roughness"]);
 ```
