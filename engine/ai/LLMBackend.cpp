@@ -295,7 +295,9 @@ std::shared_ptr<HttpLLMBackend> LLMBackendFactory::CreateFromEnv(atlas::asset::I
     uint32_t timeout = 30000;
     const char* timeoutStr = std::getenv("ATLAS_LLM_TIMEOUT");
     if (timeoutStr) {
-        try { timeout = static_cast<uint32_t>(std::stoul(timeoutStr)); } catch (...) {}
+        try { timeout = static_cast<uint32_t>(std::stoul(timeoutStr)); } catch (...) {
+            atlas::Logger::Warn("LLMBackend: failed to parse ATLAS_LLM_TIMEOUT: " + std::string(timeoutStr));
+        }
     }
 
     return Create(httpClient, endpoint, model, apiKey, timeout);

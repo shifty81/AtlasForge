@@ -10,6 +10,7 @@
 // See: docs/IMPLEMENTATION_PATH.md (Priority 5.2)
 
 #include "AssetFormat.h"
+#include "DependencyGraph.h"
 #include <cstdint>
 #include <string>
 #include <vector>
@@ -33,12 +34,6 @@ struct MigrationRule {
     uint16_t fromVersion;
     uint16_t toVersion;
     std::string description;
-};
-
-/// A directed edge in the asset dependency graph.
-struct AssetDependency {
-    std::string assetId;
-    std::string dependsOn;
 };
 
 /// Validates assets, manages migrations, and tracks dependencies.
@@ -90,7 +85,7 @@ public:
 
 private:
     std::vector<MigrationRule> m_migrations;
-    std::vector<AssetDependency> m_dependencies;
+    DependencyGraph m_depGraph;
     std::unordered_set<std::string> m_lockedAssets;
     bool m_schemaLocked = false;
     uint16_t m_lockedSchemaVersion = 0;

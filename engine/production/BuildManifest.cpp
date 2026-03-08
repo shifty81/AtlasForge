@@ -1,4 +1,5 @@
 #include "BuildManifest.h"
+#include "../core/Logger.h"
 #include <sstream>
 
 namespace atlas::production {
@@ -175,7 +176,7 @@ static ArtifactEntry ParseArtifactObject(const std::string& json, size_t& pos) {
                 else if (key == "hash") entry.hash = std::stoull(value);
                 else if (key == "size") entry.size = std::stoull(value);
                 else if (key == "version") entry.version = value;
-            } catch (...) {}
+            } catch (...) { atlas::Logger::Warn("BuildManifest: failed to parse artifact field: " + key); }
         }
     }
     return entry;
@@ -244,7 +245,7 @@ BuildManifest BuildManifest::FromJSON(const std::string& json) {
                 else if (key == "buildTimestamp") manifest.buildTimestamp = value;
                 else if (key == "layoutHash") manifest.layoutHash = std::stoull(value);
                 else if (key == "dslVersion") manifest.dslVersion = value;
-            } catch (...) {}
+            } catch (...) { atlas::Logger::Warn("BuildManifest: failed to parse field: " + key); }
         }
     }
     return manifest;

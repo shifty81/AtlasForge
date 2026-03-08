@@ -101,18 +101,31 @@ public:
     const EngineConfig& Config() const { return m_config; }
 
     ecs::World& GetWorld() { return m_world; }
+    const ecs::World& GetWorld() const { return m_world; }
     net::NetContext& GetNet() { return m_net; }
+    const net::NetContext& GetNet() const { return m_net; }
     sim::TickScheduler& GetScheduler() { return m_scheduler; }
+    const sim::TickScheduler& GetScheduler() const { return m_scheduler; }
     sim::TimeModel& GetTimeModel() { return m_timeModel; }
+    const sim::TimeModel& GetTimeModel() const { return m_timeModel; }
     sim::WorldState& GetWorldState() { return m_worldState; }
+    const sim::WorldState& GetWorldState() const { return m_worldState; }
     sim::SaveSystem& GetSaveSystem() { return m_saveSystem; }
+    const sim::SaveSystem& GetSaveSystem() const { return m_saveSystem; }
     ui::UIManager& GetUIManager() { return m_uiManager; }
+    const ui::UIManager& GetUIManager() const { return m_uiManager; }
     ui::UIEventRouter& GetEventRouter() { return m_eventRouter; }
+    const ui::UIEventRouter& GetEventRouter() const { return m_eventRouter; }
     physics::PhysicsWorld& GetPhysics() { return m_physics; }
+    const physics::PhysicsWorld& GetPhysics() const { return m_physics; }
     flow::GameFlowGraph& GetFlowGraph() { return m_flowGraph; }
+    const flow::GameFlowGraph& GetFlowGraph() const { return m_flowGraph; }
     input::InputManager& GetInputManager() { return m_inputManager; }
+    const input::InputManager& GetInputManager() const { return m_inputManager; }
     audio::AudioEngine& GetAudioEngine() { return m_audioEngine; }
+    const audio::AudioEngine& GetAudioEngine() const { return m_audioEngine; }
     script::ScriptSystem& GetScriptSystem() { return m_scriptSystem; }
+    const script::ScriptSystem& GetScriptSystem() const { return m_scriptSystem; }
 
     /// Attach a game module to be ticked each frame by the engine.
     /// The caller retains ownership; the Engine only stores a raw pointer.
@@ -120,8 +133,11 @@ public:
     module::IGameModule* GetGameModule() const { return m_gameModule; }
 
     platform::PlatformWindow* GetWindow() { return m_window.get(); }
+    const platform::PlatformWindow* GetWindow() const { return m_window.get(); }
     ui::UIRenderer* GetRenderer() { return m_renderer.get(); }
+    const ui::UIRenderer* GetRenderer() const { return m_renderer.get(); }
     render::EditorViewportFramebuffer* GetViewportFramebuffer() { return m_viewportFB.get(); }
+    const render::EditorViewportFramebuffer* GetViewportFramebuffer() const { return m_viewportFB.get(); }
 
     int32_t MouseX() const { return m_mouseX; }
     int32_t MouseY() const { return m_mouseY; }
