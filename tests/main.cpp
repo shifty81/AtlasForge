@@ -1022,6 +1022,45 @@ void register_panel_draw_impl_tests();
 // Editor Panel Registry (all panels instantiate + draw)
 void register_editor_panel_registry_tests();
 
+// Editor Tool Layer (Phase C)
+void test_itool_name();
+void test_itool_activate_deactivate();
+void test_itool_update();
+void test_itool_polymorphism();
+void test_editor_cmd_bus_enqueue();
+void test_editor_cmd_bus_drain();
+void test_editor_cmd_bus_clear();
+void test_editor_cmd_bus_dispatch();
+void test_editor_cmd_bus_dispatch_unhandled();
+void test_editor_cmd_bus_move_enqueue();
+void test_undoable_bus_execute();
+void test_undoable_bus_undo_redo();
+void test_undoable_bus_clear();
+void test_undoable_bus_last_executed();
+void test_undoable_bus_handler_notified();
+void test_event_bus_subscribe_publish();
+void test_event_bus_unsubscribe();
+void test_event_bus_multiple_subscribers();
+void test_event_bus_type_filtering();
+void test_event_bus_clear();
+void test_bookmark_save_get();
+void test_bookmark_get_by_name();
+void test_bookmark_remove();
+void test_bookmark_all();
+void test_bookmark_clear();
+void test_layer_create_and_query();
+void test_layer_visibility();
+void test_layer_locked();
+void test_layer_remove();
+void test_layer_assign_entity();
+void test_layer_entity_visibility();
+void test_tag_add_remove();
+void test_tag_entity_tags();
+void test_tag_entities_with_tag();
+void test_layer_tag_remove_entity();
+void test_layer_tag_clear();
+void test_layer_auto_create();
+
 // Component Category
 void test_component_category_defaults();
 void test_component_category_simulated();
@@ -4167,6 +4206,56 @@ int main() {
 
     // Editor Panel Registry tests
     register_editor_panel_registry_tests();
+
+    // Editor Tool Layer (Phase C) tests
+    std::cout << "\n--- ITool Interface ---" << std::endl;
+    test_itool_name();
+    test_itool_activate_deactivate();
+    test_itool_update();
+    test_itool_polymorphism();
+
+    std::cout << "\n--- EditorCommandBus ---" << std::endl;
+    test_editor_cmd_bus_enqueue();
+    test_editor_cmd_bus_drain();
+    test_editor_cmd_bus_clear();
+    test_editor_cmd_bus_dispatch();
+    test_editor_cmd_bus_dispatch_unhandled();
+    test_editor_cmd_bus_move_enqueue();
+
+    std::cout << "\n--- UndoableCommandBus ---" << std::endl;
+    test_undoable_bus_execute();
+    test_undoable_bus_undo_redo();
+    test_undoable_bus_clear();
+    test_undoable_bus_last_executed();
+    test_undoable_bus_handler_notified();
+
+    std::cout << "\n--- EditorEventBus ---" << std::endl;
+    test_event_bus_subscribe_publish();
+    test_event_bus_unsubscribe();
+    test_event_bus_multiple_subscribers();
+    test_event_bus_type_filtering();
+    test_event_bus_clear();
+
+    std::cout << "\n--- SceneBookmarkManager ---" << std::endl;
+    test_bookmark_save_get();
+    test_bookmark_get_by_name();
+    test_bookmark_remove();
+    test_bookmark_all();
+    test_bookmark_clear();
+
+    std::cout << "\n--- LayerTagSystem ---" << std::endl;
+    test_layer_create_and_query();
+    test_layer_visibility();
+    test_layer_locked();
+    test_layer_remove();
+    test_layer_assign_entity();
+    test_layer_entity_visibility();
+    test_tag_add_remove();
+    test_tag_entity_tags();
+    test_tag_entities_with_tag();
+    test_layer_tag_remove_entity();
+    test_layer_tag_clear();
+    test_layer_auto_create();
 
     std::cout << "\n=== All tests passed! ===" << std::endl;
     return 0;

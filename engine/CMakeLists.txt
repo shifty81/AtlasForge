@@ -168,6 +168,11 @@ add_library(AtlasEngine STATIC
     ai/LLMBackend.cpp
     production/BuildAuditLog.cpp
     tools/ProjectNamespaceRewriter.cpp
+    tools/EditorCommandBus.cpp
+    tools/UndoableCommandBus.cpp
+    tools/EditorEventBus.cpp
+    tools/SceneBookmarkManager.cpp
+    tools/LayerTagSystem.cpp
     script/ScriptVM.cpp
     script/ScriptSystem.cpp
     script/ScriptSandbox.cpp
@@ -204,6 +209,18 @@ elseif(MSVC)
     target_compile_options(AtlasEngine PRIVATE
         /fp:strict               # Strict floating-point model
     )
+endif()
+
+# ============================================================
+# ATLAS_EDITOR_TOOLS compile flag
+# ============================================================
+# When enabled, editor tool overlay code (ITool implementations,
+# EditorCommandBus, EditorEventBus, etc.) is compiled into the engine.
+# Disable this flag for release/shipping builds to compile out all
+# editor tool infrastructure with zero overhead.
+option(ATLAS_EDITOR_TOOLS "Include in-client editor tool overlay support" ON)
+if(ATLAS_EDITOR_TOOLS)
+    target_compile_definitions(AtlasEngine PUBLIC ATLAS_EDITOR_TOOLS)
 endif()
 
 # Link dynamic loading library on Unix
@@ -285,6 +302,7 @@ target_include_directories(AtlasSimulation INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/procedural>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/script>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/abi>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/tools>
 )
 
 # --- Install / Export ---
