@@ -2135,6 +2135,39 @@ void test_constraint_solver_item_count_limit();
 void test_constraint_solver_is_feasible();
 void test_constraint_solver_clear_items();
 
+// Rendering Pipeline tests (Phase E)
+void test_gbuffer_default_pbr_config();
+void test_gbuffer_init_shutdown();
+void test_gbuffer_bind_unbind();
+void test_gbuffer_resize();
+void test_gbuffer_get_attachment();
+void test_pbr_default_params();
+void test_pbr_unique_ids();
+void test_pbr_texture_binding();
+void test_pbr_validate();
+void test_pbr_emissive();
+void test_shadow_default_config();
+void test_shadow_init_cascades();
+void test_shadow_light_direction();
+void test_shadow_update_cascades();
+void test_shadow_bind_states();
+void test_postprocess_default_settings();
+void test_postprocess_init_shutdown();
+void test_postprocess_toggle_effects();
+void test_postprocess_effect_count();
+void test_postprocess_resize();
+void test_instanced_init();
+void test_instanced_create_batch();
+void test_instanced_add_remove_instance();
+void test_instanced_submit_draw_calls();
+void test_instanced_clear_batch();
+void test_spatial_insert_query();
+void test_spatial_remove();
+void test_spatial_update();
+void test_spatial_aabb_query();
+void test_spatial_nearest_neighbors();
+void test_spatial_cell_count();
+
 int main() {
     std::cout << "=== Atlas Engine Tests ===" << std::endl;
 
@@ -4553,6 +4586,52 @@ int main() {
     test_constraint_solver_item_count_limit();
     test_constraint_solver_is_feasible();
     test_constraint_solver_clear_items();
+
+    // ============================================================
+    // Phase E: Rendering Pipeline
+    // ============================================================
+    std::cout << "\n--- G-Buffer ---" << std::endl;
+    test_gbuffer_default_pbr_config();
+    test_gbuffer_init_shutdown();
+    test_gbuffer_bind_unbind();
+    test_gbuffer_resize();
+    test_gbuffer_get_attachment();
+
+    std::cout << "\n--- PBR Material ---" << std::endl;
+    test_pbr_default_params();
+    test_pbr_unique_ids();
+    test_pbr_texture_binding();
+    test_pbr_validate();
+    test_pbr_emissive();
+
+    std::cout << "\n--- Shadow Map ---" << std::endl;
+    test_shadow_default_config();
+    test_shadow_init_cascades();
+    test_shadow_light_direction();
+    test_shadow_update_cascades();
+    test_shadow_bind_states();
+
+    std::cout << "\n--- Post-Process ---" << std::endl;
+    test_postprocess_default_settings();
+    test_postprocess_init_shutdown();
+    test_postprocess_toggle_effects();
+    test_postprocess_effect_count();
+    test_postprocess_resize();
+
+    std::cout << "\n--- Instanced Renderer ---" << std::endl;
+    test_instanced_init();
+    test_instanced_create_batch();
+    test_instanced_add_remove_instance();
+    test_instanced_submit_draw_calls();
+    test_instanced_clear_batch();
+
+    std::cout << "\n--- Spatial Hash ---" << std::endl;
+    test_spatial_insert_query();
+    test_spatial_remove();
+    test_spatial_update();
+    test_spatial_aabb_query();
+    test_spatial_nearest_neighbors();
+    test_spatial_cell_count();
 
     std::cout << "\n=== All tests passed! ===" << std::endl;
     return 0;
