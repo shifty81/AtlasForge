@@ -204,6 +204,7 @@ add_executable(AtlasTests
     test_atlas_ui.cpp
     test_pcg_framework.cpp
     test_rendering_pipeline.cpp
+    test_procedural_pipeline.cpp
     ${CMAKE_SOURCE_DIR}/editor/panels/ConsolePanel.cpp
     ${CMAKE_SOURCE_DIR}/editor/panels/InteractionDebugger.cpp
     ${CMAKE_SOURCE_DIR}/editor/panels/ECSInspectorPanel.cpp

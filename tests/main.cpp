@@ -2168,6 +2168,48 @@ void test_spatial_aabb_query();
 void test_spatial_nearest_neighbors();
 void test_spatial_cell_count();
 
+// Procedural Pipeline tests (Phase F)
+void test_interior_add_slot();
+void test_interior_place_module();
+void test_interior_place_invalid_type();
+void test_interior_place_invalid_size();
+void test_interior_remove_module();
+void test_interior_find_slots_by_type();
+void test_interior_find_slots_by_size();
+void test_interior_get_modules_by_type();
+void test_interior_has_power();
+void test_interior_clear();
+void test_hull_convex_hull_tetrahedron();
+void test_hull_convex_hull_cube();
+void test_hull_fill_gaps();
+void test_hull_subdivide();
+void test_hull_smooth();
+void test_hull_generate_from_interior();
+void test_hull_mesh_centroid();
+void test_tier_bonus_values();
+void test_tier_visual_progression();
+void test_tier_upgrade_requirement();
+void test_tier_can_upgrade();
+void test_tier_apply_bonus();
+void test_tier_name();
+void test_build_queue_add_order();
+void test_build_queue_tick();
+void test_build_queue_pause_resume();
+void test_build_queue_remove();
+void test_build_queue_priority_sort();
+void test_build_queue_total_remaining();
+void test_planetary_add_zone();
+void test_planetary_spacing_validation();
+void test_planetary_has_required_zones();
+void test_planetary_generate();
+void test_planetary_upgrade_zone();
+void test_planetary_clear();
+void test_scaling_size_multiplier();
+void test_scaling_cost_multiplier();
+void test_scaling_power_draw();
+void test_scaling_fits_in_slot();
+void test_scaling_convert_to_small();
+
 int main() {
     std::cout << "=== Atlas Engine Tests ===" << std::endl;
 
@@ -4632,6 +4674,59 @@ int main() {
     test_spatial_aabb_query();
     test_spatial_nearest_neighbors();
     test_spatial_cell_count();
+
+    // Phase F: Procedural Pipeline
+    std::cout << "\n--- Interior Node ---" << std::endl;
+    test_interior_add_slot();
+    test_interior_place_module();
+    test_interior_place_invalid_type();
+    test_interior_place_invalid_size();
+    test_interior_remove_module();
+    test_interior_find_slots_by_type();
+    test_interior_find_slots_by_size();
+    test_interior_get_modules_by_type();
+    test_interior_has_power();
+    test_interior_clear();
+
+    std::cout << "\n--- Hull Mesh Generator ---" << std::endl;
+    test_hull_convex_hull_tetrahedron();
+    test_hull_convex_hull_cube();
+    test_hull_fill_gaps();
+    test_hull_subdivide();
+    test_hull_smooth();
+    test_hull_generate_from_interior();
+    test_hull_mesh_centroid();
+
+    std::cout << "\n--- Module Tier ---" << std::endl;
+    test_tier_bonus_values();
+    test_tier_visual_progression();
+    test_tier_upgrade_requirement();
+    test_tier_can_upgrade();
+    test_tier_apply_bonus();
+    test_tier_name();
+
+    std::cout << "\n--- Build Queue ---" << std::endl;
+    test_build_queue_add_order();
+    test_build_queue_tick();
+    test_build_queue_pause_resume();
+    test_build_queue_remove();
+    test_build_queue_priority_sort();
+    test_build_queue_total_remaining();
+
+    std::cout << "\n--- Planetary Base ---" << std::endl;
+    test_planetary_add_zone();
+    test_planetary_spacing_validation();
+    test_planetary_has_required_zones();
+    test_planetary_generate();
+    test_planetary_upgrade_zone();
+    test_planetary_clear();
+
+    std::cout << "\n--- Module Scaling ---" << std::endl;
+    test_scaling_size_multiplier();
+    test_scaling_cost_multiplier();
+    test_scaling_power_draw();
+    test_scaling_fits_in_slot();
+    test_scaling_convert_to_small();
 
     std::cout << "\n=== All tests passed! ===" << std::endl;
     return 0;
