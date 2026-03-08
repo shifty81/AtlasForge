@@ -36,7 +36,8 @@ float ConstraintSolver::Fitness(const Chromosome& chr,
     float totalCost  = 0;
     float totalValue = 0;
     int   count      = 0;
-    for (size_t i = 0; i < chr.size(); ++i) {
+    size_t limit = std::min(chr.size(), m_items.size());
+    for (size_t i = 0; i < limit; ++i) {
         if (chr[i]) {
             totalCost  += m_items[i].cost;
             totalValue += m_items[i].value;
@@ -56,7 +57,8 @@ float ConstraintSolver::Fitness(const Chromosome& chr,
 
 ConstraintResult ConstraintSolver::Decode(const Chromosome& chr) const {
     ConstraintResult res;
-    for (size_t i = 0; i < chr.size(); ++i) {
+    size_t limit = std::min(chr.size(), m_items.size());
+    for (size_t i = 0; i < limit; ++i) {
         if (chr[i]) {
             res.selectedIndices.push_back(i);
             res.totalCost  += m_items[i].cost;
@@ -69,7 +71,7 @@ ConstraintResult ConstraintSolver::Decode(const Chromosome& chr) const {
 
 ConstraintSolver::Chromosome
 ConstraintSolver::Crossover(const Chromosome& a, const Chromosome& b) {
-    if (a.empty()) return a;
+    if (a.empty() || a.size() != b.size()) return a;
     size_t point = static_cast<size_t>(m_rng.NextU32(static_cast<uint32_t>(a.size())));
     Chromosome child(a.size());
     for (size_t i = 0; i < a.size(); ++i) {

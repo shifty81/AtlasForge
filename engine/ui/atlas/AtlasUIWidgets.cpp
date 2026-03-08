@@ -138,7 +138,7 @@ bool Slider(AtlasUIContext& ctx, const std::string& label,
     }
 
     if (ctx.ActiveWidget() == id && ctx.Input().mouseDown) {
-        float t = (ctx.Input().mouseX - trackR.x) / trackR.w;
+        float t = (trackR.w > 0) ? (ctx.Input().mouseX - trackR.x) / trackR.w : 0.0f;
         t = std::max(0.0f, std::min(1.0f, t));
         value = min + t * (max - min);
         dragging = true;
