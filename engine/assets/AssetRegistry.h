@@ -1,12 +1,10 @@
 #pragma once
+#include "DependencyGraph.h"
 #include <string>
 #include <vector>
 #include <unordered_map>
 #include <filesystem>
 #include <functional>
-#include <algorithm>
-#include <set>
-#include <stack>
 
 namespace atlas::asset {
 
@@ -14,11 +12,6 @@ struct AssetEntry {
     std::string id;
     std::string path;
     uint64_t version = 1;
-};
-
-struct AssetDependency {
-    std::string assetId;
-    std::string dependsOn;
 };
 
 class AssetRegistry {
@@ -46,7 +39,7 @@ private:
     std::unordered_map<std::string, AssetEntry> m_assets;
     std::unordered_map<std::string, std::filesystem::file_time_type> m_timestamps;
     ReloadCallback m_onReload;
-    std::vector<AssetDependency> m_dependencies;
+    DependencyGraph m_depGraph;
 };
 
 }

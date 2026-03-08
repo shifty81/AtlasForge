@@ -2,7 +2,6 @@
 #include "../sim/StateHasher.h"
 #include <filesystem>
 #include <fstream>
-#include <unordered_set>
 
 namespace atlas::asset {
 
@@ -144,68 +143,25 @@ std::vector<MigrationRule> AssetValidator::MigrationPath(uint16_t from,
 
 void AssetValidator::AddDependency(const std::string& assetId,
                                     const std::string& dependsOn) {
-    AssetDependency dep;
-    dep.assetId = assetId;
-    dep.dependsOn = dependsOn;
-    m_dependencies.push_back(std::move(dep));
+    m_depGraph.AddDependency(assetId, dependsOn);
 }
 
 std::vector<std::string> AssetValidator::GetDependencies(
         const std::string& assetId) const {
-    std::vector<std::string> result;
-    for (const auto& dep : m_dependencies) {
-        if (dep.assetId == assetId) {
-            result.push_back(dep.dependsOn);
-        }
-    }
-    return result;
+    return m_depGraph.GetDependencies(assetId);
 }
 
 std::vector<std::string> AssetValidator::GetDependents(
         const std::string& assetId) const {
-    std::vector<std::string> result;
-    for (const auto& dep : m_dependencies) {
-        if (dep.dependsOn == assetId) {
-            result.push_back(dep.assetId);
-        }
-    }
-    return result;
+    return m_depGraph.GetDependents(assetId);
 }
 
 bool AssetValidator::HasCircularDependency(const std::string& assetId) const {
-    // DFS reachability check: a cycle exists if any transitive
-    // dependency of assetId leads back to assetId itself.
-    std::unordered_set<std::string> visited;
-    std::vector<std::string> stack;
-
-    // Seed with direct dependencies of the starting asset
-    for (const auto& dep : m_dependencies) {
-        if (dep.assetId == assetId) {
-            stack.push_back(dep.dependsOn);
-        }
-    }
-
-    while (!stack.empty()) {
-        std::string current = stack.back();
-        stack.pop_back();
-
-        if (current == assetId) return true;
-
-        if (visited.count(current)) continue;
-        visited.insert(current);
-
-        for (const auto& dep : m_dependencies) {
-            if (dep.assetId == current && !visited.count(dep.dependsOn)) {
-                stack.push_back(dep.dependsOn);
-            }
-        }
-    }
-
-    return false;
+    return m_depGraph.HasCircularDependency(assetId);
 }
 
 std::vector<AssetDependency> AssetValidator::AllDependencies() const {
-    return m_dependencies;
+    return m_depGraph.AllDependencies();
 }
 
 size_t AssetValidator::MigrationCount() const {
@@ -213,7 +169,7 @@ size_t AssetValidator::MigrationCount() const {
 }
 
 size_t AssetValidator::DependencyCount() const {
-    return m_dependencies.size();
+    return m_depGraph.Count();
 }
 
 // ---------------------------------------------------------------------------

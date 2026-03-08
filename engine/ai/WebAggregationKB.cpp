@@ -1,4 +1,5 @@
 #include "WebAggregationKB.h"
+#include "../core/Logger.h"
 #include <algorithm>
 #include <sstream>
 #include <unordered_set>
@@ -301,7 +302,7 @@ bool WebAggregationKB::ImportJSON(const std::string& json) {
                                 else if (k == "category") entry.category = val;
                                 else if (k == "timestamp") entry.timestamp = std::stoull(val);
                                 else if (k == "relevanceScore") entry.relevanceScore = std::stod(val);
-                            } catch (...) {}
+                            } catch (...) { atlas::Logger::Warn("WebAggregationKB: failed to parse field: " + k); }
                         }
                     }
                     m_entries[entry.id] = entry;

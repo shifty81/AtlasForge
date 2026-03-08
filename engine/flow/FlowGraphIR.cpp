@@ -1,4 +1,5 @@
 #include "FlowGraphIR.h"
+#include "../core/Logger.h"
 #include <sstream>
 #include <cmath>
 #include <iomanip>
@@ -208,17 +209,17 @@ static FlowNodeIR ParseNodeObject(const std::string& json, size_t& pos) {
             std::string value = ParseValue(json, pos);
             if (key == "id") {
                 try { node.id = static_cast<uint32_t>(std::stoul(value)); }
-                catch (...) {}
+                catch (...) { atlas::Logger::Warn("FlowGraphIR: failed to parse node id: " + value); }
             } else if (key == "type") {
                 node.type = value;
             } else if (key == "category") {
                 node.category = value;
             } else if (key == "posX") {
                 try { node.posX = std::stof(value); }
-                catch (...) {}
+                catch (...) { atlas::Logger::Warn("FlowGraphIR: failed to parse posX: " + value); }
             } else if (key == "posY") {
                 try { node.posY = std::stof(value); }
-                catch (...) {}
+                catch (...) { atlas::Logger::Warn("FlowGraphIR: failed to parse posY: " + value); }
             }
         }
     }
@@ -251,7 +252,7 @@ static FlowEdge ParseEdgeObject(const std::string& json, size_t& pos) {
                 else if (key == "fromPort") edge.fromPort = static_cast<uint16_t>(std::stoul(value));
                 else if (key == "toNode") edge.toNode = static_cast<uint32_t>(std::stoul(value));
                 else if (key == "toPort") edge.toPort = static_cast<uint16_t>(std::stoul(value));
-            } catch (...) {}
+            } catch (...) { atlas::Logger::Warn("FlowGraphIR: failed to parse edge field: " + key); }
         }
     }
     return edge;
@@ -300,7 +301,7 @@ FlowGraphIR FlowGraphIR::FromJSON(const std::string& json) {
             std::string value = ParseValue(json, pos);
             if (key == "version") {
                 try { ir.version = static_cast<uint32_t>(std::stoul(value)); }
-                catch (...) {}
+                catch (...) { atlas::Logger::Warn("FlowGraphIR: failed to parse version: " + value); }
             } else if (key == "name") {
                 ir.name = value;
             } else if (key == "graphType") {
